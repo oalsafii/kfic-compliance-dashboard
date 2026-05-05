@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KFIC Invest · Compliance Testing Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* KFIC brand — warm bronze/copper from the logo triangle */
+      --brand: #A06D32;
+      --brand-dark: #7A5326;
+      --brand-light: #C99765;
+      --cream: #F8F4ED;
+      --ink: #1C1917;
+      --line: #E5DCCB;
+      --paper: #FBF8F2;
+      --shell: #1A1612;
+      --shell-2: #0E0B08;
+      /* Severity scale (kept distinct from brand for accessibility) */
+      --critical: #b91c1c;
+      --high: #ea580c;
+      --medium: #b45309;
+      --low: #1d4ed8;
+      --closed: #166534;
+    }
+    html { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: var(--paper); color: var(--ink); }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .pill { display:inline-flex; align-items:center; gap:.4rem; padding:.15rem .55rem; border-radius:9999px; font-size:.7rem; font-weight:600; letter-spacing:.02em; }
+    .sev-Critical { background:#fee2e2; color:var(--critical); }
+    .sev-High     { background:#ffedd5; color:var(--high); }
+    .sev-Medium   { background:#fef3c7; color:var(--medium); }
+    .sev-Low      { background:#dbeafe; color:var(--low); }
+    .sev-Closed   { background:#dcfce7; color:var(--closed); }
+    .tab-btn[aria-selected="true"] { color: var(--brand-light); border-color: var(--brand-light); }
+    .tab-btn { color:#a8a29e; border-color:transparent; }
+    .tab-btn:hover { color:#ffffff; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:.75rem; }
+    .kpi-num { font-feature-settings: "tnum"; }
+    .row-overdue { background: linear-gradient(90deg, rgba(254,226,226,.55), rgba(254,226,226,0)); }
+    .pulse-dot { width:.5rem; height:.5rem; border-radius:9999px; background:#16a34a; box-shadow:0 0 0 0 rgba(22,163,74,.6); animation:pulse 1.6s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(22,163,74,.6)} 70%{box-shadow:0 0 0 8px rgba(22,163,74,0)} 100%{box-shadow:0 0 0 0 rgba(22,163,74,0)} }
+    .scroll-shadow::-webkit-scrollbar { height:8px; width:8px; }
+    .scroll-shadow::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
+    details > summary { list-style: none; cursor:pointer; }
+    details > summary::-webkit-details-marker { display:none; }
+    .chip { display:inline-block; padding:.1rem .5rem; border-radius:.375rem; font-size:.7rem; font-weight:500; background:#f1f5f9; color:#334155; }
+    .severity-bar { height:.4rem; border-radius:9999px; }
+    .focus-ring:focus { outline:2px solid #A06D32; outline-offset:2px; }
+    .modal-backdrop { background: rgba(15,23,42,.55); }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ========== HEADER ========== -->
+<header class="bg-[var(--shell)] text-white">
+  <div class="max-w-[1400px] mx-auto px-6 py-3 flex items-center gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-md bg-white grid place-items-center">
+        <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 2 L19 2 L11 11 L19 20 L3 20 L11 11 Z" fill="#A06D32"/>
+        </svg>
+      </div>
+      <div class="leading-tight">
+        <div class="text-sm font-bold tracking-wider">KFIC <span class="font-light opacity-90">INVEST</span></div>
+        <div class="text-[11px] text-white/70">Compliance Testing Dashboard</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-2 ml-2 text-[11px] text-slate-300">
+      <span class="px-2 py-0.5 border border-white/30 rounded-full">Internal — Restricted</span>
+      <span class="pulse-dot" title="Live"></span><span>Live</span>
+    </div>
+    <div class="ml-auto flex items-center gap-4 text-xs text-slate-200">
+      <div class="hidden lg:block">
+        <span class="text-slate-400">As of</span>
+        <span id="hdr-date" class="ml-1 mono"></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-800 grid place-items-center text-[11px] font-semibold">CC</div>
+        <div class="hidden sm:block leading-tight">
+          <div class="font-medium">Compliance Department</div>
+          <div class="text-[10px] text-slate-300">Chief Compliance Officer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Tabs -->
+  <nav class="bg-[var(--shell-2)] border-t border-white/5">
+    <div class="max-w-[1400px] mx-auto px-6 flex gap-1 overflow-x-auto">
+      <button class="tab-btn focus-ring px-4 py-3 text-sm border-b-2 transition" data-tab="overview" aria-selected="true">Overview</button>
+      <button class="tab-btn focus-ring px-4 py-3 text-sm border-b-2 transition" data-tab="findings" aria-selected="false">Findings (CAPA)</button>
+      <button class="tab-btn focus-ring px-4 py-3 text-sm border-b-2 transition" data-tab="aging" aria-selected="false">Aging &amp; Overdue</button>
+      <button class="tab-btn focus-ring px-4 py-3 text-sm border-b-2 transition" data-tab="plan" aria-selected="false">Plan &amp; Coverage</button>
+      <button class="tab-btn focus-ring px-4 py-3 text-sm border-b-2 transition" data-tab="regulator" aria-selected="false">Regulator Engagements</button>
+    </div>
+  </nav>
+</header>
+
+<main class="max-w-[1400px] mx-auto px-6 py-6 space-y-6">
+
+  <!-- ========== OVERVIEW ========== -->
+  <section data-pane="overview">
+
+    <!-- Banner -->
+    <div id="overdue-banner" class="hidden mb-5 p-4 card border-l-4 border-l-[var(--critical)]">
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-red-100 text-[var(--critical)] grid place-items-center font-bold">!</div>
+        <div class="flex-1">
+          <div class="text-sm font-semibold text-[var(--critical)]">Overdue findings require attention</div>
+          <div id="overdue-banner-text" class="text-xs text-slate-600 mt-0.5"></div>
+        </div>
+        <button class="text-xs px-3 py-1.5 rounded-md bg-[var(--brand)] text-white" onclick="setTab('aging')">Review</button>
+      </div>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Open issues</div>
+        <div id="kpi-open" class="kpi-num text-3xl font-semibold mt-1 text-[var(--brand)]">—</div>
+        <div class="text-[11px] text-slate-500 mt-1">across all sources</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Critical open</div>
+        <div id="kpi-critical" class="kpi-num text-3xl font-semibold mt-1 text-[var(--critical)]">—</div>
+        <div class="text-[11px] text-slate-500 mt-1">target: contain 24h · close 30d</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">High open</div>
+        <div id="kpi-high" class="kpi-num text-3xl font-semibold mt-1 text-[var(--high)]">—</div>
+        <div class="text-[11px] text-slate-500 mt-1">target: close in 60d</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Overdue</div>
+        <div id="kpi-overdue" class="kpi-num text-3xl font-semibold mt-1">—</div>
+        <div class="text-[11px] text-slate-500 mt-1">past target / revised target</div>
+      </div>
+    </div>
+
+    <!-- Second KPI row: Program-level KRIs -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Annual plan completion</div>
+        <div class="flex items-end gap-2 mt-1">
+          <div class="kpi-num text-2xl font-semibold text-[var(--brand)]">62%</div>
+          <div class="text-[11px] text-slate-500 pb-1">vs ≥95% target</div>
+        </div>
+        <div class="severity-bar bg-slate-100 mt-2"><div class="severity-bar bg-[var(--brand)]" style="width:62%"></div></div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Mandatory training</div>
+        <div class="flex items-end gap-2 mt-1">
+          <div class="kpi-num text-2xl font-semibold text-emerald-700">96%</div>
+          <div class="text-[11px] text-slate-500 pb-1">vs ≥98% target</div>
+        </div>
+        <div class="severity-bar bg-slate-100 mt-2"><div class="severity-bar bg-emerald-600" style="width:96%"></div></div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Repeat findings (24-mo)</div>
+        <div class="flex items-end gap-2 mt-1">
+          <div class="kpi-num text-2xl font-semibold text-[var(--brand)]">12.5%</div>
+          <div class="text-[11px] text-slate-500 pb-1">vs ≤5% target</div>
+        </div>
+        <div class="severity-bar bg-slate-100 mt-2"><div class="severity-bar bg-[var(--high)]" style="width:80%"></div></div>
+      </div>
+      <div class="card p-4">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Whistleblower triage SLA</div>
+        <div class="flex items-end gap-2 mt-1">
+          <div class="kpi-num text-2xl font-semibold text-emerald-700">100%</div>
+          <div class="text-[11px] text-slate-500 pb-1">in 5 BD</div>
+        </div>
+        <div class="severity-bar bg-slate-100 mt-2"><div class="severity-bar bg-emerald-600" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
+      <div class="card p-4">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm font-semibold">Open by severity</div>
+          <span class="text-[11px] text-slate-500">As of today</span>
+        </div>
+        <div class="h-56"><canvas id="chart-severity"></canvas></div>
+      </div>
+      <div class="card p-4 lg:col-span-2">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-sm font-semibold">Open by source</div>
+          <span class="text-[11px] text-slate-500">All eight intake sources</span>
+        </div>
+        <div class="h-56"><canvas id="chart-source"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-2">Open by department</div>
+        <div class="h-64"><canvas id="chart-dept"></canvas></div>
+      </div>
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-2">Aging — open issues</div>
+        <div class="h-64"><canvas id="chart-aging"></canvas></div>
+      </div>
+    </div>
+
+    <!-- KRI table -->
+    <div class="card p-4 mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold">Key Risk &amp; Performance Indicators</div>
+        <span class="chip">Source: Compliance Testing Program §11</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-[11px] uppercase tracking-wide text-slate-500 border-b border-slate-200">
+            <tr><th class="py-2 pr-3">Indicator</th><th class="py-2 pr-3">Target</th><th class="py-2 pr-3">Owner</th><th class="py-2 pr-3">Current</th><th class="py-2 pr-3">Status</th></tr>
+          </thead>
+          <tbody id="kri-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Latest activity -->
+    <div class="card p-4">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-sm font-semibold">Latest findings</div>
+        <button class="text-xs text-[var(--brand)] underline" onclick="setTab('findings')">View all</button>
+      </div>
+      <div id="latest-list" class="divide-y divide-slate-100"></div>
+    </div>
+  </section>
+
+  <!-- ========== FINDINGS ========== -->
+  <section data-pane="findings" class="hidden">
+    <div class="card p-4">
+      <div class="flex flex-wrap items-center gap-3 mb-3">
+        <div class="text-sm font-semibold mr-2">CAPA Tracker</div>
+        <span id="local-count-chip" class="chip hidden">0 added locally</span>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="btn-clear-local" class="hidden text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">Clear local</button>
+          <button id="btn-export" class="text-xs px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">Export JSON</button>
+          <button id="btn-add-finding" class="text-xs px-3 py-1.5 rounded-md bg-[var(--brand)] text-white hover:bg-[var(--brand-dark)] flex items-center gap-1.5">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            New finding
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 mb-3 pb-3 border-b border-slate-100">
+        <select id="f-severity" class="text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white"><option value="">All severities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+        <select id="f-status" class="text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white"><option value="">All statuses</option><option>Open</option><option>In progress</option><option>Pending validation</option><option>Closed</option></select>
+        <select id="f-source" class="text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white"><option value="">All sources</option></select>
+        <select id="f-dept" class="text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white"><option value="">All departments</option></select>
+        <label class="text-xs flex items-center gap-1.5 ml-1"><input type="checkbox" id="f-overdue" class="rounded"> Overdue only</label>
+        <input id="f-search" placeholder="Search ID, finding, owner…" class="ml-auto text-xs border border-slate-300 rounded-md px-3 py-1.5 bg-white w-64"/>
+      </div>
+      <div class="overflow-x-auto scroll-shadow">
+        <table class="w-full text-xs">
+          <thead class="text-left text-[10px] uppercase tracking-wide text-slate-500 border-b border-slate-200 bg-slate-50">
+            <tr>
+              <th class="py-2 pl-3 pr-2">ID</th>
+              <th class="py-2 px-2">Source</th>
+              <th class="py-2 px-2">Dept</th>
+              <th class="py-2 px-2">Finding</th>
+              <th class="py-2 px-2">Severity</th>
+              <th class="py-2 px-2">Owner</th>
+              <th class="py-2 px-2">Raised</th>
+              <th class="py-2 px-2">Target</th>
+              <th class="py-2 px-2">Days</th>
+              <th class="py-2 px-2">Status</th>
+              <th class="py-2 px-2"></th>
+            </tr>
+          </thead>
+          <tbody id="findings-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <div id="findings-empty" class="hidden text-center text-sm text-slate-500 py-10">No findings match the current filter.</div>
+      <div class="flex items-center justify-between mt-3 text-[11px] text-slate-500">
+        <div id="findings-count">—</div>
+        <div>Closure rule: Critical &amp; High require Compliance evidence validation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AGING ========== -->
+  <section data-pane="aging" class="hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+      <div class="card p-4 lg:col-span-2">
+        <div class="text-sm font-semibold mb-3">Aging matrix — open issues</div>
+        <table class="w-full text-sm">
+          <thead class="text-left text-[11px] uppercase tracking-wide text-slate-500 border-b border-slate-200">
+            <tr><th class="py-2 pr-3">Bucket</th><th class="py-2 pr-3">Critical</th><th class="py-2 pr-3">High</th><th class="py-2 pr-3">Medium</th><th class="py-2 pr-3">Low</th><th class="py-2 pr-3">Total</th></tr>
+          </thead>
+          <tbody id="aging-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-3">Severity windows</div>
+        <ul class="text-sm space-y-2">
+          <li class="flex items-center justify-between"><span class="pill sev-Critical">Critical</span><span class="text-slate-600">Contain 24h · close 30d</span></li>
+          <li class="flex items-center justify-between"><span class="pill sev-High">High</span><span class="text-slate-600">60 days</span></li>
+          <li class="flex items-center justify-between"><span class="pill sev-Medium">Medium</span><span class="text-slate-600">90 days</span></li>
+          <li class="flex items-center justify-between"><span class="pill sev-Low">Low</span><span class="text-slate-600">120 days</span></li>
+        </ul>
+        <div class="text-[11px] text-slate-500 mt-3">Overdue = today is past target (or revised target) and status ≠ Closed.</div>
+      </div>
+    </div>
+
+    <div class="card p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold">Overdue findings</div>
+        <span id="overdue-count" class="chip"></span>
+      </div>
+      <div id="overdue-list"></div>
+    </div>
+  </section>
+
+  <!-- ========== PLAN & COVERAGE ========== -->
+  <section data-pane="plan" class="hidden">
+
+    <!-- Annual testing calendar -->
+    <div class="card p-4 mb-4">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <div>
+          <div class="text-sm font-semibold">Annual testing calendar — 2026</div>
+          <div class="text-[11px] text-slate-500 mt-0.5">Department × month coverage. Reserve capacity ≥ 20% held for ad-hoc engagements (CTP §12).</div>
+        </div>
+        <div class="ml-auto flex flex-wrap items-center gap-3 text-[11px] text-slate-700">
+          <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-2.5 rounded-sm" style="background:#A06D32"></span>Complete</span>
+          <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-2.5 rounded-sm" style="background:#ea580c"></span>In flight</span>
+          <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-2.5 rounded-sm bg-slate-300"></span>Planned</span>
+          <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-2.5 rounded-sm" style="background-image:repeating-linear-gradient(45deg,#cbd5e1,#cbd5e1 3px,#e2e8f0 3px,#e2e8f0 6px)"></span>Continuous</span>
+          <span class="flex items-center gap-1.5"><span class="inline-block w-1 h-3 rounded-sm" style="background:#A06D32"></span>Today (May)</span>
+        </div>
+      </div>
+      <div id="cal-wrap" class="overflow-x-auto scroll-shadow"></div>
+      <div class="text-[11px] text-slate-500 mt-3">Hover any block for engagement details. Continuous bands indicate Tier 1 ongoing monitoring (e.g., AML alerts, PA dealing pre-clearance).</div>
+    </div>
+
+    <!-- Risk tiers + coverage map -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-3">Risk tiers &amp; cadence</div>
+        <ul class="text-sm space-y-3">
+          <li><div class="font-medium">Tier 1 — Critical</div><div class="text-slate-600 text-xs">Continuous + ≥1 thematic / yr</div></li>
+          <li><div class="font-medium">Tier 2 — High</div><div class="text-slate-600 text-xs">≥1 every 12 months</div></li>
+          <li><div class="font-medium">Tier 3 — Moderate</div><div class="text-slate-600 text-xs">≥1 every 18–24 months</div></li>
+          <li><div class="font-medium">Tier 4 — Low</div><div class="text-slate-600 text-xs">≥1 every 36 months</div></li>
+        </ul>
+      </div>
+      <div class="card p-4 lg:col-span-2">
+        <div class="text-sm font-semibold mb-3">Coverage map by department group</div>
+        <div id="coverage-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+      </div>
+    </div>
+
+    <div class="card p-4">
+      <div class="text-sm font-semibold mb-3">Testing lifecycle</div>
+      <ol class="grid grid-cols-2 md:grid-cols-6 gap-3 text-xs">
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">01 Scoping</div><div class="text-slate-600 mt-1">Objective, period, regulatory inventory.</div></li>
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">02 Planning</div><div class="text-slate-600 mt-1">Test programme, sample, analytics.</div></li>
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">03 Fieldwork</div><div class="text-slate-600 mt-1">Walkthroughs, design + operating effectiveness.</div></li>
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">04 Findings</div><div class="text-slate-600 mt-1">Draft, root cause, validation forum.</div></li>
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">05 Reporting</div><div class="text-slate-600 mt-1">Issue report; escalate Critical/High in 24h.</div></li>
+        <li class="p-3 rounded-md bg-slate-50"><div class="font-semibold text-[var(--brand)]">06 Closure</div><div class="text-slate-600 mt-1">CAPA tracking; Compliance validates evidence.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========== REGULATOR ENGAGEMENTS ========== -->
+  <section data-pane="regulator" class="hidden">
+    <div class="card p-4 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold">Inbound regulator &amp; auditor engagements</div>
+        <span class="chip">Per CTP §9 — Compliance manages end-to-end</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-[11px] uppercase tracking-wide text-slate-500 border-b border-slate-200">
+            <tr><th class="py-2 pr-3">Source</th><th class="py-2 pr-3">External Ref.</th><th class="py-2 pr-3">CAPA</th><th class="py-2 pr-3">Dept</th><th class="py-2 pr-3">Severity</th><th class="py-2 pr-3">Stage</th><th class="py-2 pr-3">Days open</th></tr>
+          </thead>
+          <tbody id="regulator-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-3">Self-disclosure register</div>
+        <div class="text-xs text-slate-600 mb-3">Triggered where Module 5 / Module 10 thresholds are met. Drafted with GC.</div>
+        <table class="w-full text-sm">
+          <thead class="text-left text-[11px] uppercase tracking-wide text-slate-500 border-b border-slate-200">
+            <tr><th class="py-2 pr-3">Date</th><th class="py-2 pr-3">Recipient</th><th class="py-2 pr-3">Subject</th><th class="py-2 pr-3">Status</th></tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-xs">
+            <tr><td class="py-2 pr-3 mono">2026-02-15</td><td class="py-2 pr-3">CMA</td><td class="py-2 pr-3">PA dealing breach (CAPA-2026-002)</td><td class="py-2 pr-3"><span class="pill sev-Closed">Submitted</span></td></tr>
+            <tr><td class="py-2 pr-3 mono">2026-03-22</td><td class="py-2 pr-3">CMA</td><td class="py-2 pr-3">Conflicts allegation (CAPA-2026-005)</td><td class="py-2 pr-3"><span class="pill sev-High">Pending GC review</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card p-4">
+        <div class="text-sm font-semibold mb-3">Escalation triggers — current month</div>
+        <ul class="text-sm space-y-2">
+          <li class="flex items-start gap-2"><span class="pill sev-Critical mt-0.5">×1</span><span>Critical finding raised — CAPA-2026-002 (PA dealing pre-clearance)</span></li>
+          <li class="flex items-start gap-2"><span class="pill sev-Critical mt-0.5">×1</span><span>Whistleblower allegation under investigation — CAPA-2026-005</span></li>
+          <li class="flex items-start gap-2"><span class="pill sev-High mt-0.5">×1</span><span>Repeat finding within 24 months — CAPA-2026-003 (recurrence of CAPA-2024-019)</span></li>
+        </ul>
+        <div class="text-[11px] text-slate-500 mt-3">All escalations notified to AC Chair, GC, CEO per CTP §13.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="max-w-[1400px] mx-auto px-6 py-6 text-[11px] text-slate-500 flex flex-wrap items-center gap-3">
+  <span>KFIC Invest · Compliance Department · v1.0 · Effective 1 June 2026</span>
+  <span class="ml-auto">Companion to: <a href="#" class="underline">Compliance Testing Program</a> · <a href="#" class="underline">Employee Handbook</a></span>
+</footer>
+
+<!-- ========== FORM MODAL: NEW FINDING ========== -->
+<div id="form-modal" class="hidden fixed inset-0 z-50 grid place-items-center modal-backdrop" onclick="if(event.target===this)closeForm()">
+  <div class="bg-white rounded-xl w-[min(900px,95vw)] max-h-[92vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center gap-3 z-10">
+      <div class="text-sm font-semibold text-[var(--brand)]">New finding</div>
+      <span class="mono text-[11px] text-slate-500">Auto-ID: <span id="fld-id-preview">CAPA-—</span></span>
+      <button class="ml-auto text-slate-400 hover:text-slate-700" onclick="closeForm()" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <form id="finding-form" class="px-6 py-5 space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Source <span class="text-red-600">*</span></span>
+          <select name="source" required class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white">
+            <option value="">Select…</option>
+            <option>Compliance Testing</option>
+            <option>Internal Audit</option>
+            <option>External Auditor</option>
+            <option>CMA Inspection</option>
+            <option>Boursa Kuwait</option>
+            <option>CBK Circular</option>
+            <option>Self-identified</option>
+            <option>Whistleblower</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">External reference</span>
+          <input name="ref" type="text" placeholder="e.g. CMA-INS-2026-04" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white mono"/>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Department <span class="text-red-600">*</span></span>
+          <input name="dept" type="text" required placeholder="e.g. Brokerage" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white" list="dept-options"/>
+          <datalist id="dept-options"></datalist>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Subprocess</span>
+          <input name="subprocess" type="text" placeholder="e.g. Onboarding EDD" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"/>
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-[11px] uppercase tracking-wide text-slate-500">Finding <span class="text-red-600">*</span></span>
+        <textarea name="finding" required rows="2" placeholder="One-sentence statement of the issue identified." class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"></textarea>
+      </label>
+
+      <label class="block">
+        <span class="text-[11px] uppercase tracking-wide text-slate-500">Root cause</span>
+        <textarea name="cause" rows="2" placeholder="Why did this happen — control, process, or behaviour gap." class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"></textarea>
+      </label>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Severity <span class="text-red-600">*</span></span>
+          <select name="severity" id="fld-severity" required class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white">
+            <option value="">Select…</option>
+            <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Date raised <span class="text-red-600">*</span></span>
+          <input name="raised" id="fld-raised" type="date" required class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white mono"/>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Target closure</span>
+          <input name="target" id="fld-target" type="date" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white mono"/>
+          <span class="text-[10px] text-slate-500">Auto-set from severity window — editable.</span>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Recurrence</span>
+          <div class="mt-2 flex items-center gap-2">
+            <input type="checkbox" name="recurrence" id="fld-recurrence" class="rounded"/>
+            <span class="text-sm text-slate-700">Recurrence of prior finding</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Owner (named) <span class="text-red-600">*</span></span>
+          <input name="owner" type="text" required placeholder="e.g. Sara Al-Otaibi" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"/>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Sponsor (Dept Head)</span>
+          <input name="sponsor" type="text" placeholder="e.g. Head of AML" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"/>
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-[11px] uppercase tracking-wide text-slate-500">Action plan</span>
+        <textarea name="plan" rows="2" placeholder="Numbered actions to remediate." class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"></textarea>
+      </label>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Milestones</span>
+          <input name="milestones" type="text" placeholder="Milestone: date · Milestone: date" class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"/>
+        </label>
+        <label class="block">
+          <span class="text-[11px] uppercase tracking-wide text-slate-500">Evidence required</span>
+          <input name="evidence" type="text" placeholder="What artefacts close this finding." class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"/>
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-[11px] uppercase tracking-wide text-slate-500">Notes</span>
+        <textarea name="notes" rows="2" placeholder="Internal notes, confidentiality flags, etc." class="mt-1 w-full text-sm border border-slate-300 rounded-md px-2 py-2 bg-white"></textarea>
+      </label>
+
+      <div class="flex items-center gap-3 pt-2 border-t border-slate-100">
+        <span class="text-[11px] text-slate-500">Saved on this device only. Status defaults to <span class="chip">Open</span>.</span>
+        <div class="ml-auto flex gap-2">
+          <button type="button" onclick="closeForm()" class="text-sm px-4 py-2 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="text-sm px-4 py-2 rounded-md bg-[var(--brand)] text-white hover:bg-[var(--brand-dark)]">Save finding</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========== DETAIL MODAL ========== -->
+<div id="modal" class="hidden fixed inset-0 z-50 grid place-items-center modal-backdrop" onclick="if(event.target===this)closeModal()">
+  <div class="bg-white rounded-xl w-[min(800px,95vw)] max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div class="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+      <div id="m-id" class="mono text-sm text-slate-500"></div>
+      <span id="m-sev" class="pill"></span>
+      <span id="m-status" class="pill"></span>
+      <button class="ml-auto text-slate-400 hover:text-slate-700" onclick="closeModal()" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="px-6 py-5 space-y-5">
+      <div>
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Finding</div>
+        <div id="m-finding" class="text-base text-slate-900 mt-1"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Source</div><div id="m-source" class="mt-0.5"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">External ref.</div><div id="m-ref" class="mt-0.5 mono text-slate-700"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Department / subprocess</div><div id="m-dept" class="mt-0.5"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Owner / Sponsor</div><div id="m-owner" class="mt-0.5"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Date raised</div><div id="m-raised" class="mt-0.5 mono"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Target / revised</div><div id="m-target" class="mt-0.5 mono"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Days open</div><div id="m-days" class="mt-0.5 mono"></div></div>
+        <div><div class="text-[11px] uppercase tracking-wide text-slate-500">Recurrence</div><div id="m-recur" class="mt-0.5"></div></div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Root cause</div>
+        <div id="m-cause" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Action plan</div>
+        <div id="m-plan" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Milestones</div>
+        <div id="m-milestones" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div>
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Evidence required</div>
+        <div id="m-evidence" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div id="m-escalation-wrap">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Escalation history</div>
+        <div id="m-escalation" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div id="m-linked-wrap">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Linked findings · related KRI</div>
+        <div id="m-linked" class="text-sm mt-1 text-slate-800"></div>
+      </div>
+      <div id="m-notes-wrap">
+        <div class="text-[11px] uppercase tracking-wide text-slate-500">Notes</div>
+        <div id="m-notes" class="text-sm mt-1 text-slate-800 italic"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// =================== DATA ===================
+// "Today" pinned for reproducible demo. In production, swap to new Date().
+const TODAY = new Date('2026-05-05');
+
+const SEVERITY_DAYS = { Critical: 30, High: 60, Medium: 90, Low: 120 };
+const SEVERITY_ORDER = { Critical:0, High:1, Medium:2, Low:3 };
+
+const KRIS = [
+  { name: "Annual plan completion",          target: "≥ 95%",        owner: "CCO",       current: "62%",  state: "amber" },
+  { name: "Critical findings overdue",       target: "0",            owner: "CCO",       current: "1",    state: "red"   },
+  { name: "High findings overdue",            target: "≤ 1",          owner: "CCO",       current: "2",    state: "red"   },
+  { name: "Repeat findings (24-mo)",          target: "≤ 5%",         owner: "CCO",       current: "12.5%",state: "red"   },
+  { name: "Mandatory training completion",    target: "≥ 98%",        owner: "HR / CCO",  current: "96%",  state: "amber" },
+  { name: "Regulator findings open > 90 d",   target: "0",            owner: "CCO / Dept",current: "0",    state: "green" },
+  { name: "AML alert closure aging (median)", target: "≤ 7 days",     owner: "MLRO",      current: "5 d",  state: "green" },
+  { name: "Whistleblower triage (in 5 BD)",   target: "100%",         owner: "CCO",       current: "100%", state: "green" },
+  { name: "PA dealing breaches",              target: "Trend ↓ YoY",  owner: "CCO",       current: "↑ vs 2025", state: "amber" },
+];
+
+const COVERAGE_GROUPS = [
+  { group: "Front office",     members: "Brokerage · Asset Mgmt · IB · Advisory",          coverage: 75, planned: 4, complete: 3 },
+  { group: "Risk & Control",   members: "Compliance · AML/CFT · Risk · IA interface",      coverage: 50, planned: 4, complete: 2 },
+  { group: "Finance & Ops",    members: "Finance · Treasury · Operations · Settlements",   coverage: 67, planned: 3, complete: 2 },
+  { group: "Enabling",         members: "IT &amp; Cyber · HR · Procurement · Outsourced",  coverage: 50, planned: 4, complete: 2 },
+  { group: "Disclosure",       members: "Investor Relations · Boursa · Insider list",      coverage: 100, planned: 2, complete: 2 },
+  { group: "Group",            members: "Subsidiaries · JVs · Fund admin · Custodians",    coverage: 33, planned: 3, complete: 1 },
+];
+
+// CAPA records (sourced from KFIC_Invest_CAPA_Tracker.xlsx)
+const CAPA = [
+  { id:"CAPA-2026-001", source:"CMA Inspection", ref:"CMA-INS-2025-14", raised:"2026-01-09", logged:"2026-01-10",
+    dept:"AML/CFT", subprocess:"Onboarding EDD",
+    finding:"EDD documentation incomplete for 7 of 40 high-risk client files reviewed.",
+    cause:"Insufficient quality review at second-line gate.",
+    severity:"High", recurrence:false, owner:"Sara Al-Otaibi", sponsor:"Head of AML",
+    plan:"(1) Re-perform EDD on the 7 files; (2) introduce 2nd-reviewer sign-off; (3) update onboarding checklist.",
+    milestones:"Re-perform: 28 Feb · Reviewer: 15 Mar · Checklist: 31 Mar",
+    target:"2026-04-15", revised:null, reason:null, status:"In progress",
+    evidence:"Re-performed EDD packs; updated SOP; sample QA report.",
+    escalation:"Notified MLRO 16 Jan 2026", linked:"", risk:"AML.RK-02", notes:"" },
+
+  { id:"CAPA-2026-002", source:"Internal Audit", ref:"IA-2026-Q1-03", raised:"2026-01-27", logged:"2026-01-27",
+    dept:"Brokerage", subprocess:"Personal-account dealing",
+    finding:"Two PA dealing pre-clearance approvals granted within 24 hours of related research note.",
+    cause:"Pre-clearance reviewer did not consult research calendar.",
+    severity:"Critical", recurrence:false, owner:"Faisal Al-Mutairi", sponsor:"Head of Brokerage",
+    plan:"(1) Block research-window trades in PA system; (2) retraining; (3) supervisory log review.",
+    milestones:"System block: 15 Feb · Training: 25 Feb · Log: 28 Feb",
+    target:"2026-02-22", revised:"2026-03-09", reason:"Awaiting vendor patch for system block",
+    status:"Pending validation",
+    evidence:"System control screenshot; training records; signed log.",
+    escalation:"Escalated to AC Chair 3 Feb 2026", linked:"", risk:"BRK.RK-04", notes:"" },
+
+  { id:"CAPA-2026-003", source:"External Auditor", ref:"ML-FY25-02", raised:"2026-02-14", logged:"2026-02-14",
+    dept:"Finance", subprocess:"Client money segregation",
+    finding:"Two reconciling items > KWD 50k aged > 5 business days during the quarter.",
+    cause:"Reconciliation tool exception report not reviewed daily during staff leave.",
+    severity:"High", recurrence:true, owner:"Mohamed Al-Salem", sponsor:"CFO",
+    plan:"(1) Daily review controlled by named delegate during leave; (2) auto-escalation on D+3.",
+    milestones:"Delegate matrix: 10 Mar · Auto-escalation rule: 31 Mar",
+    target:"2026-04-15", revised:null, reason:null, status:"Open",
+    evidence:"Updated procedure; delegate roster; alert log.",
+    escalation:"", linked:"CAPA-2024-019", risk:"FIN.RK-01", notes:"Recurrence of 2024 finding" },
+
+  { id:"CAPA-2026-004", source:"Boursa Kuwait", ref:"BSK-DISC-2026-08", raised:"2026-02-27", logged:"2026-02-27",
+    dept:"Investor Relations", subprocess:"Disclosure timing",
+    finding:"Material announcement filed 22 minutes after the 9:00 AM trading session opened.",
+    cause:"Approval workflow stalled at GC review; no fallback approver configured.",
+    severity:"Medium", recurrence:false, owner:"Layla Al-Shamri", sponsor:"Head of IR",
+    plan:"(1) Add GC backup approver; (2) pre-stage announcements 1 BD prior; (3) disclosure rehearsals.",
+    milestones:"Backup approver: 20 Mar · Pre-stage SOP: 31 Mar · Rehearsal: Q2",
+    target:"2026-06-15", revised:null, reason:null, status:"In progress",
+    evidence:"Updated workflow; rehearsal log.",
+    escalation:"", linked:"", risk:"IR.RK-03", notes:"" },
+
+  { id:"CAPA-2026-005", source:"Whistleblower", ref:"WB-2026-02", raised:"2026-03-12", logged:"2026-03-13",
+    dept:"Asset Management", subprocess:"Conflicts of interest",
+    finding:"Allegation that personal relationship between PM and counterparty was not disclosed.",
+    cause:"(Under investigation — pending substantiation)",
+    severity:"Critical", recurrence:false, owner:"Chief Compliance Officer", sponsor:"CEO",
+    plan:"Independent investigation; interim PM rotation off the relevant mandate.",
+    milestones:"Investigation kickoff: 22 Mar · Interim rotation: 22 Mar · Findings: 30 Apr",
+    target:"2026-05-15", revised:null, reason:null, status:"In progress",
+    evidence:"Investigation report (privileged); rotation memo; new disclosure.",
+    escalation:"AC Chair, GC, CEO notified", linked:"", risk:"AM.RK-07",
+    notes:"Confidential — restricted access" },
+
+  { id:"CAPA-2026-006", source:"Compliance Testing", ref:"CTP-2026-007", raised:"2026-03-22", logged:"2026-03-22",
+    dept:"IT & Cyber", subprocess:"Privileged access management",
+    finding:"3 of 25 admin accounts retained access > 30 days after role change.",
+    cause:"Joiners-movers-leavers process not triggered for internal moves.",
+    severity:"High", recurrence:false, owner:"Khaled Al-Ajmi", sponsor:"CIO",
+    plan:"(1) Add internal-move trigger to JML; (2) quarterly entitlement review; (3) automated revocation after 7 days.",
+    milestones:"JML trigger: 30 Apr · Review: 31 May · Auto-revoke: 30 Jun",
+    target:"2026-07-15", revised:null, reason:null, status:"Open",
+    evidence:"JML documentation; entitlement review report; auto-revoke logs.",
+    escalation:"", linked:"", risk:"IT.RK-05", notes:"" },
+
+  { id:"CAPA-2025-099", source:"Internal Audit", ref:"IA-2025-Q4-08", raised:"2025-10-27", logged:"2025-10-28",
+    dept:"Procurement", subprocess:"Vendor due diligence",
+    finding:"Vendor onboarded without sanctions screening.",
+    cause:"Manual handoff between Procurement and Compliance missed.",
+    severity:"High", recurrence:false, owner:"Reem Al-Hajri", sponsor:"Head of Procurement",
+    plan:"(1) Mandatory screening checkbox in PO system; (2) reverse onboarding for vendor; (3) refresh training.",
+    milestones:"System control: 15 Dec · Reverse: 30 Nov · Training: 31 Dec",
+    target:"2025-12-25", revised:null, reason:null, status:"Closed", closed:"2025-12-22",
+    evidence:"System screenshot; vendor file; training register.",
+    escalation:"", linked:"", risk:"PRC.RK-02", notes:"" },
+
+  { id:"CAPA-2025-082", source:"CBK Circular", ref:"CBK-2025-15", raised:"2025-09-04", logged:"2025-09-05",
+    dept:"Finance", subprocess:"Liquidity reporting",
+    finding:"Monthly liquidity return submitted 1 BD late.",
+    cause:"Submitter on leave without delegate.",
+    severity:"Low", recurrence:false, owner:"Mohamed Al-Salem", sponsor:"CFO",
+    plan:"(1) Named delegate roster; (2) calendar block 2 BD before due.",
+    milestones:"Delegate roster: 30 Sep",
+    target:"2025-11-09", revised:null, reason:null, status:"Closed", closed:"2025-10-28",
+    evidence:"Delegate roster; submission log.",
+    escalation:"", linked:"", risk:"FIN.RK-04", notes:"" },
+];
+
+// ============== HELPERS ==============
+const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+const daysBetween = (a,b) => Math.floor((b - a) / 86400000);
+const isOpen = (r) => r.status !== 'Closed';
+function dueDate(r) {
+  return new Date(r.revised || r.target);
+}
+function isOverdue(r) {
+  return isOpen(r) && TODAY > dueDate(r);
+}
+function daysOpen(r) {
+  const end = r.closed ? new Date(r.closed) : TODAY;
+  return daysBetween(new Date(r.raised), end);
+}
+function ageBucket(r) {
+  const d = daysOpen(r);
+  if (d <= 30) return "0–30 days";
+  if (d <= 60) return "31–60 days";
+  if (d <= 90) return "61–90 days";
+  return ">90 days";
+}
+
+// ============== TABS ==============
+function setTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const sel = btn.dataset.tab === name;
+    btn.setAttribute('aria-selected', sel ? 'true' : 'false');
+  });
+  document.querySelectorAll('section[data-pane]').forEach(s => {
+    s.classList.toggle('hidden', s.dataset.pane !== name);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
+
+// ============== HEADER DATE ==============
+document.getElementById('hdr-date').textContent =
+  TODAY.toLocaleDateString('en-GB', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+
+// ============== STORAGE: locally-added findings ==============
+const STORAGE_KEY = 'kfic-capa-additions-v1';
+function loadAdditions() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveAdditions() { localStorage.setItem(STORAGE_KEY, JSON.stringify(additions)); }
+let additions = loadAdditions();
+function getAll() { return [...CAPA, ...additions]; }
+
+// ============== CHART REGISTRY ==============
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+Chart.defaults.color = "#475569";
+Chart.defaults.borderColor = "#e2e8f0";
+const SEVERITY_COLOR = { Critical:'#b91c1c', High:'#ea580c', Medium:'#b45309', Low:'#1d4ed8' };
+const charts = {};
+
+// ============== KRI / COVERAGE (rendered once) ==============
+const stateChip = { red:'bg-red-100 text-red-800', amber:'bg-amber-100 text-amber-800', green:'bg-emerald-100 text-emerald-800' };
+const stateLabel = { red:'At risk', amber:'Watch', green:'On target' };
+KRIS.forEach(k => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="py-2 pr-3">${k.name}</td>
+    <td class="py-2 pr-3 mono text-slate-700">${k.target}</td>
+    <td class="py-2 pr-3 text-slate-700">${k.owner}</td>
+    <td class="py-2 pr-3 mono">${k.current}</td>
+    <td class="py-2 pr-3"><span class="pill ${stateChip[k.state]}">${stateLabel[k.state]}</span></td>`;
+  document.getElementById('kri-tbody').appendChild(tr);
+});
+COVERAGE_GROUPS.forEach(g => {
+  const color = g.coverage >= 80 ? 'bg-emerald-500' : g.coverage >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  document.getElementById('coverage-grid').insertAdjacentHTML('beforeend', `
+    <div class="border border-slate-200 rounded-lg p-3">
+      <div class="flex items-baseline justify-between mb-1">
+        <div class="text-sm font-semibold">${g.group}</div>
+        <div class="mono text-sm">${g.coverage}%</div>
+      </div>
+      <div class="severity-bar bg-slate-100 mb-2"><div class="severity-bar ${color}" style="width:${g.coverage}%"></div></div>
+      <div class="text-[11px] text-slate-500">${g.members}</div>
+      <div class="text-[11px] text-slate-600 mt-1">${g.complete} of ${g.planned} engagements complete</div>
+    </div>`);
+});
+// ============== TESTING CALENDAR (rendered once) ==============
+const TESTING_CALENDAR = [
+  { dept:"AML/CFT",            tier:"Tier 1", continuous:true,  engagements:[
+    { name:"Onboarding EDD thematic",       start:1,  end:3,  status:"complete"  },
+    { name:"Sanctions screening review",     start:4,  end:5,  status:"in-flight" },
+    { name:"Transaction monitoring rules",   start:8,  end:9,  status:"planned"   },
+  ]},
+  { dept:"Brokerage",          tier:"Tier 1", continuous:true,  engagements:[
+    { name:"PA dealing pre-clearance",       start:1,  end:3,  status:"complete"  },
+    { name:"Market abuse controls",          start:9,  end:10, status:"planned"   },
+  ]},
+  { dept:"IT & Cyber",         tier:"Tier 1", continuous:true,  engagements:[
+    { name:"Privileged access management",   start:3,  end:5,  status:"in-flight" },
+    { name:"Cyber resilience test",          start:10, end:11, status:"planned"   },
+  ]},
+  { dept:"Asset Management",   tier:"Tier 2", continuous:false, engagements:[
+    { name:"Conflicts of interest",          start:3,  end:5,  status:"in-flight" },
+    { name:"Suitability assessment",         start:10, end:11, status:"planned"   },
+  ]},
+  { dept:"Investment Banking", tier:"Tier 2", continuous:false, engagements:[
+    { name:"MNPI handling",                  start:6,  end:7,  status:"planned"   },
+    { name:"Deal team controls",             start:11, end:12, status:"planned"   },
+  ]},
+  { dept:"Investor Relations", tier:"Tier 2", continuous:false, engagements:[
+    { name:"Disclosure timing review",       start:2,  end:4,  status:"complete"  },
+    { name:"Insider list review",            start:9,  end:10, status:"planned"   },
+  ]},
+  { dept:"Finance",            tier:"Tier 2", continuous:false, engagements:[
+    { name:"Client money segregation",       start:2,  end:4,  status:"complete"  },
+    { name:"Reconciliation review",          start:11, end:12, status:"planned"   },
+  ]},
+  { dept:"Treasury & Operations", tier:"Tier 2", continuous:false, engagements:[
+    { name:"Settlement controls",            start:6,  end:7,  status:"planned"   },
+    { name:"Liquidity reporting",            start:9,  end:10, status:"planned"   },
+  ]},
+  { dept:"HR & Procurement",   tier:"Tier 3", continuous:false, engagements:[
+    { name:"Vendor due diligence",           start:7,  end:8,  status:"planned"   },
+  ]},
+  { dept:"Group / Outsourced", tier:"Tier 3", continuous:false, engagements:[
+    { name:"Custodian oversight",            start:8,  end:9,  status:"planned"   },
+    { name:"Fund admin controls",            start:11, end:12, status:"planned"   },
+  ]},
+];
+
+function renderCalendar() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const todayMonth = TODAY.getMonth() + 1;
+  const wrap = document.getElementById('cal-wrap');
+  const colTpl = `grid-template-columns: 200px repeat(12, minmax(54px,1fr));`;
+
+  let html = `<div class="min-w-[820px]">`;
+
+  // Header row
+  html += `<div class="grid border-b border-slate-200" style="${colTpl}">`;
+  html += `<div></div>`;
+  months.forEach((m, i) => {
+    const isToday = (i+1) === todayMonth;
+    html += `<div class="text-center text-[10px] font-medium py-2 ${isToday ? 'text-[var(--brand)] bg-[var(--cream)]' : 'text-slate-600'}">${m}${isToday ? ' <span class="text-[var(--brand)]">●</span>' : ''}</div>`;
+  });
+  html += `</div>`;
+
+  // Dept rows
+  TESTING_CALENDAR.forEach(row => {
+    html += `<div class="grid border-b border-slate-100 min-h-[44px] hover:bg-slate-50/60 transition" style="${colTpl}">`;
+    // Label
+    html += `<div class="py-2 pr-3 flex flex-col justify-center" style="grid-row:1; grid-column:1;">
+      <div class="text-xs font-medium">${row.dept}</div>
+      <div class="text-[10px] text-slate-500">${row.tier}${row.continuous ? ' · Continuous' : ''}</div>
+    </div>`;
+    // 12 background cells (for vertical grid lines + today highlight)
+    for (let i = 0; i < 12; i++) {
+      const isToday = (i+1) === todayMonth;
+      html += `<div style="grid-row:1; grid-column:${i+2};" class="${i < 11 ? 'border-r border-slate-50' : ''} ${isToday ? 'bg-[var(--cream)]' : ''}"></div>`;
+    }
+    // Continuous band (thin striped bar, full width)
+    if (row.continuous) {
+      html += `<div style="grid-row:1; grid-column:2 / span 12; background-image:repeating-linear-gradient(45deg,#cbd5e1,#cbd5e1 3px,#e2e8f0 3px,#e2e8f0 6px); height:6px; border-radius:2px;" class="self-center mx-1"></div>`;
+    }
+    // Engagement bars
+    row.engagements.forEach(e => {
+      const span = e.end - e.start + 1;
+      const bg = e.status === 'complete'  ? '#A06D32' :
+                 e.status === 'in-flight' ? '#ea580c' : '#cbd5e1';
+      const fg = e.status === 'planned'   ? '#1e293b' : '#fff';
+      const labelStatus = e.status === 'in-flight' ? 'In flight' : (e.status[0].toUpperCase()+e.status.slice(1));
+      html += `<div class="self-center mx-1 my-1 px-2 py-1 text-[10px] truncate rounded shadow-sm cursor-default"
+                    style="grid-row:1; grid-column:${e.start+1} / span ${span}; background:${bg}; color:${fg};"
+                    title="${e.name} · ${months[e.start-1]}–${months[e.end-1]} · ${labelStatus}">
+        ${e.name}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  wrap.innerHTML = html;
+}
+renderCalendar();
+
+// ============== REACTIVE RENDERS ==============
+function renderKPIs() {
+  const all = getAll();
+  const open = all.filter(isOpen);
+  const overdue = all.filter(isOverdue);
+  const critical = open.filter(r => r.severity === 'Critical');
+  const high = open.filter(r => r.severity === 'High');
+  document.getElementById('kpi-open').textContent = open.length;
+  document.getElementById('kpi-critical').textContent = critical.length;
+  document.getElementById('kpi-high').textContent = high.length;
+  const ov = document.getElementById('kpi-overdue');
+  ov.textContent = overdue.length;
+  ov.className = 'kpi-num text-3xl font-semibold mt-1 ' + (overdue.length > 0 ? 'text-[var(--critical)]' : 'text-emerald-700');
+
+  const banner = document.getElementById('overdue-banner');
+  if (overdue.length > 0) {
+    banner.classList.remove('hidden');
+    const bySev = overdue.reduce((m,r) => { m[r.severity]=(m[r.severity]||0)+1; return m; }, {});
+    document.getElementById('overdue-banner-text').textContent =
+      `${overdue.length} finding(s) past target — ${Object.entries(bySev).map(([k,v])=>`${v} ${k}`).join(' · ')}.`;
+  } else {
+    banner.classList.add('hidden');
+  }
+
+  const chip = document.getElementById('local-count-chip');
+  const clearBtn = document.getElementById('btn-clear-local');
+  if (additions.length > 0) {
+    chip.classList.remove('hidden');
+    chip.textContent = `${additions.length} added locally`;
+    clearBtn.classList.remove('hidden');
+  } else {
+    chip.classList.add('hidden');
+    clearBtn.classList.add('hidden');
+  }
+}
+
+function renderLatest() {
+  const wrap = document.getElementById('latest-list');
+  wrap.innerHTML = '';
+  [...getAll()].sort((a,b) => new Date(b.raised) - new Date(a.raised)).slice(0,5).forEach(r => {
+    const div = document.createElement('div');
+    div.className = "py-3 flex items-start gap-3 cursor-pointer hover:bg-slate-50 px-2 -mx-2 rounded";
+    div.onclick = () => openModal(r);
+    div.innerHTML = `
+      <span class="pill ${isOpen(r) ? 'sev-'+r.severity : 'sev-Closed'} mt-0.5">${isOpen(r) ? r.severity : 'Closed'}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium text-slate-900 truncate">${r.finding}</div>
+        <div class="text-xs text-slate-500 mt-0.5"><span class="mono">${r.id}</span> · ${r.source} · ${r.dept} · ${fmtDate(r.raised)}${r._local ? ' · <span class="chip">Local</span>' : ''}</div>
+      </div>
+      <div class="text-xs text-slate-600 whitespace-nowrap">${r.owner}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderCharts() {
+  const all = getAll();
+  const open = all.filter(isOpen);
+
+  // severity donut
+  const sevData = ['Critical','High','Medium','Low'].map(s => open.filter(r => r.severity===s).length);
+  if (charts.severity) {
+    charts.severity.data.datasets[0].data = sevData;
+    charts.severity.update();
+  } else {
+    charts.severity = new Chart(document.getElementById('chart-severity'), {
+      type:'doughnut',
+      data:{ labels:['Critical','High','Medium','Low'], datasets:[{ data:sevData, backgroundColor:Object.values(SEVERITY_COLOR), borderWidth:0 }] },
+      options:{ plugins:{ legend:{ position:'right', labels:{ boxWidth:10 } } }, cutout:'68%', responsive:true, maintainAspectRatio:false }
+    });
+  }
+
+  // source bar
+  const sources = [...new Set(all.map(r => r.source))];
+  const sourceData = sources.map(s => open.filter(r => r.source===s).length);
+  if (charts.source) {
+    charts.source.data.labels = sources;
+    charts.source.data.datasets[0].data = sourceData;
+    charts.source.update();
+  } else {
+    charts.source = new Chart(document.getElementById('chart-source'), {
+      type:'bar',
+      data:{ labels:sources, datasets:[{ data:sourceData, backgroundColor:'#A06D32' }] },
+      options:{ indexAxis:'y', plugins:{ legend:{ display:false } }, scales:{ x:{ ticks:{ stepSize:1 }, beginAtZero:true } }, responsive:true, maintainAspectRatio:false }
+    });
+  }
+
+  // dept bar
+  const depts = [...new Set(open.map(r => r.dept))];
+  const deptData = depts.map(d => open.filter(r => r.dept===d).length);
+  if (charts.dept) {
+    charts.dept.data.labels = depts;
+    charts.dept.data.datasets[0].data = deptData;
+    charts.dept.update();
+  } else {
+    charts.dept = new Chart(document.getElementById('chart-dept'), {
+      type:'bar',
+      data:{ labels:depts, datasets:[{ data:deptData, backgroundColor:'#7A5326' }] },
+      options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ ticks:{ stepSize:1 }, beginAtZero:true } }, responsive:true, maintainAspectRatio:false }
+    });
+  }
+
+  // aging stacked
+  const buckets = ["0–30 days","31–60 days","61–90 days",">90 days"];
+  const sevs = ['Critical','High','Medium','Low'];
+  const datasets = sevs.map(sev => ({
+    label: sev,
+    data: buckets.map(b => open.filter(r => r.severity===sev && ageBucket(r)===b).length),
+    backgroundColor: SEVERITY_COLOR[sev],
+    stack: 'a',
+  }));
+  if (charts.aging) {
+    charts.aging.data.datasets = datasets;
+    charts.aging.update();
+  } else {
+    charts.aging = new Chart(document.getElementById('chart-aging'), {
+      type:'bar',
+      data:{ labels:buckets, datasets },
+      options:{ plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10 } } }, scales:{ x:{ stacked:true }, y:{ stacked:true, ticks:{ stepSize:1 }, beginAtZero:true } }, responsive:true, maintainAspectRatio:false }
+    });
+  }
+}
+
+function renderFilters() {
+  const all = getAll();
+  const sourceSel = document.getElementById('f-source');
+  const deptSel = document.getElementById('f-dept');
+  const curSrc = sourceSel.value, curDept = deptSel.value;
+  sourceSel.innerHTML = '<option value="">All sources</option>' +
+    [...new Set(all.map(r => r.source))].map(s => `<option ${s===curSrc?'selected':''}>${s}</option>`).join('');
+  deptSel.innerHTML = '<option value="">All departments</option>' +
+    [...new Set(all.map(r => r.dept))].map(d => `<option ${d===curDept?'selected':''}>${d}</option>`).join('');
+
+  // datalist for new-finding form (department autocomplete)
+  document.getElementById('dept-options').innerHTML =
+    [...new Set(all.map(r => r.dept))].map(d => `<option value="${d}">`).join('');
+}
+
+function rowDays(r){ const d = daysOpen(r); return isOpen(r) ? `${d}` : `${d} (closed)`; }
+function buildFindingsRow(r) {
+  const overdueClass = isOverdue(r) ? 'row-overdue' : '';
+  const sevPill = isOpen(r) ? `<span class="pill sev-${r.severity}">${r.severity}</span>` : `<span class="pill sev-Closed">Closed</span>`;
+  const localTag = r._local ? ' <span class="chip ml-1" title="Saved on this device">Local</span>' : '';
+  return `<tr class="${overdueClass} hover:bg-slate-50 cursor-pointer" data-id="${r.id}">
+    <td class="py-2 pl-3 pr-2 mono text-[11px] text-slate-700 whitespace-nowrap">${r.id}${localTag}</td>
+    <td class="py-2 px-2 whitespace-nowrap">${r.source}</td>
+    <td class="py-2 px-2 whitespace-nowrap">${r.dept}</td>
+    <td class="py-2 px-2 max-w-[320px] truncate" title="${r.finding.replace(/"/g,'&quot;')}">${r.finding}</td>
+    <td class="py-2 px-2">${sevPill}</td>
+    <td class="py-2 px-2 whitespace-nowrap">${r.owner}</td>
+    <td class="py-2 px-2 mono whitespace-nowrap">${fmtDate(r.raised)}</td>
+    <td class="py-2 px-2 mono whitespace-nowrap">${fmtDate(r.revised || r.target)}${r.revised ? ' <span class="text-amber-600" title="revised">*</span>' : ''}</td>
+    <td class="py-2 px-2 mono">${rowDays(r)}${isOverdue(r) ? ' <span class="text-[var(--critical)] font-semibold">⚠</span>' : ''}</td>
+    <td class="py-2 px-2 whitespace-nowrap"><span class="chip">${r.status}</span></td>
+    <td class="py-2 px-2"><span class="text-[var(--brand)] underline text-[11px]">Open</span></td>
+  </tr>`;
+}
+
+function renderFindings() {
+  const all = getAll();
+  const sev = document.getElementById('f-severity').value;
+  const status = document.getElementById('f-status').value;
+  const source = document.getElementById('f-source').value;
+  const dept = document.getElementById('f-dept').value;
+  const overdueOnly = document.getElementById('f-overdue').checked;
+  const q = document.getElementById('f-search').value.trim().toLowerCase();
+
+  const rows = all
+    .filter(r => !sev || r.severity === sev)
+    .filter(r => !status || r.status === status)
+    .filter(r => !source || r.source === source)
+    .filter(r => !dept || r.dept === dept)
+    .filter(r => !overdueOnly || isOverdue(r))
+    .filter(r => !q || (r.id+r.finding+r.owner+r.dept+r.source).toLowerCase().includes(q))
+    .sort((a,b) => {
+      if (isOpen(a) !== isOpen(b)) return isOpen(a) ? -1 : 1;
+      const sd = SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity];
+      if (sd) return sd;
+      return new Date(b.raised) - new Date(a.raised);
+    });
+
+  document.getElementById('findings-tbody').innerHTML = rows.map(buildFindingsRow).join('');
+  document.getElementById('findings-count').textContent = `${rows.length} of ${all.length} findings`;
+  document.getElementById('findings-empty').classList.toggle('hidden', rows.length>0);
+
+  document.querySelectorAll('#findings-tbody tr').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const r = all.find(x => x.id === tr.dataset.id);
+      if (r) openModal(r);
+    });
+  });
+}
+
+function renderAging() {
+  const all = getAll();
+  const open = all.filter(isOpen);
+  const overdue = all.filter(isOverdue);
+  const buckets = ["0–30 days","31–60 days","61–90 days",">90 days"];
+  const sevs = ['Critical','High','Medium','Low'];
+  const tbody = document.getElementById('aging-tbody');
+  tbody.innerHTML = '';
+  buckets.forEach(b => {
+    const cells = sevs.map(s => open.filter(r => r.severity===s && ageBucket(r)===b).length);
+    const total = cells.reduce((a,c)=>a+c,0);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="py-2 pr-3 font-medium">${b}</td>` +
+      cells.map(c => `<td class="py-2 pr-3 mono">${c||'<span class="text-slate-300">0</span>'}</td>`).join('') +
+      `<td class="py-2 pr-3 mono font-semibold">${total}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  const list = document.getElementById('overdue-list');
+  document.getElementById('overdue-count').textContent = `${overdue.length} item${overdue.length===1?'':'s'}`;
+  if (overdue.length === 0) {
+    list.innerHTML = `<div class="text-sm text-slate-500 italic py-3">No overdue findings.</div>`;
+  } else {
+    list.innerHTML = overdue.map(r => {
+      const lateBy = daysBetween(dueDate(r), TODAY);
+      return `<div class="flex flex-wrap items-center gap-3 py-3 border-b border-slate-100 cursor-pointer hover:bg-slate-50 px-2 -mx-2 rounded" data-id="${r.id}">
+        <span class="pill sev-${r.severity}">${r.severity}</span>
+        <div class="mono text-xs text-slate-500">${r.id}</div>
+        <div class="flex-1 min-w-[280px] text-sm">${r.finding}</div>
+        <div class="text-xs text-slate-600">${r.owner} · ${r.dept}</div>
+        <div class="text-xs"><span class="text-[var(--critical)] font-semibold">${lateBy}d late</span> · target ${fmtDate(dueDate(r))}</div>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('[data-id]').forEach(el => el.addEventListener('click', () => {
+      openModal(getAll().find(r => r.id === el.dataset.id));
+    }));
+  }
+}
+
+function renderRegulator() {
+  const REGULATOR_SOURCES = ['CMA Inspection','Boursa Kuwait','CBK Circular','External Auditor','Internal Audit'];
+  const all = getAll();
+  const rows = all.filter(r => REGULATOR_SOURCES.includes(r.source))
+    .sort((a,b) => new Date(b.raised) - new Date(a.raised));
+  const tbody = document.getElementById('regulator-tbody');
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const stage = r.status === 'Closed' ? 'Closed' :
+                  r.status === 'Pending validation' ? 'Validation' :
+                  r.status === 'In progress' ? 'Remediate' : 'Plan';
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr class="cursor-pointer hover:bg-slate-50" data-id="${r.id}">
+        <td class="py-2 pr-3 whitespace-nowrap">${r.source}</td>
+        <td class="py-2 pr-3 mono text-xs text-slate-700">${r.ref}</td>
+        <td class="py-2 pr-3 mono text-xs">${r.id}</td>
+        <td class="py-2 pr-3 whitespace-nowrap">${r.dept}</td>
+        <td class="py-2 pr-3"><span class="pill ${isOpen(r) ? 'sev-'+r.severity : 'sev-Closed'}">${isOpen(r) ? r.severity : 'Closed'}</span></td>
+        <td class="py-2 pr-3"><span class="chip">${stage}</span></td>
+        <td class="py-2 pr-3 mono">${daysOpen(r)}</td>
+      </tr>`);
+  });
+  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () =>
+    openModal(getAll().find(r => r.id === tr.dataset.id))));
+}
+
+function recomputeAll() {
+  renderKPIs();
+  renderLatest();
+  renderFilters();
+  renderCharts();
+  renderFindings();
+  renderAging();
+  renderRegulator();
+}
+
+// Filter event listeners
+['f-severity','f-status','f-source','f-dept','f-overdue','f-search'].forEach(id => {
+  document.getElementById(id).addEventListener(id==='f-search' ? 'input' : 'change', renderFindings);
+});
+
+// ============== DETAIL MODAL ==============
+function openModal(r) {
+  if (!r) return;
+  document.getElementById('m-id').textContent = r.id;
+  const sevEl = document.getElementById('m-sev');
+  sevEl.className = `pill ${isOpen(r) ? 'sev-'+r.severity : 'sev-Closed'}`;
+  sevEl.textContent = isOpen(r) ? r.severity : 'Closed';
+  const stEl = document.getElementById('m-status');
+  stEl.className = 'pill chip';
+  stEl.textContent = r.status;
+  document.getElementById('m-finding').textContent = r.finding;
+  document.getElementById('m-source').textContent = `${r.source} · ${r.ref || '—'}`;
+  document.getElementById('m-ref').textContent = r.ref || '—';
+  document.getElementById('m-dept').textContent = `${r.dept} · ${r.subprocess || ''}`.replace(/ · $/, '');
+  document.getElementById('m-owner').textContent = `${r.owner} · ${r.sponsor || ''}`.replace(/ · $/, '');
+  document.getElementById('m-raised').textContent = fmtDate(r.raised);
+  const tgt = r.revised
+    ? `${fmtDate(r.target)} → ${fmtDate(r.revised)} (${r.reason || 'revised'})`
+    : fmtDate(r.target);
+  document.getElementById('m-target').textContent = tgt;
+  document.getElementById('m-days').textContent = `${daysOpen(r)}${isOverdue(r) ? ` · OVERDUE by ${daysBetween(dueDate(r), TODAY)}d` : ''}`;
+  document.getElementById('m-recur').textContent = r.recurrence ? `Yes — recurrence` : 'No';
+  document.getElementById('m-cause').textContent = r.cause || '— pending —';
+  document.getElementById('m-plan').textContent = r.plan || '— not yet defined —';
+  document.getElementById('m-milestones').textContent = r.milestones || '—';
+  document.getElementById('m-evidence').textContent = r.evidence || '—';
+  document.getElementById('m-escalation').textContent = r.escalation || '— none —';
+  const linked = [r.linked, r.risk].filter(Boolean).join(' · ');
+  document.getElementById('m-linked').textContent = linked || '— none —';
+  document.getElementById('m-notes-wrap').classList.toggle('hidden', !r.notes);
+  document.getElementById('m-notes').textContent = r.notes || '';
+  document.getElementById('modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// ============== ADD-FINDING FORM ==============
+function nextId() {
+  const yr = TODAY.getFullYear();
+  const all = getAll();
+  const maxN = all.filter(r => r.id.startsWith(`CAPA-${yr}-`))
+    .reduce((m, r) => {
+      const n = parseInt(r.id.split('-').pop(), 10);
+      return Math.max(m, isNaN(n) ? 0 : n);
+    }, 0);
+  return `CAPA-${yr}-${String(maxN + 1).padStart(3, '0')}`;
+}
+
+function openForm() {
+  const f = document.getElementById('finding-form');
+  f.reset();
+  document.getElementById('fld-raised').value = TODAY.toISOString().slice(0, 10);
+  document.getElementById('fld-id-preview').textContent = nextId();
+  document.getElementById('fld-target').value = '';
+  document.getElementById('form-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeForm() {
+  document.getElementById('form-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function updateTargetFromSeverity() {
+  const sev = document.getElementById('fld-severity').value;
+  const raisedStr = document.getElementById('fld-raised').value;
+  const tgtEl = document.getElementById('fld-target');
+  if (sev && raisedStr && !tgtEl.dataset.dirty) {
+    const d = new Date(raisedStr);
+    d.setDate(d.getDate() + SEVERITY_DAYS[sev]);
+    tgtEl.value = d.toISOString().slice(0, 10);
+  }
+}
+document.getElementById('fld-severity').addEventListener('change', updateTargetFromSeverity);
+document.getElementById('fld-raised').addEventListener('change', updateTargetFromSeverity);
+document.getElementById('fld-target').addEventListener('input', (e) => { e.target.dataset.dirty = '1'; });
+
+document.getElementById('finding-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const fd = new FormData(f);
+  const record = {
+    id: nextId(),
+    source: fd.get('source'),
+    ref: fd.get('ref') || '—',
+    raised: fd.get('raised'),
+    logged: fd.get('raised'),
+    dept: fd.get('dept'),
+    subprocess: fd.get('subprocess') || '',
+    finding: fd.get('finding'),
+    cause: fd.get('cause') || '',
+    severity: fd.get('severity'),
+    recurrence: !!fd.get('recurrence'),
+    owner: fd.get('owner'),
+    sponsor: fd.get('sponsor') || '',
+    plan: fd.get('plan') || '',
+    milestones: fd.get('milestones') || '',
+    target: fd.get('target') || (() => {
+      const d = new Date(fd.get('raised'));
+      d.setDate(d.getDate() + SEVERITY_DAYS[fd.get('severity')]);
+      return d.toISOString().slice(0, 10);
+    })(),
+    revised: null, reason: null,
+    status: 'Open',
+    evidence: fd.get('evidence') || '',
+    escalation: '', linked: '', risk: '',
+    notes: fd.get('notes') || '',
+    _local: true,
+  };
+  additions.push(record);
+  saveAdditions();
+  recomputeAll();
+  closeForm();
+  setTab('findings');
+});
+
+document.getElementById('btn-add-finding').addEventListener('click', openForm);
+document.getElementById('btn-clear-local').addEventListener('click', () => {
+  if (!additions.length) return;
+  if (confirm(`Remove ${additions.length} locally-added finding(s)? This cannot be undone.`)) {
+    additions = [];
+    saveAdditions();
+    recomputeAll();
+  }
+});
+document.getElementById('btn-export').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(getAll(), null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `kfic-capa-${TODAY.toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeModal(); closeForm(); }
+});
+
+// ============== BOOT ==============
+recomputeAll();
+
+</script>
+</body>
+</html>
