@@ -39,6 +39,10 @@ ${body}
 </html>
 `;
 
-await mkdir(new URL('./web/', import.meta.url), { recursive: true });
-await writeFile(new URL('./web/index.html', import.meta.url), doc);
-console.log(`web/index.html — ${(doc.length / 1024).toFixed(1)} KB`);
+/* Output lands in docs/ because GitHub Pages serves a branch's /docs
+   folder with no configuration at all, and Netlify can publish the same
+   folder — one build output, either host. */
+await mkdir(new URL('./docs/', import.meta.url), { recursive: true });
+await writeFile(new URL('./docs/index.html', import.meta.url), doc);
+await writeFile(new URL('./docs/.nojekyll', import.meta.url), '');
+console.log(`docs/index.html — ${(doc.length / 1024).toFixed(1)} KB`);

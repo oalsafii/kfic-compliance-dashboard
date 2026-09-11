@@ -2,7 +2,7 @@
 # the desk's Artifact-body source. Only the built standalone desk in web/
 # is published.
 [build]
-  publish = "web"
+  publish = "docs"
   command = "node build-web.mjs"
 
 [[headers]]
