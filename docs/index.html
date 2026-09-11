@@ -1,0 +1,1663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Personal operating desk for Kuwait compliance work.">
+<meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F5F6F4" media="(prefers-color-scheme: light)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2022%2022%22%3E%3Crect%20width%3D%2222%22%20height%3D%2222%22%20rx%3D%224%22%20fill%3D%22%23111418%22%2F%3E%3Cpath%20d%3D%22M4%203.5%20L18%203.5%20L11%2011%20L18%2018.5%20L4%2018.5%20L11%2011%20Z%22%20fill%3D%22%23C99457%22%2F%3E%3C%2Fsvg%3E">
+<style>
+  /* The skeleton the Artifact host would otherwise provide. */
+  html{color-scheme:light dark}
+  body{margin:0;font:14px system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>KFIC Compliance Desk</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   TOKENS — light is the bare :root; dark redefines tokens only.
+   ============================================================ */
+:root{
+  --ground:#F5F6F4;
+  --panel:#FFFFFF;
+  --panel-2:#FAFAF8;
+  --ink:#15181D;
+  --ink-2:#4A5159;
+  --ink-3:#757D86;
+  --rule:#E2E4DF;
+  --rule-2:#D2D5CE;
+  --bronze:#9A6B35;
+  --bronze-soft:#F0E7DA;
+  --late:#C2453C;
+  --late-bg:#FBE9E7;
+  --soon:#B07C06;
+  --soon-bg:#FCF3DC;
+  --clear:#3C7D63;
+  --clear-bg:#E6F2EC;
+  --rest:#8A9099;
+  --rest-bg:#EEF0ED;
+  --shade:#ECEEE9;
+  --focus:#9A6B35;
+  --shadow:0 1px 2px rgba(21,24,29,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111418;
+    --panel:#181C22;
+    --panel-2:#1D2229;
+    --ink:#E8EAE7;
+    --ink-2:#A7AEB5;
+    --ink-3:#767E87;
+    --rule:#262C34;
+    --rule-2:#333A43;
+    --bronze:#C99457;
+    --bronze-soft:#2A2119;
+    --late:#E5695E;
+    --late-bg:#2E1A18;
+    --soon:#E0A93B;
+    --soon-bg:#2B2314;
+    --clear:#5FB68E;
+    --clear-bg:#152720;
+    --rest:#7A828B;
+    --rest-bg:#1E242B;
+    --shade:#1C2127;
+    --focus:#C99457;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111418;
+  --panel:#181C22;
+  --panel-2:#1D2229;
+  --ink:#E8EAE7;
+  --ink-2:#A7AEB5;
+  --ink-3:#767E87;
+  --rule:#262C34;
+  --rule-2:#333A43;
+  --bronze:#C99457;
+  --bronze-soft:#2A2119;
+  --late:#E5695E;
+  --late-bg:#2E1A18;
+  --soon:#E0A93B;
+  --soon-bg:#2B2314;
+  --clear:#5FB68E;
+  --clear-bg:#152720;
+  --rest:#7A828B;
+  --rest-bg:#1E242B;
+  --shade:#1C2127;
+  --focus:#C99457;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'IBM Plex Sans Arabic','Archivo',system-ui,-apple-system,sans-serif;
+  font-size:14px;line-height:1.5;margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.ui{font-family:'Archivo',system-ui,sans-serif;text-wrap:balance}
+.mono,.num{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.ar{font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;unicode-bidi:isolate}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1360px;margin:0 auto;padding-inline:20px}
+@media(max-width:520px){.wrap{padding-inline:16px}}
+
+/* ---------- instrument header ---------- */
+header.inst{
+  position:sticky;top:0;z-index:40;
+  background:var(--panel);border-bottom:1px solid var(--rule);
+}
+.inst-row{display:flex;align-items:center;gap:22px;padding-block:10px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.mark svg{display:block}
+.mark-txt{line-height:1.15}
+.mark-txt b{font-family:'Archivo',sans-serif;font-size:13px;font-weight:700;letter-spacing:.09em}
+.mark-txt span{display:block;font-size:10px;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase}
+
+.fact{display:flex;flex-direction:column;gap:1px;flex:0 0 auto}
+.fact-k{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-family:'Archivo',sans-serif;font-weight:600}
+.fact-v{font-size:13px;font-weight:500}
+
+.urgent{
+  margin-inline-start:auto;display:flex;align-items:center;gap:12px;
+  border-inline-start:2px solid var(--bronze);padding-inline-start:14px;
+}
+.urgent-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-family:'Archivo',sans-serif;font-weight:600}
+.urgent-what{font-size:12.5px;max-width:30ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.urgent-clock{font-size:23px;font-weight:600;letter-spacing:-.01em;line-height:1}
+.btn-ico{
+  background:none;border:1px solid var(--rule-2);color:var(--ink-2);
+  width:30px;height:30px;border-radius:5px;cursor:pointer;display:grid;place-items:center;font-size:14px;
+}
+.btn-ico:hover{border-color:var(--bronze);color:var(--bronze)}
+
+/* ---------- runway ---------- */
+.runway{background:var(--panel);border-bottom:1px solid var(--rule);padding-block:0 14px}
+.runway-head{display:flex;align-items:baseline;gap:10px;padding-block:12px 8px;flex-wrap:wrap}
+.runway-head h2{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin:0;color:var(--ink-2)}
+.runway-head .hint{font-size:11px;color:var(--ink-3)}
+.ruler-scroll{overflow-x:auto}
+.ruler{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(62px,1fr);min-width:760px;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.day{border-inline-end:1px solid var(--rule);padding:7px 6px 8px;min-height:104px;display:flex;flex-direction:column;gap:5px;position:relative;background:var(--panel)}
+.day:last-child{border-inline-end:none}
+.day.off{background:var(--shade)}
+.day.today{background:var(--bronze-soft);box-shadow:inset 0 2px 0 var(--bronze)}
+.day-n{font-size:15px;font-weight:600;line-height:1}
+.day-d{font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-family:'Archivo',sans-serif;font-weight:600}
+.day-off-tag{font-size:9px;color:var(--ink-3);margin-top:auto}
+.flag{
+  font-size:10px;line-height:1.25;padding:3px 5px;border-radius:3px;
+  border-inline-start:2.5px solid var(--rest);background:var(--rest-bg);color:var(--ink);
+  cursor:pointer;text-align:start;width:100%;border-block:0;border-inline-end:0;font-family:inherit;
+  display:block;overflow:hidden;
+}
+.flag:hover{outline:1px solid var(--rule-2)}
+.flag.late{border-color:var(--late);background:var(--late-bg)}
+.flag.soon{border-color:var(--soon);background:var(--soon-bg)}
+.flag.clear{border-color:var(--clear);background:var(--clear-bg)}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);overflow-x:auto;background:var(--ground);position:sticky;top:0;z-index:20}
+.tab{
+  background:none;border:none;border-bottom:2px solid transparent;color:var(--ink-3);
+  font-family:'Archivo',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.02em;
+  padding:11px 13px;cursor:pointer;white-space:nowrap;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--bronze);border-bottom-color:var(--bronze)}
+.tab .cnt{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-3);margin-inline-start:5px}
+.tab[aria-selected="true"] .cnt{color:var(--bronze)}
+
+main{padding-block:18px 60px}
+.pane[hidden]{display:none}
+
+/* ---------- desk ---------- */
+.desk{display:grid;grid-template-columns:minmax(0,2.25fr) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:960px){.desk{grid-template-columns:1fr}}
+.stacks{display:flex;flex-direction:column;gap:16px}
+
+.stack-h{display:flex;align-items:baseline;gap:9px;margin-bottom:7px}
+.stack-h h3{margin:0;font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.stack-h .n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3)}
+.stack-h .sub{font-size:11px;color:var(--ink-3);margin-inline-start:auto}
+
+.items{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:7px;overflow:hidden}
+.item{
+  background:var(--panel);padding:10px 12px 10px 0;
+  display:grid;grid-template-columns:3px minmax(0,1fr) auto;gap:0 12px;align-items:start;
+}
+.item .bar{grid-row:1/99;width:3px;height:100%;background:var(--rest);border-radius:0}
+.item.late .bar{background:var(--late)} .item.soon .bar{background:var(--soon)} .item.clear .bar{background:var(--clear)}
+.item-main{min-width:0;display:flex;flex-direction:column;gap:3px}
+.item-t{font-size:13.5px;font-weight:500;line-height:1.35}
+.item-m{display:flex;flex-wrap:wrap;gap:5px 9px;align-items:center;font-size:11px;color:var(--ink-3)}
+.item-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:0 0 auto}
+.due{font-size:12px;font-weight:600;white-space:nowrap}
+.due.late{color:var(--late)} .due.soon{color:var(--soon)} .due.clear{color:var(--clear)} .due.rest{color:var(--ink-2)}
+.acts{display:flex;gap:4px}
+.mini{
+  font-family:'Archivo',sans-serif;font-size:10.5px;font-weight:600;
+  background:var(--panel-2);border:1px solid var(--rule-2);color:var(--ink-2);
+  padding:3px 7px;border-radius:4px;cursor:pointer;
+}
+.mini:hover{border-color:var(--bronze);color:var(--bronze)}
+.mini.go{background:var(--bronze);border-color:var(--bronze);color:#fff}
+:root[data-theme="dark"] .mini.go{color:#14181C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mini.go{color:#14181C}}
+.mini.go:hover{opacity:.88;color:#fff}
+:root[data-theme="dark"] .mini.go:hover{color:#14181C}
+
+.pill{
+  display:inline-flex;align-items:center;gap:4px;padding:1.5px 6px;border-radius:3px;
+  font-size:10px;font-weight:600;font-family:'Archivo',sans-serif;letter-spacing:.03em;
+  background:var(--rest-bg);color:var(--ink-2);
+}
+.pill.late{background:var(--late-bg);color:var(--late)}
+.pill.soon{background:var(--soon-bg);color:var(--soon)}
+.pill.clear{background:var(--clear-bg);color:var(--clear)}
+.pill.who{background:transparent;border:1px solid var(--rule-2);color:var(--ink-3);font-weight:500}
+.pill.ex{background:transparent;border:1px dashed var(--rule-2);color:var(--ink-3);font-weight:500}
+
+.empty{background:var(--panel);border:1px dashed var(--rule-2);border-radius:7px;padding:18px;text-align:center;color:var(--ink-3);font-size:12.5px}
+
+/* ---------- rail ---------- */
+.rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:62px}
+@media(max-width:960px){.rail{position:static}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:7px;box-shadow:var(--shadow)}
+.card-h{padding:9px 12px;border-bottom:1px solid var(--rule);font-family:'Archivo',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.card-b{padding:11px 12px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding-block:5px;font-size:12px;align-items:baseline}
+.kv + .kv{border-top:1px solid var(--rule)}
+.kv .k{color:var(--ink-2)}
+.kv .v{font-family:'IBM Plex Mono',monospace;font-weight:500;white-space:nowrap}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.qa button{
+  font-family:'Archivo',sans-serif;font-size:11.5px;font-weight:600;text-align:start;
+  background:var(--panel-2);border:1px solid var(--rule);color:var(--ink);
+  padding:8px 9px;border-radius:5px;cursor:pointer;line-height:1.3;
+}
+.qa button:hover{border-color:var(--bronze);color:var(--bronze)}
+.qa button span{display:block;font-size:10px;color:var(--ink-3);font-weight:500;margin-top:1px}
+.qa button:hover span{color:var(--bronze)}
+.rule-pin{padding-block:7px;font-size:11.5px;line-height:1.45}
+.rule-pin + .rule-pin{border-top:1px solid var(--rule)}
+.rule-pin b{display:block;font-size:11px;font-family:'Archivo',sans-serif;letter-spacing:.02em}
+.rule-pin span{color:var(--ink-2)}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--rule);border-radius:7px}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:12.5px}
+th{
+  text-align:start;font-family:'Archivo',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  padding:9px 12px;border-bottom:1px solid var(--rule);white-space:nowrap;background:var(--panel-2);
+}
+td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.num,th.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.sec-h{display:flex;align-items:baseline;gap:10px;margin:0 0 9px;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:15px;font-weight:600;letter-spacing:-.005em}
+.sec-h p{margin:0;font-size:12px;color:var(--ink-3);max-width:70ch}
+.sec + .sec{margin-top:26px}
+
+/* ---------- stages ---------- */
+.stages{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.stg{
+  font-size:9.5px;font-family:'Archivo',sans-serif;font-weight:600;
+  padding:2px 5px;border-radius:3px;background:var(--rest-bg);color:var(--ink-3);
+  border:1px solid transparent;
+}
+.stg.done{background:var(--clear-bg);color:var(--clear)}
+.stg.now{background:var(--soon-bg);color:var(--soon);border-color:var(--soon)}
+
+/* ---------- meters ---------- */
+.meter{height:5px;border-radius:3px;background:var(--shade);overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;background:var(--bronze);border-radius:3px}
+.meter i.late{background:var(--late)} .meter i.clear{background:var(--clear)} .meter i.soon{background:var(--soon)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:11px}
+.tile{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:12px}
+.tile-k{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);font-family:'Archivo',sans-serif;font-weight:700}
+.tile-v{font-family:'IBM Plex Mono',monospace;font-size:25px;font-weight:600;line-height:1.15;margin-top:5px;font-variant-numeric:tabular-nums}
+.tile-s{font-size:11px;color:var(--ink-3);margin-top:2px}
+
+/* ---------- week bars ---------- */
+.wk{display:flex;flex-direction:column;gap:7px}
+.wk-row{display:grid;grid-template-columns:minmax(96px,auto) 1fr 44px;gap:10px;align-items:center;font-size:12px}
+.wk-bar{height:14px;background:var(--shade);border-radius:3px;overflow:hidden}
+.wk-bar i{display:block;height:100%;background:var(--bronze);opacity:.85}
+.wk-row .num{font-size:11.5px;color:var(--ink-2);text-align:end}
+
+/* ---------- modal ---------- */
+dialog{
+  border:1px solid var(--rule-2);border-radius:9px;padding:0;background:var(--panel);color:var(--ink);
+  max-width:min(620px,94vw);width:100%;box-shadow:0 18px 50px rgba(0,0,0,.22);
+}
+dialog::backdrop{background:rgba(10,12,15,.5)}
+.dlg-h{padding:13px 16px;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px}
+.dlg-h h3{margin:0;font-size:14px;font-weight:600}
+.dlg-b{padding:15px 16px;max-height:66vh;overflow-y:auto}
+.dlg-f{padding:11px 16px;border-top:1px solid var(--rule);display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap}
+label.fld{display:block;margin-bottom:11px}
+label.fld > span{display:block;font-size:10.5px;font-family:'Archivo',sans-serif;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{
+  width:100%;background:var(--panel-2);border:1px solid var(--rule-2);color:var(--ink);
+  border-radius:5px;padding:7px 9px;font-family:inherit;font-size:13px;
+}
+textarea{min-height:66px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,.flag:focus-visible,.tab:focus-visible{
+  outline:2px solid var(--focus);outline-offset:1px;
+}
+.btn{
+  font-family:'Archivo',sans-serif;font-size:12px;font-weight:600;
+  background:var(--panel-2);border:1px solid var(--rule-2);color:var(--ink);
+  padding:7px 13px;border-radius:5px;cursor:pointer;
+}
+.btn:hover{border-color:var(--bronze)}
+.btn.primary{background:var(--bronze);border-color:var(--bronze);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#14181C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#14181C}}
+.btn.primary:hover{opacity:.9}
+.btn.danger{color:var(--late);border-color:var(--rule-2)}
+.btn.danger:hover{border-color:var(--late)}
+
+.derived{border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-top:4px}
+.derived-r{padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:3px 12px;align-items:baseline}
+.derived-r + .derived-r{border-top:1px solid var(--rule)}
+.derived-r .d-t{font-size:12.5px;font-weight:500}
+.derived-r .d-d{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;white-space:nowrap}
+.derived-r .d-rule{grid-column:1/3;font-size:11px;color:var(--ink-3);line-height:1.5}
+
+.note{font-size:11.5px;color:var(--ink-3);line-height:1.55}
+.banner{
+  background:var(--panel);border:1px solid var(--rule);border-inline-start:2.5px solid var(--bronze);
+  border-radius:6px;padding:10px 13px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;
+}
+.banner p{margin:0;font-size:12.5px;color:var(--ink-2);flex:1 1 260px}
+.banner b{color:var(--ink)}
+.restricted{background:repeating-linear-gradient(135deg,transparent,transparent 5px,var(--shade) 5px,var(--shade) 10px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<!-- ===================== HEADER ===================== -->
+<header class="inst">
+  <div class="wrap inst-row">
+    <div class="mark">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+        <path d="M3 2 L19 2 L11 11 L19 20 L3 20 L11 11 Z" fill="var(--bronze)"/>
+      </svg>
+      <div class="mark-txt"><b>KFIC</b><span>Compliance Desk</span></div>
+    </div>
+
+    <div class="fact">
+      <div class="fact-k">Kuwait</div>
+      <div class="fact-v"><span id="f-date" class="mono">—</span> <span id="f-bd" class="pill">—</span></div>
+    </div>
+
+    <div class="fact">
+      <div class="fact-k">Boursa</div>
+      <div class="fact-v"><span id="f-session" class="pill">—</span></div>
+    </div>
+
+    <div class="urgent">
+      <div>
+        <div class="urgent-label">Next hard deadline</div>
+        <div id="u-what" class="urgent-what">—</div>
+      </div>
+      <div style="text-align:end">
+        <div id="u-clock" class="urgent-clock mono">—</div>
+        <div id="u-when" class="urgent-label" style="text-align:end">—</div>
+      </div>
+      <button class="btn-ico" id="btn-theme" title="Switch theme" aria-label="Switch theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== RUNWAY ===================== -->
+<section class="runway">
+  <div class="wrap">
+    <div class="runway-head">
+      <h2>Runway · next 14 days</h2>
+      <span class="hint">Friday &amp; Saturday shaded as the Kuwait weekend. Click any flag to open it.</span>
+    </div>
+    <div class="ruler-scroll"><div class="ruler" id="ruler"></div></div>
+  </div>
+</section>
+
+<!-- ===================== TABS ===================== -->
+<div class="wrap" style="padding-inline:0">
+  <div class="wrap" style="padding-block:0">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-pane="today" aria-selected="true">Today <span class="cnt" id="c-today"></span></button>
+      <button class="tab" role="tab" data-pane="oblig" aria-selected="false">Obligations <span class="cnt" id="c-oblig"></span></button>
+      <button class="tab" role="tab" data-pane="disc" aria-selected="false">Disclosures <span class="cnt" id="c-disc"></span></button>
+      <button class="tab" role="tab" data-pane="capa" aria-selected="false">CAPAs <span class="cnt" id="c-capa"></span></button>
+      <button class="tab" role="tab" data-pane="watch" aria-selected="false">Watch list <span class="cnt" id="c-watch"></span></button>
+      <button class="tab" role="tab" data-pane="perf" aria-selected="false">Performance</button>
+      <button class="tab" role="tab" data-pane="evid" aria-selected="false">Evidence</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="banner" id="seed-banner" hidden>
+    <p><b>These are example items</b>, built from the rows in <span class="mono">KFIC_Invest_CAPA_Tracker.xlsx</span> and dated relative to today so the desk opens in a working state. Keep them to try it out, or clear them and start on your real matters.</p>
+    <button class="btn" id="btn-keep">Keep as my starting set</button>
+    <button class="btn" id="btn-blank">Clear &amp; start blank</button>
+  </div>
+
+  <!-- ---------- TODAY ---------- -->
+  <section class="pane" data-pane="today">
+    <div class="desk">
+      <div class="stacks">
+        <div>
+          <div class="stack-h">
+            <h3>On me</h3><span class="n" id="n-me">0</span>
+            <span class="sub">Nobody else can move these</span>
+          </div>
+          <div id="stack-me"></div>
+        </div>
+        <div>
+          <div class="stack-h">
+            <h3>On them</h3><span class="n" id="n-them">0</span>
+            <span class="sub">Aged from the day you handed it over</span>
+          </div>
+          <div id="stack-them"></div>
+        </div>
+        <div>
+          <div class="stack-h">
+            <h3>Scheduled</h3><span class="n" id="n-later">0</span>
+            <span class="sub">Not yet live — dated beyond this week</span>
+          </div>
+          <div id="stack-later"></div>
+        </div>
+      </div>
+
+      <aside class="rail">
+        <div class="card">
+          <div class="card-h">Quick actions</div>
+          <div class="card-b">
+            <div class="qa">
+              <button data-new="disclosure">New disclosure<span>pick annex, derive deadline</span></button>
+              <button data-new="entitlement">Entitlement run<span>derive the full AGM timeline</span></button>
+              <button data-new="task">Add to desk<span>a one-off item</span></button>
+              <button data-new="watch">Log a concern<span>private watch list</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">Standing clocks</div>
+          <div class="card-b" id="clocks"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">Rule pins</div>
+          <div class="card-b" id="pins"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">Storage</div>
+          <div class="card-b">
+            <div class="note" id="store-state">Checking…</div>
+            <div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap">
+              <button class="mini" id="btn-backup">Back up</button>
+              <button class="mini" id="btn-restore">Restore</button>
+            </div>
+            <input type="file" id="file-restore" accept="application/json,.json" hidden>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ---------- OBLIGATIONS ---------- -->
+  <section class="pane" data-pane="oblig" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Derived obligations</h2>
+        <p>Every date below was computed from a trigger event using Kuwait business days — not typed in by hand. The rule each one rests on is quoted underneath it.</p>
+      </div>
+      <div id="oblig-list"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Recurring duties</h2>
+        <p>These regenerate on completion, so a duty never depends on you remembering it while on leave.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Duty</th><th>Cycle</th><th class="num">Next due</th><th>Delegate if away</th><th></th></tr></thead>
+          <tbody id="recur-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Calendar basis</h2>
+        <p>The engine treats Friday and Saturday as non-working. Official holidays shift with the Hijri calendar each year, so they are yours to enter — nothing is assumed.</p>
+      </div>
+      <div class="card"><div class="card-b">
+        <div id="hol-list" class="note" style="margin-bottom:9px"></div>
+        <button class="btn" id="btn-hol">Manage holidays</button>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ---------- DISCLOSURES ---------- -->
+  <section class="pane" data-pane="disc" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Disclosure log</h2>
+        <p>The seven-stage chain from the publishing runbook, timestamped. This is the file you reach for when someone asks why a filing landed when it did.</p>
+      </div>
+      <div id="disc-list"></div>
+    </div>
+    <div class="sec">
+      <div class="card"><div class="card-b note">
+        <b style="color:var(--ink)">Upload order is not symmetric.</b> Ordinary disclosures run Boursa&nbsp;/&nbsp;create → CMA&nbsp;/&nbsp;submit → Boursa&nbsp;/&nbsp;activate. Share-entitlement filings use the Company&nbsp;Action route, Boursa first and the Authority last. The desk tracks whichever route you pick.
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ---------- CAPA ---------- -->
+  <section class="pane" data-pane="capa" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>My CAPA slice</h2>
+        <p>Only what you own or are chasing — the programme view stays in the testing dashboard. Severity sets the close-by date: Critical 30d, High 60d, Medium 90d, Low 120d.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Ref</th><th>Finding</th><th>Owner</th><th class="num">Target</th><th class="num">Age</th><th>State</th><th></th></tr></thead>
+          <tbody id="capa-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- WATCH ---------- -->
+  <section class="pane" data-pane="watch" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Watch list</h2>
+        <p>Things you are uneasy about but have not formally raised. Each one ages, and the desk pushes you to escalate or close it out rather than let it go quiet.</p>
+      </div>
+      <div class="banner" style="border-inline-start-color:var(--late)">
+        <p><b>Restricted matters hold a pointer only.</b> For anything privileged — an investigation, a whistleblower report — record the reference and where the file lives. The substance stays out of this page by design.</p>
+      </div>
+      <div id="watch-list"></div>
+    </div>
+  </section>
+
+  <!-- ---------- PERFORMANCE ---------- -->
+  <section class="pane" data-pane="perf" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Your own record</h2>
+        <p>Not the programme's KRIs — yours. What you turned around, how fast, and how much of it came back.</p>
+      </div>
+      <div class="tiles" id="perf-tiles"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Where the week went</h2>
+        <p>Log time against a category as you close items. After a quarter this is the argument for headcount.</p>
+      </div>
+      <div class="card"><div class="card-b"><div class="wk" id="wk-bars"></div></div></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Self-review pack</h2>
+        <p>Your metrics, closed items, regulator engagements and evidence trail, assembled as one document.</p>
+      </div>
+      <div class="card"><div class="card-b" style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+        <button class="btn primary" id="btn-pack">Build the pack</button>
+        <button class="btn" id="btn-export">Export desk as CSV</button>
+        <button class="btn" id="btn-backup2">Back up everything (JSON)</button>
+        <span class="note" id="dl-note"></span>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ---------- EVIDENCE ---------- -->
+  <section class="pane" data-pane="evid" hidden>
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Evidence trail</h2>
+        <p>Every state change, oldest last. Written as it happens so it cannot be reconstructed favourably afterwards.</p>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="num">When</th><th>Matter</th><th>Event</th></tr></thead>
+          <tbody id="evid-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg"><form method="dialog" id="dlg-form">
+  <div class="dlg-h"><h3 id="dlg-title">—</h3></div>
+  <div class="dlg-b" id="dlg-body"></div>
+  <div class="dlg-f" id="dlg-foot"></div>
+</form></dialog>
+
+<script>
+"use strict";
+
+/* ============================================================
+   1. KUWAIT CALENDAR
+   Weekend is Friday + Saturday. Holidays are user-supplied —
+   they move with the Hijri year and are never assumed here.
+   ============================================================ */
+const DAY_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const DAY_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+const iso   = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const daysBetween = (a,b) => Math.round((startOfDay(b) - startOfDay(a)) / 86400000);
+
+const isWeekend = d => d.getDay() === 5 || d.getDay() === 6;
+const isHoliday = d => STATE.settings.holidays.includes(iso(d));
+const isBizDay  = d => !isWeekend(d) && !isHoliday(d);
+
+/** Move n business days from d (n may be negative). */
+function addBizDays(d, n){
+  let x = new Date(d), step = n < 0 ? -1 : 1, left = Math.abs(n);
+  while (left > 0){ x = addDays(x, step); if (isBizDay(x)) left--; }
+  return x;
+}
+/** Next business day on or after d. */
+function rollForward(d){ let x = new Date(d); while (!isBizDay(x)) x = addDays(x,1); return x; }
+/** Boursa trading days track business days. */
+const addTradingDays = addBizDays;
+
+const fmtDate = d => d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+const fmtShort = d => d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+
+/* ---- Boursa session: continuous 09:00–12:30, Sun–Thu ---- */
+function sessionState(now){
+  if (!isBizDay(now)) return {open:false, label:'Closed · weekend', next: rollForward(now)};
+  const mins = now.getHours()*60 + now.getMinutes();
+  if (mins < 540)  return {open:false, label:'Pre-open', next: now};
+  if (mins <= 750) return {open:true,  label:'Session open', next: now};
+  return {open:false, label:'Closed · post-session', next: rollForward(addDays(now,1))};
+}
+/** The disclosure cut-off: 15 minutes before the next session opens. */
+function nextSessionCutoff(from){
+  let day = new Date(from);
+  const mins = day.getHours()*60 + day.getMinutes();
+  if (!isBizDay(day) || mins >= 525) day = rollForward(addDays(day,1));
+  const c = startOfDay(day); c.setHours(8,45,0,0);
+  return c;
+}
+
+/* ============================================================
+   2. THE RULE BOOK
+   Deadlines quoted from Book 10 of the CMA Executive Regulations
+   (via the disclosure runbook) and the share-entitlement timetable.
+   Arabic text is carried verbatim — it is the justification.
+   ============================================================ */
+const DISCLOSURE_KINDS = [
+  {id:'material_in',  label:'Material information — arose during working hours', annex:'ملحق 10',
+   rule:'الإفصاح فوراً', calc:'immediate'},
+  {id:'material_out', label:'Material information — arose outside working hours', annex:'ملحق 10',
+   rule:'قبل 15 دقيقة على الأقل من جلسة التداول التالية', calc:'cutoff'},
+  {id:'board_call',   label:'Board meeting — invitation', annex:'ملحق 9',
+   rule:'الدعوة للاجتماع', calc:'immediate'},
+  {id:'board_res',    label:'Board meeting — results', annex:'ملحق 10',
+   rule:'نتائج الاجتماع تُفصح خلالها أو قبل 15 دقيقة من الجلسة التالية', calc:'cutoff'},
+  {id:'litigation',   label:'Litigation or judgment (initial or supplementary)', annex:'ملحق 7',
+   rule:'الملحق 7 لكل إفصاح متعلق بدعوى أو حكم — لا يُستخدم الملحق 12 إطلاقاً', calc:'immediate'},
+  {id:'rating',       label:'Credit rating — new or changed', annex:'ملحق 8',
+   rule:'تصنيف ائتماني جديد أو متغيّر', calc:'immediate'},
+  {id:'agm_call',     label:'General assembly — invitation', annex:'ملحق 14',
+   rule:'قبل 5 أيام عمل من تاريخ حيازة حق الحضور', calc:'bizBefore', n:5, anchorLabel:'تاريخ حق الحضور'},
+  {id:'bonds',        label:'Listed bonds or sukuk', annex:'ملحق 13',
+   rule:'سندات/صكوك مدرجة', calc:'immediate'},
+  {id:'corp_action',  label:'Share entitlements / corporate action', annex:'نموذج استحقاقات الأسهم',
+   rule:'مسار الرفع (ب): البورصة أولاً ثم الهيئة آخراً', calc:'immediate', route:'b'},
+  {id:'corrective',   label:'Corrective — fixes wrong information already announced', annex:'ملحق 11',
+   rule:'يصحّح معلومة خاطئة في إعلان سابق', calc:'immediate'},
+  {id:'supplementary',label:'Supplementary — adds a development to a prior disclosure', annex:'ملحق 12',
+   rule:'يضيف تطوراً جديداً على إفصاح سابق (إلا الدعاوى والأحكام)', calc:'immediate'},
+  {id:'bo_initial',   label:'Beneficial owner — first time at 5% or more', annex:'ملحق 1',
+   rule:'المهلة: 5 أيام عمل', calc:'biz', n:5},
+  {id:'bo_change',    label:'Beneficial owner — change exceeding 0.5%', annex:'ملحق 2',
+   rule:'المهلة: 10 أيام عمل', calc:'biz', n:10},
+  {id:'bo_group',     label:'Group ownership aggregating 5% or more', annex:'ملحق 3',
+   rule:'ملكية مجموعة مجمّعة 5% فأكثر', calc:'biz', n:5},
+  {id:'major_annual', label:'Annual disclosure of major holders (5%+)', annex:'ملحق 4',
+   rule:'إفصاح سنوي عن كبار الملاك', calc:'biz', n:5},
+  {id:'insider_list', label:'Insider list — creation or update', annex:'ملحق 5',
+   rule:'التحديث خلال 5 أيام عمل من التغيّر', calc:'biz', n:5},
+  {id:'insider_deal', label:'Insider dealt in the security', annex:'ملحق 6',
+   rule:'خلال يومي عمل (قبل الجلسة الثالثة)', calc:'biz', n:2},
+];
+
+const DISCLOSURE_STAGES = [
+  {k:'assess',  en:'Assess',   ar:'الاستلام والتقييم'},
+  {k:'prepare', en:'Prepare',  ar:'الإعداد والبحث'},
+  {k:'draft',   en:'Draft',    ar:'الصياغة'},
+  {k:'approve', en:'Approve',  ar:'المراجعة والاعتماد'},
+  {k:'ready',   en:'Ready',    ar:'التجهيز للرفع'},
+  {k:'file',    en:'File',     ar:'الرفع والنشر'},
+  {k:'archive', en:'Archive',  ar:'التأكيد والأرشفة'},
+];
+
+/** The entitlement timetable. Each entry is quoted verbatim from the
+ *  التوقيت / المتطلب column and computed off the AGM date. */
+const ENTITLEMENT_STEPS = [
+  {t:'إخطار من الجمعية — form to Clearing, agenda, governance report',
+   rule:'قبل 5 أيام عمل على الأقل من تاريخ حق حضور الجمعية', from:'attend', biz:-5},
+  {t:'الإعلان الأول — newspaper announcement',
+   rule:'إعلان بالجريدة قبل 7 أيام على الأقل من الإعلان التذكيري', from:'remind', cal:-7},
+  {t:'حيازة حق الحضور',
+   rule:'ثلاثة أيام تداول قبل تاريخ حق الحضور', from:'attend', trade:-3},
+  {t:'حق حضور الجمعية العامة',
+   rule:'قبل 10 أيام من تاريخ الجمعية — وإن وقع في عطلة يؤخذ بيوم العمل التالي', from:'agm', cal:-10, roll:true},
+  {t:'الإعلان التذكيري',
+   rule:'قبل 7 أيام على الأقل من موعد الجمعية', from:'agm', cal:-7},
+  {t:'إفصاح نتائج الجمعية',
+   rule:'نفس يوم الجمعية العامة', from:'agm', cal:0},
+  {t:'تأكيد نموذج الاستحقاق',
+   rule:'قبل 8 أيام على الأقل من يوم الاستحقاق', from:'entitle', cal:-8},
+  {t:'يوم حيازة السهم',
+   rule:'ثلاثة أيام تداول قبل يوم استحقاق السهم', from:'entitle', trade:-3},
+  {t:'يوم الاستحقاق',
+   rule:'حسب جدول أعمال الجمعية (15 يوم عمل على الأقل بعد الجمعية)', from:'entitle', cal:0},
+  {t:'يوم التوزيع',
+   rule:'حسب جدول أعمال الجمعية (4 أيام بعد يوم الاستحقاق)', from:'entitle', cal:4},
+  {t:'محضر الجمعية وتعديل سجل الاستثمار — CMA and CBK',
+   rule:'خلال مدة أقصاها 10 أيام عمل بعد انعقاد الجمعية', from:'agm', biz:10},
+];
+
+/* `ar:true` marks a value that is genuinely Arabic and must set RTL.
+   Mixed Latin/Arabic strings stay LTR with bidi isolation, or the
+   digits migrate to the wrong end of the line. */
+const RULE_PINS = [
+  {t:'Material info, outside hours', d:'قبل 15 دقيقة من الجلسة التالية', ar:true},
+  {t:'Insider dealing',       d:'Within يومي عمل — before the third session'},
+  {t:'Beneficial ownership',  d:'5 business days initial · 10 on change'},
+  {t:'Insider list update',   d:'5 business days from the change'},
+  {t:'Golden rule',           d:'Never publish anywhere before Boursa has it'},
+];
+
+const SEVERITY_DAYS = {Critical:30, High:60, Medium:90, Low:120};
+const SEV_CLASS    = {Critical:'late', High:'late', Medium:'soon', Low:''};
+
+/* ============================================================
+   3. DEADLINE ENGINE
+   ============================================================ */
+function deriveDisclosure(kindId, eventDate, anchorDate){
+  const k = DISCLOSURE_KINDS.find(x => x.id === kindId);
+  const ev = parse(eventDate);
+  let due, precise = null;
+  switch (k.calc){
+    case 'cutoff':      precise = nextSessionCutoff(ev); due = startOfDay(precise); break;
+    case 'biz':         due = addBizDays(ev, k.n); break;
+    case 'bizBefore':   due = addBizDays(anchorDate ? parse(anchorDate) : ev, -k.n); break;
+    default:            due = rollForward(ev); break;
+  }
+  return {annex:k.annex, rule:k.rule, label:k.label, due:iso(due), precise:precise ? precise.toISOString() : null, route:k.route || 'a'};
+}
+
+function deriveEntitlement(agmISO, entitleISO){
+  const agm = parse(agmISO);
+  const attend = rollForward(addDays(agm, -10));
+  const remind = addDays(agm, -7);
+  const entitle = entitleISO ? parse(entitleISO) : addBizDays(agm, 15);
+  const anchors = {agm, attend, remind, entitle};
+  return ENTITLEMENT_STEPS.map(s => {
+    const base = anchors[s.from];
+    let d = new Date(base);
+    if (s.biz   !== undefined) d = addBizDays(base, s.biz);
+    if (s.trade !== undefined) d = addTradingDays(base, s.trade);
+    if (s.cal   !== undefined) d = addDays(base, s.cal);
+    if (s.roll) d = rollForward(d);
+    return {t:s.t, rule:s.rule, due:iso(d)};
+  }).sort((a,b) => a.due.localeCompare(b.due));
+}
+
+/* ============================================================
+   4. STATE + STORE
+   db holds a few aggregate documents, never one per event.
+   localStorage mirrors so the page works before db resolves
+   and when it never does.
+   ============================================================ */
+const LS_KEY = 'kfic-desk-v1';
+const BLANK = {items:[], disclosures:[], watch:[], evidence:[], time:{}, settings:{holidays:[]}, seeded:null};
+let STATE = structuredClone(BLANK);
+let DB = null, SAMPLE = null, DOWNLOADS = null;
+
+function readLocal(){
+  try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+function writeLocal(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(STATE)); } catch { /* private window */ }
+}
+async function persist(){
+  writeLocal();
+  if (!DB) return;
+  try {
+    await DB.doc('state/desk').set({
+      items:STATE.items, disclosures:STATE.disclosures, watch:STATE.watch,
+      evidence:STATE.evidence.slice(-400), time:STATE.time,
+      settings:STATE.settings, seeded:STATE.seeded, savedAt:new Date().toISOString(),
+    });
+  } catch (e) {
+    if (e && e.code === 'quota_exceeded') toast('The desk store is full — clear closed matters to make room.');
+  }
+}
+function logEvidence(matter, event){
+  STATE.evidence.push({at:new Date().toISOString(), matter, event});
+}
+
+/* ============================================================
+   5. DERIVED VIEWS
+   ============================================================ */
+const NOW = () => new Date();
+function statusOf(item){
+  if (item.done) return 'clear';
+  const d = daysBetween(NOW(), parse(item.due));
+  if (d < 0)  return 'late';
+  if (d <= 2) return 'soon';
+  return 'rest';
+}
+function dueLabel(item){
+  if (item.done) return 'Done';
+  const d = daysBetween(NOW(), parse(item.due));
+  if (d < 0)  return `${Math.abs(d)}d late`;
+  if (d === 0) return 'Today';
+  if (d === 1) return 'Tomorrow';
+  return `${d} days`;
+}
+const liveItems = () => STATE.items.filter(i => !i.done);
+function urgentItem(){
+  return liveItems().slice().sort((a,b) => a.due.localeCompare(b.due))[0] || null;
+}
+
+/* ============================================================
+   6. RENDER
+   ============================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function renderHeader(){
+  const now = NOW();
+  $('#f-date').textContent = fmtDate(now);
+  const bd = $('#f-bd');
+  if (isHoliday(now))      { bd.textContent = 'Holiday'; bd.className = 'pill'; }
+  else if (isWeekend(now)) { bd.textContent = DAY_AR[now.getDay()] + ' · weekend'; bd.className = 'pill'; }
+  else                     { bd.textContent = 'Business day'; bd.className = 'pill clear'; }
+
+  const s = sessionState(now);
+  const se = $('#f-session');
+  se.textContent = s.label;
+  se.className = 'pill' + (s.open ? ' clear' : '');
+
+  const u = urgentItem();
+  if (!u){
+    $('#u-what').textContent = 'Nothing outstanding';
+    $('#u-clock').textContent = '—';
+    $('#u-when').textContent = '';
+  } else {
+    const st = statusOf(u);
+    $('#u-what').textContent = u.title;
+    $('#u-clock').textContent = dueLabel(u);
+    $('#u-clock').style.color = st === 'late' ? 'var(--late)' : st === 'soon' ? 'var(--soon)' : 'var(--ink)';
+    $('#u-when').textContent = fmtShort(parse(u.due));
+  }
+}
+
+function renderRuler(){
+  const now = startOfDay(NOW());
+  const wrap = $('#ruler');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 14; i++){
+    const d = addDays(now, i);
+    const cell = document.createElement('div');
+    cell.className = 'day' + (isBizDay(d) ? '' : ' off') + (i === 0 ? ' today' : '');
+    const on = liveItems().filter(it => it.due === iso(d));
+    cell.innerHTML =
+      `<div><div class="day-d">${DAY_EN[d.getDay()]}</div><div class="day-n mono">${String(d.getDate()).padStart(2,'0')}</div></div>` +
+      on.map(it => `<button class="flag ${statusOf(it)}" data-open="${esc(it.id)}">${esc(it.title.slice(0,42))}</button>`).join('') +
+      (on.length === 0 && !isBizDay(d) ? `<div class="day-off-tag">${isHoliday(d) ? 'holiday' : DAY_AR[d.getDay()]}</div>` : '');
+    wrap.appendChild(cell);
+  }
+}
+
+function itemRow(it){
+  const st = statusOf(it);
+  const who = it.who ? `<span class="pill who">${esc(it.who)}</span>` : '';
+  const age = it.handedAt ? `<span class="mono">${daysBetween(parse(it.handedAt), NOW())}d with them</span>` : '';
+  const src = it.annex ? `<span class="pill" dir="auto">${esc(it.annex)}</span>` : '';
+  const ex  = it.example ? `<span class="pill ex">example</span>` : '';
+  const chase = it.lane === 'them' && SAMPLE ? `<button class="mini" data-chase="${esc(it.id)}">Chase</button>` : '';
+  return `<div class="item ${st}">
+    <div class="bar"></div>
+    <div class="item-main">
+      <div class="item-t" dir="auto">${esc(it.title)}</div>
+      <div class="item-m">${src}${who}${age}${ex}${it.note ? `<span>${esc(it.note)}</span>` : ''}</div>
+    </div>
+    <div class="item-r">
+      <div class="due ${st}">${dueLabel(it)}</div>
+      <div class="acts">${chase}
+        <button class="mini" data-open="${esc(it.id)}">Open</button>
+        <button class="mini go" data-done="${esc(it.id)}">Done</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderStacks(){
+  const live = liveItems();
+  const soon = d => daysBetween(NOW(), parse(d)) <= 6;
+  const me    = live.filter(i => i.lane === 'me'   && soon(i.due));
+  const them  = live.filter(i => i.lane === 'them');
+  const later = live.filter(i => i.lane === 'me'   && !soon(i.due));
+  const bySort = a => a.slice().sort((x,y) => x.due.localeCompare(y.due));
+
+  const fill = (el, arr, msg) => {
+    el.innerHTML = arr.length
+      ? `<div class="items">${bySort(arr).map(itemRow).join('')}</div>`
+      : `<div class="empty">${msg}</div>`;
+  };
+  fill($('#stack-me'),    me,    'Nothing on you inside the next week.');
+  fill($('#stack-them'),  them,  'Nothing sitting with anyone else.');
+  fill($('#stack-later'), later, 'Nothing scheduled further out.');
+
+  $('#n-me').textContent    = me.length;
+  $('#n-them').textContent  = them.length;
+  $('#n-later').textContent = later.length;
+}
+
+function renderRail(){
+  const live = liveItems();
+  const late = live.filter(i => statusOf(i) === 'late').length;
+  const openDisc = STATE.disclosures.filter(d => !d.stages?.archive).length;
+  const oldestChase = STATE.items
+    .filter(i => !i.done && i.lane === 'them' && i.handedAt)
+    .map(i => daysBetween(parse(i.handedAt), NOW()))
+    .sort((a,b) => b-a)[0];
+
+  $('#clocks').innerHTML = [
+    ['Overdue on the desk',  late,  late ? 'late' : 'clear'],
+    ['Disclosures in flight', openDisc, openDisc ? 'soon' : 'clear'],
+    ['Longest wait on others', oldestChase != null ? oldestChase + 'd' : '—', oldestChase > 7 ? 'late' : 'rest'],
+    ['Watch items unescalated', STATE.watch.filter(w => !w.escalated).length, 'rest'],
+  ].map(([k,v,c]) =>
+    `<div class="kv"><span class="k">${k}</span><span class="v" style="color:var(--${c === 'rest' ? 'ink' : c})">${v}</span></div>`
+  ).join('');
+
+  const ss = $('#store-state');
+  if (ss){
+    ss.innerHTML = DB
+      ? 'Saved to your private artifact store — follows you across devices, and this page keeps a local copy too.'
+      : 'Saved in <b style="color:var(--ink)">this browser only</b>. Nothing leaves the device. Back up before changing machines or clearing site data.';
+  }
+
+  $('#pins').innerHTML = RULE_PINS.map(p =>
+    `<div class="rule-pin"><b>${esc(p.t)}</b><span class="${p.ar ? 'ar' : ''}" dir="auto">${esc(p.d)}</span></div>`
+  ).join('');
+}
+
+function renderObligations(){
+  const derived = STATE.items.filter(i => i.rule);
+  $('#oblig-list').innerHTML = derived.length ? `<div class="derived">${
+    derived.slice().sort((a,b) => a.due.localeCompare(b.due)).map(i => `
+      <div class="derived-r">
+        <div class="d-t" dir="auto">${esc(i.title)} ${i.annex ? `<span class="pill" dir="auto">${esc(i.annex)}</span>` : ''}</div>
+        <div class="d-d ${statusOf(i)}" style="color:var(--${statusOf(i) === 'rest' ? 'ink' : statusOf(i)})">${fmtShort(parse(i.due))} · ${dueLabel(i)}</div>
+        <div class="d-rule ar">${esc(i.rule)}</div>
+      </div>`).join('')
+  }</div>` : `<div class="empty">No derived obligations yet. Start a disclosure or an entitlement run and the dates appear here.</div>`;
+
+  $('#recur-body').innerHTML = STATE.items.filter(i => i.recur).map(i => `
+    <tr>
+      <td>${esc(i.title)}</td>
+      <td>${esc(i.recur)}</td>
+      <td class="num" style="color:var(--${statusOf(i) === 'rest' ? 'ink' : statusOf(i)})">${fmtShort(parse(i.due))}</td>
+      <td>${esc(i.delegate || '—')}</td>
+      <td><button class="mini go" data-done="${esc(i.id)}">Complete</button></td>
+    </tr>`).join('') || `<tr><td colspan="5" style="color:var(--ink-3)">No recurring duties recorded.</td></tr>`;
+
+  const hol = STATE.settings.holidays;
+  $('#hol-list').textContent = hol.length
+    ? `${hol.length} holiday${hol.length > 1 ? 's' : ''} entered: ` + hol.slice().sort().map(h => fmtShort(parse(h))).join(' · ')
+    : 'No holidays entered — the engine is currently skipping weekends only.';
+}
+
+function renderDisclosures(){
+  const list = STATE.disclosures;
+  $('#disc-list').innerHTML = list.length ? `<div class="items">${
+    list.slice().sort((a,b) => (b.eventDate||'').localeCompare(a.eventDate||'')).map(d => {
+      const stagesDone = DISCLOSURE_STAGES.filter(s => d.stages?.[s.k]).length;
+      const nextStage = DISCLOSURE_STAGES.find(s => !d.stages?.[s.k]);
+      const st = d.stages?.archive ? 'clear' : (daysBetween(NOW(), parse(d.due)) < 0 ? 'late' : 'soon');
+      return `<div class="item ${st}">
+        <div class="bar"></div>
+        <div class="item-main">
+          <div class="item-t" dir="auto">${esc(d.title)}</div>
+          <div class="item-m">
+            <span class="pill" dir="auto">${esc(d.annex)}</span>
+            <span class="mono">event ${esc(d.eventDate)}</span>
+            <span>route ${d.route === 'b' ? 'B · Company Action' : 'A · ordinary'}</span>
+          </div>
+          <div class="ar note">${esc(d.rule)}</div>
+          <div class="stages">${DISCLOSURE_STAGES.map(s =>
+            `<span class="stg ${d.stages?.[s.k] ? 'done' : (s.k === nextStage?.k ? 'now' : '')}" title="${d.stages?.[s.k] ? new Date(d.stages[s.k]).toLocaleString('en-GB') : 'not yet'}">${s.en}</span>`
+          ).join('')}</div>
+        </div>
+        <div class="item-r">
+          <div class="due ${st}">${d.stages?.archive ? 'Filed' : dueLabel({due:d.due})}</div>
+          <div class="acts">
+            ${nextStage ? `<button class="mini go" data-stage="${esc(d.id)}">Mark ${esc(nextStage.en)}</button>` : ''}
+            <button class="mini" data-disc="${esc(d.id)}">Detail</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')
+  }</div>` : `<div class="empty">No disclosures logged. Start one from Quick actions and the annex, deadline and stage chain are set up for you.</div>`;
+}
+
+function renderCapa(){
+  const rows = STATE.items.filter(i => i.capa);
+  $('#capa-body').innerHTML = rows.length ? rows.map(i => {
+    const st = statusOf(i);
+    return `<tr>
+      <td class="num">${esc(i.capa.ref)}</td>
+      <td>${esc(i.title)}${i.capa.repeat ? ' <span class="pill late">repeat</span>' : ''}</td>
+      <td>${esc(i.who || '—')}</td>
+      <td class="num" style="color:var(--${st === 'rest' ? 'ink' : st})">${fmtShort(parse(i.due))}</td>
+      <td class="num">${daysBetween(parse(i.capa.raised), NOW())}d</td>
+      <td><span class="pill ${SEV_CLASS[i.capa.severity] || ''}">${esc(i.capa.severity)}</span></td>
+      <td><button class="mini go" data-done="${esc(i.id)}">Close</button></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="7" style="color:var(--ink-3)">No CAPAs on your slice.</td></tr>`;
+}
+
+function renderWatch(){
+  $('#watch-list').innerHTML = STATE.watch.length ? `<div class="items">${
+    STATE.watch.map(w => {
+      const age = daysBetween(parse(w.raised), NOW());
+      const nag = age >= (w.nagAfter ?? 14) && !w.escalated;
+      return `<div class="item ${nag ? 'late' : 'rest'} ${w.restricted ? 'restricted' : ''}">
+        <div class="bar"></div>
+        <div class="item-main">
+          <div class="item-t" dir="auto">${esc(w.title)}</div>
+          <div class="item-m">
+            ${w.restricted ? '<span class="pill late">restricted · pointer only</span>' : ''}
+            <span class="mono">raised ${fmtShort(parse(w.raised))}</span>
+            ${w.location ? `<span>file: ${esc(w.location)}</span>` : ''}
+            ${w.escalated ? `<span class="pill clear">escalated ${esc(w.escalated)}</span>` : ''}
+          </div>
+          ${nag ? `<div class="note" style="color:var(--late)">Open ${age} days without escalation — decide or close it out.</div>` : ''}
+        </div>
+        <div class="item-r">
+          <div class="due ${nag ? 'late' : 'rest'}">${age}d</div>
+          <div class="acts">
+            ${w.escalated ? '' : `<button class="mini go" data-esc="${esc(w.id)}">Escalate</button>`}
+            <button class="mini" data-wclose="${esc(w.id)}">Close out</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')
+  }</div>` : `<div class="empty">Nothing on the watch list. Log a concern the moment it occurs to you — that is the point of it.</div>`;
+}
+
+function renderPerf(){
+  const closed = STATE.items.filter(i => i.done && i.closedAt);
+  const onTime = closed.filter(i => daysBetween(parse(i.due), parse(i.closedAt.slice(0,10))) <= 0).length;
+  const pct = closed.length ? Math.round(onTime / closed.length * 100) : null;
+  const turn = closed.length
+    ? Math.round(closed.reduce((s,i) => s + Math.max(0, daysBetween(parse(i.createdAt.slice(0,10)), parse(i.closedAt.slice(0,10)))), 0) / closed.length)
+    : null;
+  const filed = STATE.disclosures.filter(d => d.stages?.archive);
+  const late  = liveItems().filter(i => statusOf(i) === 'late').length;
+
+  $('#perf-tiles').innerHTML = [
+    ['Closed on time', pct == null ? '—' : pct + '%', `${onTime} of ${closed.length} closed items`, pct == null ? '' : (pct >= 90 ? 'clear' : pct >= 75 ? 'soon' : 'late')],
+    ['Median turnaround', turn == null ? '—' : turn + 'd', 'from landing on your desk to closed', ''],
+    ['Disclosures filed', filed.length, 'full seven-stage chain completed', ''],
+    ['Currently overdue', late, late ? 'needs a reason, not a note' : 'nothing past its date', late ? 'late' : 'clear'],
+  ].map(([k,v,s,c]) => `<div class="tile">
+      <div class="tile-k">${k}</div>
+      <div class="tile-v" ${c ? `style="color:var(--${c})"` : ''}>${v}</div>
+      <div class="tile-s">${s}</div>
+    </div>`).join('');
+
+  const time = STATE.time || {};
+  const total = Object.values(time).reduce((a,b) => a+b, 0);
+  const cats = Object.entries(time).sort((a,b) => b[1]-a[1]);
+  $('#wk-bars').innerHTML = cats.length ? cats.map(([k,v]) => `
+    <div class="wk-row">
+      <span>${esc(k)}</span>
+      <span class="wk-bar"><i style="width:${total ? Math.round(v/total*100) : 0}%"></i></span>
+      <span class="num">${total ? Math.round(v/total*100) : 0}%</span>
+    </div>`).join('')
+    : `<div class="note">Nothing logged yet. When you mark an item done the desk asks which category it belonged to, and this fills in.</div>`;
+}
+
+function renderEvidence(){
+  const rows = STATE.evidence.slice().reverse();
+  $('#evid-body').innerHTML = rows.length ? rows.map(e => `<tr>
+      <td class="num">${new Date(e.at).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</td>
+      <td>${esc(e.matter)}</td>
+      <td>${esc(e.event)}</td>
+    </tr>`).join('') : `<tr><td colspan="3" style="color:var(--ink-3)">No entries yet.</td></tr>`;
+}
+
+function renderCounts(){
+  $('#c-today').textContent  = liveItems().length || '';
+  $('#c-oblig').textContent  = STATE.items.filter(i => i.rule && !i.done).length || '';
+  $('#c-disc').textContent   = STATE.disclosures.filter(d => !d.stages?.archive).length || '';
+  $('#c-capa').textContent   = STATE.items.filter(i => i.capa && !i.done).length || '';
+  $('#c-watch').textContent  = STATE.watch.filter(w => !w.escalated).length || '';
+}
+
+function renderAll(){
+  renderHeader(); renderRuler(); renderStacks(); renderRail();
+  renderObligations(); renderDisclosures(); renderCapa();
+  renderWatch(); renderPerf(); renderEvidence(); renderCounts();
+  $('#seed-banner').hidden = STATE.seeded !== null;
+}
+
+/* ============================================================
+   7. ACTIONS
+   ============================================================ */
+const uid = () => 'x' + Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4);
+
+function addItem(o){
+  const it = Object.assign({id:uid(), lane:'me', done:false, createdAt:new Date().toISOString()}, o);
+  STATE.items.push(it);
+  logEvidence(it.title, `Added to desk, due ${it.due}`);
+  return it;
+}
+
+function markDone(id){
+  const it = STATE.items.find(i => i.id === id);
+  if (!it) return;
+  askCategory(it.title, cat => {
+    it.done = true;
+    it.closedAt = new Date().toISOString();
+    if (cat){ STATE.time[cat] = (STATE.time[cat] || 0) + 1; }
+    logEvidence(it.title, `Closed${cat ? ' · ' + cat : ''}`);
+    if (it.recur){
+      const next = it.recur === 'Monthly' ? addDays(parse(it.due), 30)
+                 : it.recur === 'Quarterly' ? addDays(parse(it.due), 91)
+                 : addDays(parse(it.due), 365);
+      addItem({title:it.title, due:iso(rollForward(next)), recur:it.recur, delegate:it.delegate, lane:'me'});
+    }
+    persist(); renderAll();
+  });
+}
+
+function toast(msg){
+  const n = $('#dl-note'); if (n){ n.textContent = msg; setTimeout(() => { if (n.textContent === msg) n.textContent = ''; }, 6000); }
+}
+
+/* ---------- dialog plumbing ---------- */
+const dlg = $('#dlg');
+function openDialog(title, bodyHTML, buttons){
+  $('#dlg-title').textContent = title;
+  $('#dlg-body').innerHTML = bodyHTML;
+  $('#dlg-foot').innerHTML = '';
+  buttons.forEach(b => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = 'btn' + (b.primary ? ' primary' : '') + (b.danger ? ' danger' : '');
+    el.textContent = b.label;
+    el.onclick = () => { if (b.act() !== false) dlg.close(); };
+    $('#dlg-foot').appendChild(el);
+  });
+  const close = document.createElement('button');
+  close.type = 'button'; close.className = 'btn'; close.textContent = 'Cancel';
+  close.onclick = () => dlg.close();
+  $('#dlg-foot').appendChild(close);
+  dlg.showModal();
+}
+
+function askCategory(title, cb){
+  const cats = ['Regulator response','Compliance testing','Onboarding / KYC review','Disclosure','Drafting','Advisory','Admin'];
+  openDialog('Closing: ' + title,
+    `<label class="fld"><span>What kind of work was this?</span>
+      <select id="q-cat">${cats.map(c => `<option>${c}</option>`).join('')}<option value="">Skip</option></select></label>
+     <p class="note">One click now is what makes the quarterly picture of your workload real.</p>`,
+    [{label:'Close item', primary:true, act(){ cb($('#q-cat').value); }}]);
+}
+
+/* ---------- new disclosure ---------- */
+function newDisclosure(){
+  const today = iso(NOW());
+  openDialog('New disclosure',
+    `<label class="fld"><span>What happened</span><input type="text" id="d-title" placeholder="Board resolved to recommend a cash dividend"></label>
+     <label class="fld"><span>Type — this picks the annex and the deadline</span>
+       <select id="d-kind">${DISCLOSURE_KINDS.map(k => `<option value="${k.id}">${esc(k.label)} — ${esc(k.annex)}</option>`).join('')}</select></label>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+       <label class="fld"><span>Date information arose</span><input type="date" id="d-date" value="${today}"></label>
+       <label class="fld"><span>Anchor date (AGM invitations only)</span><input type="date" id="d-anchor"></label>
+     </div>
+     <div id="d-preview"></div>`,
+    [{label:'Log it and set the clock', primary:true, act(){
+      const kind = $('#d-kind').value, ev = $('#d-date').value, anchor = $('#d-anchor').value;
+      const title = $('#d-title').value.trim() || DISCLOSURE_KINDS.find(k => k.id === kind).label;
+      if (!ev){ return false; }
+      const d = deriveDisclosure(kind, ev, anchor);
+      const rec = {id:uid(), title, annex:d.annex, rule:d.rule, due:d.due, precise:d.precise,
+                   route:d.route, eventDate:ev, stages:{assess:new Date().toISOString()}};
+      STATE.disclosures.push(rec);
+      addItem({title:'Disclosure: ' + title, due:d.due, annex:d.annex, rule:d.rule, lane:'me', discId:rec.id});
+      logEvidence(title, `Disclosure logged · ${d.annex} · due ${d.due}`);
+      persist(); renderAll(); setTab('disc');
+    }}]);
+
+  const preview = () => {
+    const kind = $('#d-kind').value, ev = $('#d-date').value;
+    if (!ev){ $('#d-preview').innerHTML = ''; return; }
+    const d = deriveDisclosure(kind, ev, $('#d-anchor').value);
+    const when = d.precise
+      ? new Date(d.precise).toLocaleString('en-GB',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})
+      : fmtDate(parse(d.due));
+    $('#d-preview').innerHTML =
+      `<div class="derived"><div class="derived-r">
+        <div class="d-t">File by · <span dir="auto">${esc(d.annex)}</span></div>
+        <div class="d-d">${esc(when)}</div>
+        <div class="d-rule ar">${esc(d.rule)}</div>
+      </div></div>`;
+  };
+  ['#d-kind','#d-date','#d-anchor'].forEach(s => $(s).addEventListener('change', preview));
+  preview();
+}
+
+/* ---------- entitlement run ---------- */
+function newEntitlement(){
+  const agm = iso(addBizDays(NOW(), 20));
+  openDialog('Entitlement run',
+    `<p class="note" style="margin:0 0 12px">Give the desk the assembly date. Every other date in the timetable is computed from it, each quoted against the rule it comes from.</p>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+       <label class="fld"><span>General assembly date</span><input type="date" id="e-agm" value="${agm}"></label>
+       <label class="fld"><span>يوم الاستحقاق (blank = +15 business days)</span><input type="date" id="e-ent"></label>
+     </div>
+     <div id="e-preview"></div>`,
+    [{label:'Add all dates to the desk', primary:true, act(){
+      const steps = deriveEntitlement($('#e-agm').value, $('#e-ent').value);
+      steps.forEach(s => addItem({title:s.t, due:s.due, rule:s.rule, lane:'me', annex:'استحقاقات'}));
+      logEvidence('Entitlement run', `${steps.length} dates derived from AGM ${$('#e-agm').value}`);
+      persist(); renderAll(); setTab('oblig');
+    }}]);
+
+  const preview = () => {
+    const v = $('#e-agm').value;
+    if (!v){ $('#e-preview').innerHTML = ''; return; }
+    const steps = deriveEntitlement(v, $('#e-ent').value);
+    $('#e-preview').innerHTML = `<div class="derived">${steps.map(s => `
+      <div class="derived-r">
+        <div class="d-t ar">${esc(s.t)}</div>
+        <div class="d-d">${esc(fmtShort(parse(s.due)))}</div>
+        <div class="d-rule ar">${esc(s.rule)}</div>
+      </div>`).join('')}</div>`;
+  };
+  ['#e-agm','#e-ent'].forEach(s => $(s).addEventListener('change', preview));
+  preview();
+}
+
+/* ---------- plain desk item ---------- */
+function newTask(){
+  openDialog('Add to desk',
+    `<label class="fld"><span>What needs doing</span><input type="text" id="t-title"></label>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+       <label class="fld"><span>Due</span><input type="date" id="t-due" value="${iso(addBizDays(NOW(),3))}"></label>
+       <label class="fld"><span>Whose court</span>
+         <select id="t-lane"><option value="me">Mine</option><option value="them">Someone else's</option></select></label>
+     </div>
+     <label class="fld"><span>With whom (if handed over)</span><input type="text" id="t-who" placeholder="Khaled — IT"></label>
+     <label class="fld"><span>Repeats</span>
+       <select id="t-rec"><option value="">One-off</option><option>Monthly</option><option>Quarterly</option><option>Annual</option></select></label>`,
+    [{label:'Add', primary:true, act(){
+      const title = $('#t-title').value.trim();
+      if (!title) return false;
+      const lane = $('#t-lane').value;
+      addItem({title, due:$('#t-due').value, lane, who:$('#t-who').value.trim(),
+               recur:$('#t-rec').value || null, handedAt: lane === 'them' ? iso(NOW()) : null});
+      persist(); renderAll();
+    }}]);
+}
+
+/* ---------- watch list ---------- */
+function newWatch(){
+  openDialog('Log a concern',
+    `<label class="fld"><span>What is bothering you</span><input type="text" id="w-title"></label>
+     <label class="fld"><span><input type="checkbox" id="w-restricted" style="width:auto;margin-inline-end:6px">Restricted matter — store a pointer only</span></label>
+     <label class="fld"><span>Where the file lives</span><input type="text" id="w-loc" placeholder="WB-2026-02 — secure drive, GC folder"></label>
+     <label class="fld"><span>Nudge me to escalate after</span><input type="number" id="w-nag" value="14" min="1" max="180"> </label>
+     <p class="note">Restricted matters deliberately have no body field. If it needs writing down in detail, it does not belong on this page.</p>`,
+    [{label:'Log it', primary:true, act(){
+      const title = $('#w-title').value.trim();
+      if (!title) return false;
+      STATE.watch.push({id:uid(), title, raised:iso(NOW()), restricted:$('#w-restricted').checked,
+                        location:$('#w-loc').value.trim(), nagAfter:Number($('#w-nag').value) || 14, escalated:null});
+      logEvidence(title, 'Added to watch list');
+      persist(); renderAll(); setTab('watch');
+    }}]);
+}
+
+/* ---------- chase drafting (sample) ---------- */
+async function chase(id){
+  const it = STATE.items.find(i => i.id === id);
+  if (!it || !SAMPLE) return;
+  openDialog('Chaser note', `<p class="note" id="ch-out">Drafting…</p>`, [
+    {label:'Copy', primary:true, act(){
+      navigator.clipboard?.writeText($('#ch-out').textContent || '');
+      return true;
+    }}
+  ]);
+  const days = it.handedAt ? daysBetween(parse(it.handedAt), NOW()) : null;
+  try {
+    const r = await SAMPLE(
+      `Write a short, courteous internal chaser note in English from a compliance officer at a Kuwaiti ` +
+      `CMA-licensed investment company. Plain text, no subject line, 3 sentences maximum, no greeting fluff. ` +
+      `Matter: "${it.title}". With: ${it.who || 'the owner'}. ` +
+      (days != null ? `Outstanding ${days} days. ` : '') +
+      `Due ${it.due}. State what is needed and by when; firm but collegial.`,
+      {modelTier:'quick', onText:({text}) => { const o = $('#ch-out'); if (o) o.textContent = text; }}
+    );
+    const o = $('#ch-out'); if (o) o.textContent = r.text;
+    logEvidence(it.title, 'Chaser drafted');
+  } catch (e) {
+    const o = $('#ch-out');
+    if (o) o.textContent = e?.code === 'not_granted'
+      ? 'Drafting needs your approval to ask Claude — reload and allow it, or write the note yourself.'
+      : 'Could not draft the note just now. The matter details are above to write it by hand.';
+  }
+}
+
+/* ---------- holidays ---------- */
+function manageHolidays(){
+  openDialog('Official holidays',
+    `<p class="note" style="margin:0 0 11px">Kuwait's official holidays shift with the Hijri calendar, so the desk never guesses them. Add the dates your company observes and every deadline recomputes.</p>
+     <label class="fld"><span>Add a date</span><input type="date" id="h-new"></label>
+     <div id="h-cur" class="note"></div>`,
+    [{label:'Add', primary:true, act(){
+      const v = $('#h-new').value;
+      if (v && !STATE.settings.holidays.includes(v)){
+        STATE.settings.holidays.push(v);
+        logEvidence('Calendar', `Holiday added ${v}`);
+        persist(); renderAll();
+      }
+      return false;
+    }}]);
+  const paint = () => {
+    $('#h-cur').innerHTML = STATE.settings.holidays.length
+      ? STATE.settings.holidays.slice().sort().map(h =>
+          `<span class="pill" style="margin:2px">${fmtDate(parse(h))} <button class="mini" data-holdel="${h}" style="padding:0 4px">×</button></span>`).join('')
+      : 'None entered.';
+  };
+  paint();
+  $('#dlg-body').addEventListener('click', e => {
+    const b = e.target.closest('[data-holdel]');
+    if (!b) return;
+    STATE.settings.holidays = STATE.settings.holidays.filter(h => h !== b.dataset.holdel);
+    persist(); renderAll(); paint();
+  });
+}
+
+/* ---------- exports ---------- */
+function buildPack(){
+  const closed = STATE.items.filter(i => i.done);
+  const lines = [
+    '# Compliance self-review pack',
+    `Generated ${new Date().toLocaleString('en-GB')}`,
+    '',
+    '## Record',
+    `- Items closed: ${closed.length}`,
+    `- Currently open: ${liveItems().length}`,
+    `- Overdue now: ${liveItems().filter(i => statusOf(i) === 'late').length}`,
+    `- Disclosures filed end to end: ${STATE.disclosures.filter(d => d.stages?.archive).length}`,
+    '',
+    '## Closed items',
+    ...closed.map(i => `- ${i.title} — due ${i.due}, closed ${i.closedAt ? i.closedAt.slice(0,10) : '—'}`),
+    '',
+    '## Disclosures',
+    ...STATE.disclosures.map(d => `- ${d.title} — ${d.annex}, event ${d.eventDate}, due ${d.due}`),
+    '',
+    '## Where the time went',
+    ...Object.entries(STATE.time).map(([k,v]) => `- ${k}: ${v} items`),
+    '',
+    '## Evidence trail',
+    ...STATE.evidence.slice(-200).map(e => `- ${new Date(e.at).toLocaleString('en-GB')} — ${e.matter} — ${e.event}`),
+  ];
+  return lines.join('\n');
+}
+function toCSV(){
+  const head = ['id','title','lane','due','done','closedAt','who','annex','rule'];
+  const rows = STATE.items.map(i => head.map(h => `"${String(i[h] ?? '').replace(/"/g,'""')}"`).join(','));
+  return [head.join(','), ...rows].join('\n');
+}
+async function offer(filename, data){
+  if (DOWNLOADS){
+    try { await DOWNLOADS.save({filename, data}); toast('Saved.'); }
+    catch { toast('The save was declined.'); }
+    return;
+  }
+  /* Plain web: a blob link works here, and is inert inside the artifact
+     sandbox — which is exactly why DOWNLOADS is tried first. */
+  try {
+    const url = URL.createObjectURL(new Blob([data], {type:'text/plain;charset=utf-8'}));
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast('Downloaded ' + filename);
+  } catch { toast('Could not save the file in this browser.'); }
+}
+
+/* ---------- backup / restore ----------
+   Without the artifact store the desk lives in one browser's
+   localStorage, so a portable backup is not optional. */
+function backup(){
+  offer(`compliance-desk-backup-${iso(NOW())}.json`, JSON.stringify(STATE, null, 2));
+}
+function restore(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (!d || typeof d !== 'object' || !Array.isArray(d.items)) throw new Error('shape');
+      STATE = Object.assign(structuredClone(BLANK), d);
+      logEvidence('Desk', 'Restored from backup file');
+      persist(); renderAll();
+      toast(`Restored ${STATE.items.length} items.`);
+    } catch { toast('That file is not a desk backup.'); }
+  };
+  r.readAsText(file);
+}
+
+/* ============================================================
+   8. TABS + EVENTS
+   ============================================================ */
+function setTab(name){
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.pane === name)));
+  $$('.pane').forEach(p => { p.hidden = p.dataset.pane !== name; });
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => setTab(t.dataset.pane)));
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-open],[data-done],[data-chase],[data-new],[data-stage],[data-esc],[data-wclose],[data-disc]');
+  if (!t) return;
+
+  if (t.dataset.new){
+    ({disclosure:newDisclosure, entitlement:newEntitlement, task:newTask, watch:newWatch})[t.dataset.new]();
+  }
+  else if (t.dataset.done)  markDone(t.dataset.done);
+  else if (t.dataset.chase) chase(t.dataset.chase);
+  else if (t.dataset.open){
+    const it = STATE.items.find(i => i.id === t.dataset.open);
+    if (it) openDialog(it.title,
+      `<div class="derived"><div class="derived-r">
+         <div class="d-t">Due</div><div class="d-d">${fmtDate(parse(it.due))} · ${dueLabel(it)}</div>
+         ${it.rule ? `<div class="d-rule ar">${esc(it.rule)}</div>` : ''}
+       </div></div>
+       <p class="note" style="margin-top:11px">${it.who ? 'With ' + esc(it.who) + '. ' : ''}${it.annex ? esc(it.annex) + '. ' : ''}Added ${new Date(it.createdAt).toLocaleDateString('en-GB')}.</p>`,
+      [{label:'Mark done', primary:true, act(){ setTimeout(() => markDone(it.id), 60); }},
+       {label:'Remove', danger:true, act(){
+          STATE.items = STATE.items.filter(x => x.id !== it.id);
+          logEvidence(it.title, 'Removed from desk'); persist(); renderAll();
+       }}]);
+  }
+  else if (t.dataset.stage){
+    const d = STATE.disclosures.find(x => x.id === t.dataset.stage);
+    const next = DISCLOSURE_STAGES.find(s => !d.stages?.[s.k]);
+    if (d && next){
+      d.stages[next.k] = new Date().toISOString();
+      logEvidence(d.title, `Stage ${next.en} (${next.ar}) completed`);
+      if (next.k === 'archive'){
+        const it = STATE.items.find(i => i.discId === d.id);
+        if (it && !it.done){ it.done = true; it.closedAt = new Date().toISOString(); }
+      }
+      persist(); renderAll();
+    }
+  }
+  else if (t.dataset.disc){
+    const d = STATE.disclosures.find(x => x.id === t.dataset.disc);
+    if (d) openDialog(d.title,
+      `<div class="derived"><div class="derived-r">
+        <div class="d-t">File by · <span dir="auto">${esc(d.annex)}</span></div>
+        <div class="d-d">${d.precise ? new Date(d.precise).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : fmtDate(parse(d.due))}</div>
+        <div class="d-rule ar">${esc(d.rule)}</div>
+      </div></div>
+      <p class="note" style="margin-top:12px"><b style="color:var(--ink)">Route ${d.route === 'b' ? 'B — Company Action' : 'A — ordinary'}:</b>
+        ${d.route === 'b'
+          ? 'Boursa first (Company Action), the Authority last.'
+          : 'Boursa / create (your account) → CMA / submit (manager) → Boursa / activate (manager).'}</p>
+      <div class="derived" style="margin-top:11px">${DISCLOSURE_STAGES.map(s => `
+        <div class="derived-r">
+          <div class="d-t ar">${esc(s.ar)}</div>
+          <div class="d-d">${d.stages?.[s.k] ? new Date(d.stages[s.k]).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'}</div>
+        </div>`).join('')}</div>`,
+      [{label:'Close', primary:true, act(){}}]);
+  }
+  else if (t.dataset.esc){
+    const w = STATE.watch.find(x => x.id === t.dataset.esc);
+    if (w){ w.escalated = iso(NOW()); logEvidence(w.title, 'Escalated'); persist(); renderAll(); }
+  }
+  else if (t.dataset.wclose){
+    const w = STATE.watch.find(x => x.id === t.dataset.wclose);
+    if (w){
+      STATE.watch = STATE.watch.filter(x => x.id !== w.id);
+      logEvidence(w.title, 'Watch item closed out'); persist(); renderAll();
+    }
+  }
+});
+
+$('#btn-hol').addEventListener('click', manageHolidays);
+$('#btn-backup').addEventListener('click', backup);
+$('#btn-restore').addEventListener('click', () => $('#file-restore').click());
+$('#file-restore').addEventListener('change', e => {
+  const f = e.target.files?.[0];
+  if (f) restore(f);
+  e.target.value = '';
+});
+$('#btn-pack').addEventListener('click', () => offer('compliance-self-review-pack.md', buildPack()));
+$('#btn-export').addEventListener('click', () => offer('compliance-desk.csv', toCSV()));
+$('#btn-backup2').addEventListener('click', backup);
+
+/* ---------- theme ---------- */
+$('#btn-theme').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const sysDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = cur ? (cur === 'dark' ? 'light' : 'dark') : (sysDark ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('kfic-desk-theme', next); } catch {}
+});
+try {
+  const th = localStorage.getItem('kfic-desk-theme');
+  if (th) document.documentElement.setAttribute('data-theme', th);
+} catch {}
+
+/* ============================================================
+   9. EXAMPLE SET — dated relative to today so the desk opens
+   in a working state. Marked as examples until adopted.
+   ============================================================ */
+function exampleState(){
+  const T = NOW();
+  const mk = (o) => Object.assign({id:uid(), done:false, example:true, createdAt:new Date().toISOString()}, o);
+  return {
+    items:[
+      mk({title:'EDD re-performed on 7 high-risk files (CMA-INS-2025-14)', due:iso(addBizDays(T,-4)),
+          lane:'me', who:'Sara — AML', annex:'CMA', capa:{ref:'CAPA-2026-001', severity:'High', raised:iso(addDays(T,-120)), repeat:false}}),
+      mk({title:'PA dealing — vendor patch for research-window block', due:iso(addBizDays(T,-1)),
+          lane:'them', who:'Faisal — Brokerage', handedAt:iso(addDays(T,-16)),
+          capa:{ref:'CAPA-2026-002', severity:'Critical', raised:iso(addDays(T,-95)), repeat:false}}),
+      mk({title:'Client money — daily exception review delegate matrix', due:iso(addBizDays(T,1)),
+          lane:'them', who:'Mohamed — Finance', handedAt:iso(addDays(T,-9)),
+          capa:{ref:'CAPA-2026-003', severity:'High', raised:iso(addDays(T,-80)), repeat:true}}),
+      mk({title:'Insider list refresh following the IR team change', due:iso(addBizDays(T,2)),
+          lane:'me', annex:'ملحق 5', rule:'التحديث خلال 5 أيام عمل من التغيّر'}),
+      mk({title:'JML internal-move trigger — privileged access', due:iso(addBizDays(T,9)),
+          lane:'them', who:'Khaled — IT', handedAt:iso(addDays(T,-5)),
+          capa:{ref:'CAPA-2026-006', severity:'High', raised:iso(addDays(T,-45)), repeat:false}}),
+      mk({title:'Monthly liquidity return to CBK', due:iso(rollForward(addDays(T,12))),
+          lane:'me', recur:'Monthly', delegate:'Mohamed Al-Salem'}),
+      mk({title:'Quarterly entitlement review — privileged accounts', due:iso(rollForward(addDays(T,26))),
+          lane:'me', recur:'Quarterly', delegate:'Khaled Al-Ajmi'}),
+    ],
+    disclosures:[{
+      id:uid(), title:'Board resolution — change of external auditor', annex:'ملحق 10',
+      rule:'قبل 15 دقيقة على الأقل من جلسة التداول التالية', eventDate:iso(addDays(T,-2)),
+      due:iso(rollForward(addDays(T,-1))), precise:null, route:'a',
+      stages:{assess:new Date(Date.now()-1.8e8).toISOString(), prepare:new Date(Date.now()-1.6e8).toISOString(),
+              draft:new Date(Date.now()-1.2e8).toISOString(), approve:new Date(Date.now()-9e7).toISOString()},
+    }],
+    watch:[
+      {id:uid(), title:'Second-line QA gate on onboarding still depends on one reviewer', raised:iso(addDays(T,-22)),
+       restricted:false, location:'', nagAfter:14, escalated:null},
+      {id:uid(), title:'WB-2026-02 — conflicts allegation', raised:iso(addDays(T,-6)),
+       restricted:true, location:'Secure drive · GC folder', nagAfter:5, escalated:null},
+    ],
+    evidence:[
+      {at:new Date(Date.now()-1.8e8).toISOString(), matter:'Change of external auditor', event:'Disclosure logged · ملحق 10'},
+      {at:new Date(Date.now()-9e7).toISOString(),  matter:'Change of external auditor', event:'Stage Approve (المراجعة والاعتماد) completed'},
+    ],
+    time:{'Regulator response':6,'Disclosure':4,'Onboarding / KYC review':9,'Compliance testing':5,'Advisory':3},
+    settings:{holidays:[]},
+    seeded:null,
+  };
+}
+
+/* ============================================================
+   10. BOOT
+   ============================================================ */
+function boot(){
+  const local = readLocal();
+  STATE = local && local.seeded !== null ? Object.assign(structuredClone(BLANK), local) : exampleState();
+  renderAll();
+  setInterval(renderHeader, 30000);
+}
+boot();
+
+$('#btn-keep').addEventListener('click', () => {
+  STATE.items.forEach(i => delete i.example);
+  STATE.seeded = 'kept';
+  logEvidence('Desk', 'Example set adopted as the starting position');
+  persist(); renderAll();
+});
+$('#btn-blank').addEventListener('click', () => {
+  STATE = Object.assign(structuredClone(BLANK), {seeded:'blank'});
+  logEvidence('Desk', 'Started from blank');
+  persist(); renderAll();
+});
+
+/* ---- capabilities light up when they resolve; never block paint ---- */
+(async () => {
+  const [db, sample, downloads] = await Promise.all([
+    window.claude?.use?.('db') ?? null,
+    window.claude?.use?.('sample') ?? null,
+    window.claude?.use?.('downloads') ?? null,
+  ]);
+  DB = db; SAMPLE = sample; DOWNLOADS = downloads;
+
+  if (DB){
+    try {
+      const snap = await DB.doc('state/desk').get();
+      if (snap.exists){
+        const d = snap.data();
+        STATE = Object.assign(structuredClone(BLANK), d);
+        renderAll();
+      } else if (STATE.seeded !== null){
+        await persist();
+      }
+      DB.doc('state/desk').onSnapshot(s => {
+        if (!s.exists || s.metadata.hasPendingWrites) return;
+        STATE = Object.assign(structuredClone(BLANK), s.data());
+        renderAll();
+      }, () => {});
+    } catch { /* fall back to local mirror already rendered */ }
+  }
+  if (SAMPLE) renderStacks();
+})();
+</script>
+
+</body>
+</html>
