@@ -1,0 +1,13 @@
+# The repo root holds the board-facing testing dashboard (index.html) and
+# the desk's Artifact-body source. Only the built standalone desk in web/
+# is published.
+[build]
+  publish = "web"
+  command = "node build-web.mjs"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
