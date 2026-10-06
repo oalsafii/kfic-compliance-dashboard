@@ -292,6 +292,28 @@ footer button:hover{text-decoration:underline}
 .banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface);
   border-radius:var(--r-card);box-shadow:var(--sh-2);padding:13px 16px;margin-top:16px;
   font-size:13.5px;color:var(--label-2)}
+
+/* ---------- phone: get the calendar above the fold ----------
+   The eyebrow, the oversized title and a third control row pushed the
+   grid down the screen. Appearance follows the system here, which the
+   page already honours, so that toggle goes. */
+@media(max-width:600px){
+  .nav-in{gap:8px;row-gap:8px;padding-block:8px}
+  .nav-title .who{display:none}
+  .nav-title .t-large{font-size:23px;letter-spacing:-.022em}
+  .brandmark{width:25px;height:25px;border-radius:6px}
+  .nav-sp{display:none}
+  .nav-grp{width:100%;gap:6px;justify-content:space-between}
+  .seg{flex:0 1 auto}
+  .seg button{padding:6px 11px;font-size:13px}
+  .ctl{gap:6px}
+  .btn{padding:8px 11px;min-height:36px;font-size:14px}
+  .btn.icon{width:36px;font-size:18px}
+  #theme{display:none}
+  main{padding-block:12px 44px}
+  .cols{gap:14px}
+  .rail{gap:14px}
+}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 

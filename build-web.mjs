@@ -16,14 +16,15 @@ const doc = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Personal operating desk for Kuwait compliance work.">
-<meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F5F6F4" media="(prefers-color-scheme: light)">
+<meta name="description" content="Compliance calendar for Kuwait regulatory deadlines.">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <link rel="icon" href="data:image/svg+xml,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">' +
-  '<rect width="22" height="22" rx="4" fill="#111418"/>' +
-  '<path d="M4 3.5 L18 3.5 L11 11 L18 18.5 L4 18.5 L11 11 Z" fill="#C99457"/></svg>'
+  '<rect width="22" height="22" rx="5" fill="#000000"/>' +
+  '<path d="M4 3.5 L18 3.5 L11 11 L18 18.5 L4 18.5 L11 11 Z" fill="#FFFFFF"/></svg>'
 )}">
 <style>
   /* The skeleton the Artifact host would otherwise provide. */
