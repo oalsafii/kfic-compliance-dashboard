@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Compliance calendar for Kuwait regulatory deadlines.">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2022%2022%22%3E%3Crect%20width%3D%2222%22%20height%3D%2222%22%20rx%3D%225%22%20fill%3D%22%23000000%22%2F%3E%3Cpath%20d%3D%22M4%203.5%20L18%203.5%20L11%2011%20L18%2018.5%20L4%2018.5%20L11%2011%20Z%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E">
+<style>
+  /* The skeleton the Artifact host would otherwise provide. */
+  html{color-scheme:light dark}
+  body{margin:0;font:14px system-ui,sans-serif}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>KFIC Compliance Calendar</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+
+<style>
+/* ===================================================================
+   A small design system on Apple's semantics: system backgrounds,
+   label hierarchy by opacity, hairline separators, inset grouped
+   lists, materials (translucent + blurred), and the system colour
+   roles. Colour appears only where it carries meaning.
+   =================================================================== */
+:root{
+  /* backgrounds */
+  --bg:#F2F2F7;
+  --surface:#FFFFFF;
+  --surface-2:#F2F2F7;
+  --nav:rgba(249,249,251,.82);
+  /* labels — Apple expresses hierarchy as opacity, not separate greys */
+  --label:#000000;
+  --label-2:rgba(60,60,67,.60);
+  --label-3:rgba(60,60,67,.30);
+  --separator:rgba(60,60,67,.16);
+  --separator-opaque:#E5E5EA;
+  --fill:rgba(120,120,128,.12);
+  --fill-2:rgba(120,120,128,.08);
+  /* system colours */
+  --blue:#007AFF;
+  --red:#FF3B30;
+  --orange:#FF9500;
+  --green:#34C759;
+  --blue-soft:rgba(0,122,255,.12);
+  --red-soft:rgba(255,59,48,.12);
+  --orange-soft:rgba(255,149,0,.14);
+  /* elevation */
+  --sh-1:0 1px 2px rgba(0,0,0,.04), 0 1px 1px rgba(0,0,0,.03);
+  --sh-2:0 4px 16px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  --sh-3:0 20px 50px rgba(0,0,0,.18), 0 4px 12px rgba(0,0,0,.10);
+  /* radii */
+  --r-card:14px; --r-ctl:9px; --r-pill:980px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --surface:#1C1C1E; --surface-2:#2C2C2E;
+    --nav:rgba(22,22,24,.80);
+    --label:#FFFFFF;
+    --label-2:rgba(235,235,245,.60);
+    --label-3:rgba(235,235,245,.30);
+    --separator:rgba(84,84,88,.60);
+    --separator-opaque:#38383A;
+    --fill:rgba(120,120,128,.24);
+    --fill-2:rgba(120,120,128,.16);
+    --blue:#0A84FF; --red:#FF453A; --orange:#FF9F0A; --green:#30D158;
+    --blue-soft:rgba(10,132,255,.18);
+    --red-soft:rgba(255,69,58,.18);
+    --orange-soft:rgba(255,159,10,.18);
+    --sh-1:none; --sh-2:none;
+    --sh-3:0 24px 60px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --surface:#1C1C1E; --surface-2:#2C2C2E;
+  --nav:rgba(22,22,24,.80);
+  --label:#FFFFFF;
+  --label-2:rgba(235,235,245,.60);
+  --label-3:rgba(235,235,245,.30);
+  --separator:rgba(84,84,88,.60);
+  --separator-opaque:#38383A;
+  --fill:rgba(120,120,128,.24);
+  --fill-2:rgba(120,120,128,.16);
+  --blue:#0A84FF; --red:#FF453A; --orange:#FF9F0A; --green:#30D158;
+  --blue-soft:rgba(10,132,255,.18);
+  --red-soft:rgba(255,69,58,.18);
+  --orange-soft:rgba(255,159,10,.18);
+  --sh-1:none; --sh-2:none;
+  --sh-3:0 24px 60px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--label);
+  font-family:'Inter','IBM Plex Sans Arabic',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:15px;line-height:1.47;letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  font-variant-numeric:tabular-nums;
+}
+.ar{font-family:'IBM Plex Sans Arabic',sans-serif;direction:ltr;unicode-bidi:isolate}
+button{font-family:inherit;letter-spacing:inherit}
+.wrap{max-width:1220px;margin:0 auto;padding-inline:22px}
+@media(max-width:600px){.wrap{padding-inline:16px}}
+
+/* ---------- type scale (Apple's) ---------- */
+.t-large{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.14}
+.t-title{font-size:21px;font-weight:700;letter-spacing:-.02em}
+.t-head{font-size:16px;font-weight:600;letter-spacing:-.014em}
+.t-body{font-size:15px;font-weight:400}
+.t-sub{font-size:13.5px;font-weight:400;color:var(--label-2)}
+.t-foot{font-size:12.5px;font-weight:400;color:var(--label-2)}
+.t-cap{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--label-2)}
+
+/* ---------- navigation bar (material) ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:var(--nav);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--separator);
+}
+.nav-in{display:flex;align-items:center;gap:14px;padding-block:11px;flex-wrap:wrap}
+.brandmark{width:28px;height:28px;border-radius:7px;background:var(--label);
+  display:grid;place-items:center;flex:0 0 auto}
+.brandmark svg{display:block}
+.nav-title .t-large{margin:0}
+.nav-title .yr{color:var(--label-3);font-weight:600}
+.nav-title .who{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--label-2);display:block;margin-bottom:1px}
+.nav-sp{margin-inline-start:auto}
+.nav-grp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ctl{display:flex;align-items:center;gap:8px}
+
+/* ---------- controls ---------- */
+.btn{
+  appearance:none;border:none;cursor:pointer;font-size:14.5px;font-weight:500;
+  padding:9px 15px;border-radius:var(--r-ctl);min-height:38px;
+  background:var(--fill);color:var(--label);
+  transition:transform .14s cubic-bezier(.2,.8,.3,1), background .14s ease, opacity .14s ease;
+}
+.btn:hover{background:var(--fill-2)}
+.btn:active{transform:scale(.96)}
+.btn.tinted{background:var(--blue-soft);color:var(--blue);font-weight:600}
+.btn.filled{background:var(--blue);color:#fff;font-weight:600}
+.btn.filled:hover{opacity:.88;background:var(--blue)}
+.btn.plain{background:transparent;color:var(--blue);font-weight:500;padding-inline:8px}
+.btn.plain:hover{background:var(--fill)}
+.btn.icon{width:38px;padding:0;display:grid;place-items:center;font-size:19px;line-height:1}
+.btn.round{border-radius:var(--r-pill)}
+
+/* segmented control */
+.seg{display:inline-flex;background:var(--fill);border-radius:9px;padding:2px;gap:2px}
+.seg button{
+  appearance:none;border:none;background:transparent;cursor:pointer;
+  font-size:13.5px;font-weight:500;color:var(--label);padding:6px 14px;border-radius:7px;
+  transition:background .18s ease, box-shadow .18s ease;
+}
+.seg button[aria-selected="true"]{background:var(--surface);box-shadow:var(--sh-1);font-weight:600}
+
+/* ---------- layout ---------- */
+main{padding-block:18px 60px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 366px;gap:20px;align-items:start}
+@media(max-width:1000px){.cols{grid-template-columns:1fr}}
+
+/* ---------- card ---------- */
+.card{background:var(--surface);border-radius:var(--r-card);box-shadow:var(--sh-2);overflow:hidden}
+.card-h{padding:14px 16px 10px;display:flex;align-items:baseline;gap:9px}
+.card-h h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-.015em}
+.card-h .n{font-size:13px;color:var(--label-3);font-weight:500}
+.card-h .lnk{margin-inline-start:auto;background:none;border:none;color:var(--blue);
+  font-size:13.5px;font-weight:500;cursor:pointer;padding:0}
+
+/* ---------- calendar ---------- */
+.cal{padding:6px 10px 12px}
+.dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding-block:6px 4px}
+.dow div{text-align:center;font-size:11.5px;font-weight:600;color:var(--label-2);letter-spacing:.02em}
+.dow div.we{color:var(--label-3)}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.cell{
+  appearance:none;border:none;background:transparent;cursor:pointer;
+  min-height:98px;padding:5px 4px 6px;border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-width:0;overflow:hidden;
+  transition:background .14s ease;
+}
+.cell:hover{background:var(--fill-2)}
+.cell.we{background:var(--fill-2)}
+.cell.we:hover{background:var(--fill)}
+.cell.hol{background:var(--orange-soft)}
+.cell.pick{background:var(--fill)}
+.daynum{
+  width:29px;height:29px;border-radius:var(--r-pill);display:grid;place-items:center;
+  font-size:15px;font-weight:500;letter-spacing:-.01em;flex:0 0 auto;
+}
+.cell.out .daynum{color:var(--label-3)}
+.cell.today .daynum{background:var(--red);color:#fff;font-weight:600}
+.cell.pick .daynum{background:var(--label);color:var(--surface);font-weight:600}
+.cell.today.pick .daynum{background:var(--red);color:#fff}
+.evs{display:flex;flex-direction:column;gap:2px;width:100%;min-width:0;max-width:100%}
+.ev{
+  display:flex;align-items:center;gap:4px;width:100%;
+  font-size:10.5px;line-height:1.25;font-weight:500;color:var(--label);
+  padding:2px 4px;border-radius:5px;background:var(--fill-2);
+  min-width:0;max-width:100%;overflow:hidden;white-space:nowrap;
+}
+.ev .d{width:5px;height:5px;border-radius:50%;flex:0 0 auto;background:var(--blue)}
+.ev .d.late{background:var(--red)} .ev .d.soon{background:var(--orange)}
+.ev .x{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev.late{background:var(--red-soft)} .ev.soon{background:var(--orange-soft)}
+.more{font-size:10px;color:var(--label-2);font-weight:500;align-self:flex-start;padding-inline:4px}
+.dots{display:none;gap:3px;justify-content:center}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--blue);display:block}
+.dots i.late{background:var(--red)} .dots i.soon{background:var(--orange)}
+@media(max-width:760px){
+  .cell{min-height:52px;gap:3px}
+  .evs,.more{display:none}
+  .dots{display:flex}
+  .daynum{width:30px;height:30px;font-size:15px}
+}
+
+/* ---------- inset grouped list ---------- */
+.list{padding:0 0 4px}
+.row{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;min-height:52px;
+  position:relative;text-align:start;width:100%;background:transparent;border:none;
+  font-family:inherit;color:inherit}
+.row + .row::before{content:"";position:absolute;inset-inline:16px auto;top:0;
+  width:calc(100% - 32px);height:1px;background:var(--separator)}
+.row .lead{width:8px;height:8px;border-radius:50%;margin-top:7px;flex:0 0 auto;background:var(--blue)}
+.row .lead.late{background:var(--red)} .row .lead.soon{background:var(--orange)}
+.row .mid{flex:1 1 auto;min-width:0}
+.row .ttl{font-size:14.5px;font-weight:500;letter-spacing:-.012em;line-height:1.35}
+.row .rule{font-size:12px;color:var(--label-2);line-height:1.5;margin-top:3px}
+.row .sub{font-size:12.5px;color:var(--label-2);margin-top:3px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.tag{font-size:11px;font-weight:600;padding:1.5px 7px;border-radius:var(--r-pill);
+  background:var(--fill);color:var(--label-2)}
+.tag.late{background:var(--red-soft);color:var(--red)}
+.tag.soon{background:var(--orange-soft);color:var(--orange)}
+.row .go{flex:0 0 auto;background:var(--fill);border:none;border-radius:var(--r-pill);
+  width:28px;height:28px;cursor:pointer;color:var(--label-2);font-size:15px;line-height:1;
+  display:grid;place-items:center;margin-top:3px;transition:transform .14s, background .14s}
+.row .go:hover{background:var(--green);color:#fff}
+.row .go:active{transform:scale(.9)}
+.empty{padding:26px 16px 30px;text-align:center;color:var(--label-3);font-size:13.5px}
+
+/* ---------- side cards ---------- */
+.rail{display:flex;flex-direction:column;gap:16px;position:sticky;top:78px}
+@media(max-width:1000px){.rail{position:static}}
+.hero{padding:16px}
+.hero .lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--label-2)}
+.hero .big{font-size:27px;font-weight:700;letter-spacing:-.028em;margin-top:5px;line-height:1.1}
+.hero .big.late{color:var(--red)} .hero .big.soon{color:var(--orange)}
+.hero .what{font-size:14px;color:var(--label-2);margin-top:4px;line-height:1.4}
+.hero-ft{margin-top:13px;padding-top:11px;border-top:1px solid var(--separator);
+  font-size:12.5px;color:var(--label-3)}
+
+/* ---------- sheets ---------- */
+dialog{
+  border:none;padding:0;background:var(--surface);color:var(--label);
+  border-radius:18px;box-shadow:var(--sh-3);max-width:min(520px,94vw);width:100%;
+}
+dialog::backdrop{background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sh-h{padding:16px 18px 12px;border-bottom:1px solid var(--separator);
+  display:flex;align-items:center;gap:12px}
+.sh-h h3{margin:0;font-size:17px;font-weight:600;letter-spacing:-.018em;flex:1 1 auto}
+.sh-b{padding:16px 18px;max-height:62vh;overflow-y:auto}
+.sh-f{padding:12px 18px 16px;display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
+label.f{display:block;margin-bottom:14px}
+label.f>span{display:block;font-size:12px;font-weight:600;color:var(--label-2);margin-bottom:6px;letter-spacing:-.005em}
+input,select{
+  width:100%;background:var(--fill-2);border:1px solid transparent;color:var(--label);
+  border-radius:10px;padding:11px 12px;font-family:inherit;font-size:15px;letter-spacing:-.01em;
+  min-height:44px;
+}
+input:focus,select:focus{outline:none;border-color:var(--blue);background:var(--surface)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* action sheet */
+.sheet-opt{display:flex;align-items:center;gap:13px;width:100%;background:transparent;border:none;
+  padding:15px 18px;cursor:pointer;text-align:start;color:var(--label);font-size:15.5px;font-weight:500;
+  position:relative;letter-spacing:-.012em}
+.sheet-opt + .sheet-opt::before{content:"";position:absolute;top:0;inset-inline-start:52px;
+  width:calc(100% - 52px);height:1px;background:var(--separator)}
+.sheet-opt:hover{background:var(--fill-2)}
+.sheet-opt .ic{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;
+  background:var(--blue-soft);color:var(--blue);font-size:14px;flex:0 0 auto;font-weight:600}
+.sheet-opt .ds{display:block;font-size:12.5px;color:var(--label-2);font-weight:400;margin-top:1px}
+
+/* preview */
+.prev{border-radius:12px;background:var(--fill-2);overflow:hidden;margin-top:2px}
+.prow{padding:11px 13px;display:grid;grid-template-columns:1fr auto;gap:3px 12px;align-items:baseline;position:relative}
+.prow + .prow::before{content:"";position:absolute;top:0;inset-inline-start:13px;
+  width:calc(100% - 26px);height:1px;background:var(--separator)}
+.prow .t{font-size:14px;font-weight:500;letter-spacing:-.012em}
+.prow .t.arabic{font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;unicode-bidi:isolate}
+.prow .dt{font-size:13.5px;font-weight:600;white-space:nowrap;color:var(--blue)}
+.prow .rl{grid-column:1/3;font-family:'IBM Plex Sans Arabic',sans-serif;direction:ltr;
+  unicode-bidi:isolate;font-size:12px;color:var(--label-2);line-height:1.55}
+
+/* footer */
+footer{margin-top:26px;padding-block:14px 10px;display:flex;gap:16px;flex-wrap:wrap;
+  align-items:center;font-size:12.5px;color:var(--label-3)}
+footer button{background:none;border:none;color:var(--blue);font:inherit;font-size:12.5px;
+  cursor:pointer;padding:0}
+footer button:hover{text-decoration:underline}
+.banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface);
+  border-radius:var(--r-card);box-shadow:var(--sh-2);padding:13px 16px;margin-top:16px;
+  font-size:13.5px;color:var(--label-2)}
+
+/* ---------- phone: get the calendar above the fold ----------
+   The eyebrow, the oversized title and a third control row pushed the
+   grid down the screen. Appearance follows the system here, which the
+   page already honours, so that toggle goes. */
+@media(max-width:600px){
+  .nav-in{gap:8px;row-gap:8px;padding-block:8px}
+  .nav-title .who{display:none}
+  .nav-title .t-large{font-size:23px;letter-spacing:-.022em}
+  .brandmark{width:25px;height:25px;border-radius:6px}
+  .nav-sp{display:none}
+  .nav-grp{width:100%;gap:6px;justify-content:space-between}
+  .seg{flex:0 1 auto}
+  .seg button{padding:6px 11px;font-size:13px}
+  .ctl{gap:6px}
+  .btn{padding:8px 11px;min-height:36px;font-size:14px}
+  .btn.icon{width:36px;font-size:18px}
+  #theme{display:none}
+  main{padding-block:12px 44px}
+  .cols{gap:14px}
+  .rail{gap:14px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="nav">
+  <div class="wrap nav-in">
+    <div class="brandmark">
+      <svg width="15" height="15" viewBox="0 0 22 22" aria-hidden="true">
+        <path d="M3 2 L19 2 L11 11 L19 20 L3 20 L11 11 Z" fill="var(--surface)"/>
+      </svg>
+    </div>
+    <div class="nav-title">
+      <span class="who">KFIC Compliance</span>
+      <div class="t-large" id="m-label">—</div>
+    </div>
+    <div class="nav-sp"></div>
+    <div class="nav-grp">
+      <div class="seg" role="tablist" aria-label="View">
+        <button role="tab" data-view="month" aria-selected="true">Month</button>
+        <button role="tab" data-view="list" aria-selected="false">List</button>
+      </div>
+      <div class="ctl">
+        <button class="btn icon" id="prev" aria-label="Previous month">‹</button>
+        <button class="btn" id="today-btn">Today</button>
+        <button class="btn icon" id="next" aria-label="Next month">›</button>
+        <button class="btn filled icon round" id="add" aria-label="Add">+</button>
+        <button class="btn icon" id="theme" aria-label="Switch appearance">◐</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="cols">
+    <div>
+      <section class="card" id="pane-month">
+        <div class="cal">
+          <div class="dow" id="dow"></div>
+          <div class="grid" id="grid"></div>
+        </div>
+      </section>
+
+      <section class="card" id="pane-list" hidden>
+        <div class="card-h"><h2>All upcoming</h2><span class="n" id="n-all"></span></div>
+        <div class="list" id="list-all"></div>
+      </section>
+
+    </div>
+
+    <aside class="rail">
+      <section class="card hero" id="hero"></section>
+
+      <section class="card" id="card-over" hidden>
+        <div class="card-h"><h2>Overdue</h2><span class="n" id="n-over"></span></div>
+        <div class="list" id="list-over"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-h">
+          <h2 id="day-title">—</h2>
+          <span class="n" id="n-day"></span>
+          <button class="lnk" id="unpick" hidden>Clear</button>
+        </div>
+        <div class="list" id="list-day"></div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="banner" id="banner" hidden>
+    <span>Three example dates are shown so the calendar isn't empty.</span>
+    <button class="btn" id="a-clear">Clear them</button>
+  </div>
+
+  <footer>
+    <span id="cal-note">—</span>
+    <button id="a-hol">Holidays</button>
+    <button id="a-backup">Back up</button>
+    <button id="a-restore">Restore</button>
+    <input type="file" id="file" accept="application/json,.json" hidden>
+    <span id="note"></span>
+  </footer>
+</main>
+
+<dialog id="dlg">
+  <div class="sh-h"><h3 id="d-title">—</h3></div>
+  <div class="sh-b" id="d-body"></div>
+  <div class="sh-f" id="d-foot"></div>
+</dialog>
+
+<dialog id="act">
+  <div class="sh-h"><h3>Add to the calendar</h3></div>
+  <div style="padding-block:4px">
+    <button class="sheet-opt" data-go="disc">
+      <span class="ic">D</span>
+      <span>New disclosure<span class="ds">Picks the annex and works out the deadline</span></span>
+    </button>
+    <button class="sheet-opt" data-go="ent">
+      <span class="ic">ح</span>
+      <span>Entitlement dates<span class="ds">The full استحقاقات timetable from one date</span></span>
+    </button>
+    <button class="sheet-opt" data-go="add">
+      <span class="ic">+</span>
+      <span>Something else<span class="ds">A date you enter yourself</span></span>
+    </button>
+  </div>
+  <div class="sh-f"><button class="btn" id="act-cancel">Cancel</button></div>
+</dialog>
+
+<script>
+"use strict";
+
+/* ===== Kuwait calendar: Fri+Sat weekend, holidays supplied by the user ===== */
+const DAY_AR=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const day0=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const diff=(a,b)=>Math.round((day0(b)-day0(a))/86400000);
+const isWeekend=d=>d.getDay()===5||d.getDay()===6;
+const isHoliday=d=>S.holidays.includes(iso(d));
+const isBiz=d=>!isWeekend(d)&&!isHoliday(d);
+function addBiz(d,n){let x=new Date(d),s=n<0?-1:1,k=Math.abs(n);while(k>0){x=addDays(x,s);if(isBiz(x))k--}return x}
+function roll(d){let x=new Date(d);while(!isBiz(x))x=addDays(x,1);return x}
+const fmtFull=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+const fmtMed=d=>d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+const NOW=()=>new Date();
+
+/* Material information out of hours: 15 minutes before the next session (09:00). */
+function cutoff(from){
+  let d=new Date(from), m=d.getHours()*60+d.getMinutes();
+  if(!isBiz(d)||m>=525) d=roll(addDays(d,1));
+  const c=day0(d); c.setHours(8,45,0,0); return c;
+}
+
+/* ===== The rules. Arabic quoted verbatim — it is the justification. ===== */
+const KINDS=[
+ {id:'material_out',l:'Material information — arose outside working hours',a:'ملحق 10',r:'قبل 15 دقيقة على الأقل من جلسة التداول التالية',c:'cut'},
+ {id:'material_in', l:'Material information — arose during working hours',a:'ملحق 10',r:'الإفصاح فوراً',c:'now'},
+ {id:'board_res',   l:'Board meeting — results',a:'ملحق 10',r:'تُفصح خلالها أو قبل 15 دقيقة من الجلسة التالية',c:'cut'},
+ {id:'board_call',  l:'Board meeting — invitation',a:'ملحق 9',r:'الدعوة للاجتماع',c:'now'},
+ {id:'litigation',  l:'Litigation or judgment (initial or supplementary)',a:'ملحق 7',r:'الملحق 7 لكل إفصاح متعلق بدعوى أو حكم — لا يُستخدم الملحق 12 إطلاقاً',c:'now'},
+ {id:'rating',      l:'Credit rating — new or changed',a:'ملحق 8',r:'تصنيف ائتماني جديد أو متغيّر',c:'now'},
+ {id:'agm_call',    l:'General assembly — invitation',a:'ملحق 14',r:'قبل 5 أيام عمل من تاريخ حيازة حق الحضور',c:'before',n:5},
+ {id:'bonds',       l:'Listed bonds or sukuk',a:'ملحق 13',r:'سندات/صكوك مدرجة',c:'now'},
+ {id:'corp_action', l:'Share entitlements / corporate action',a:'نموذج استحقاقات الأسهم',r:'مسار الرفع (ب): البورصة أولاً ثم الهيئة آخراً',c:'now'},
+ {id:'corrective',  l:'Corrective — fixes wrong information announced',a:'ملحق 11',r:'يصحّح معلومة خاطئة في إعلان سابق',c:'now'},
+ {id:'supplementary',l:'Supplementary — adds a development',a:'ملحق 12',r:'يضيف تطوراً جديداً (إلا الدعاوى والأحكام)',c:'now'},
+ {id:'bo_initial',  l:'Beneficial owner — first time at 5% or more',a:'ملحق 1',r:'المهلة: 5 أيام عمل',c:'biz',n:5},
+ {id:'bo_change',   l:'Beneficial owner — change exceeding 0.5%',a:'ملحق 2',r:'المهلة: 10 أيام عمل',c:'biz',n:10},
+ {id:'bo_group',    l:'Group ownership aggregating 5% or more',a:'ملحق 3',r:'ملكية مجموعة مجمّعة 5% فأكثر',c:'biz',n:5},
+ {id:'major_annual',l:'Annual disclosure of major holders (5%+)',a:'ملحق 4',r:'إفصاح سنوي عن كبار الملاك',c:'biz',n:5},
+ {id:'insider_list',l:'Insider list — creation or update',a:'ملحق 5',r:'التحديث خلال 5 أيام عمل من التغيّر',c:'biz',n:5},
+ {id:'insider_deal',l:'Insider dealt in the security',a:'ملحق 6',r:'خلال يومي عمل (قبل الجلسة الثالثة)',c:'biz',n:2},
+];
+
+/* The استحقاقات timetable, computed off the assembly date. */
+const ENT=[
+ {t:'إخطار من الجمعية — نموذج المقاصة وجدول الأعمال وتقرير الحوكمة',r:'قبل 5 أيام عمل على الأقل من تاريخ حق حضور الجمعية',f:'attend',biz:-5},
+ {t:'الإعلان الأول — إعلان بالجريدة',r:'قبل 7 أيام على الأقل من الإعلان التذكيري',f:'remind',cal:-7},
+ {t:'حيازة حق الحضور',r:'ثلاثة أيام تداول قبل تاريخ حق الحضور',f:'attend',biz:-3},
+ {t:'حق حضور الجمعية العامة',r:'قبل 10 أيام من تاريخ الجمعية — وإن وقع في عطلة يؤخذ بيوم العمل التالي',f:'agm',cal:-10,roll:1},
+ {t:'الإعلان التذكيري',r:'قبل 7 أيام على الأقل من موعد الجمعية',f:'agm',cal:-7},
+ {t:'إفصاح نتائج الجمعية',r:'نفس يوم الجمعية العامة',f:'agm',cal:0},
+ {t:'تأكيد نموذج الاستحقاق',r:'قبل 8 أيام على الأقل من يوم الاستحقاق',f:'ent',cal:-8},
+ {t:'يوم حيازة السهم',r:'ثلاثة أيام تداول قبل يوم استحقاق السهم',f:'ent',biz:-3},
+ {t:'يوم الاستحقاق',r:'حسب جدول أعمال الجمعية (15 يوم عمل على الأقل بعد الجمعية)',f:'ent',cal:0},
+ {t:'يوم التوزيع',r:'حسب جدول أعمال الجمعية (4 أيام بعد يوم الاستحقاق)',f:'ent',cal:4},
+ {t:'محضر الجمعية وتعديل سجل الاستثمار — الهيئة والبنك المركزي',r:'خلال مدة أقصاها 10 أيام عمل بعد انعقاد الجمعية',f:'agm',biz:10},
+];
+
+function deriveDisc(id,evISO,anchorISO){
+  const k=KINDS.find(x=>x.id===id), ev=parse(evISO);
+  let due, exact=null;
+  if(k.c==='cut'){ exact=cutoff(ev); due=day0(exact); }
+  else if(k.c==='biz') due=addBiz(ev,k.n);
+  else if(k.c==='before') due=addBiz(anchorISO?parse(anchorISO):ev,-k.n);
+  else due=roll(ev);
+  return {annex:k.a,rule:k.r,label:k.l,due:iso(due),exact};
+}
+function deriveEnt(agmISO,entISO){
+  const agm=parse(agmISO);
+  const A={agm,attend:roll(addDays(agm,-10)),remind:addDays(agm,-7),
+           ent:entISO?parse(entISO):addBiz(agm,15)};
+  return ENT.map(s=>{
+    const b=A[s.f]; let d=new Date(b);
+    if(s.biz!==undefined)d=addBiz(b,s.biz);
+    if(s.cal!==undefined)d=addDays(b,s.cal);
+    if(s.roll)d=roll(d);
+    return {t:s.t,rule:s.r,due:iso(d)};
+  }).sort((a,b)=>a.due.localeCompare(b.due));
+}
+
+/* ===== state ===== */
+const KEY='kfic-desk-v2';
+const BLANK={items:[],holidays:[],seeded:null};
+let S=structuredClone(BLANK), DB=null, DL=null;
+let view=day0(NOW()), picked=iso(NOW()), mode='month';
+
+const uid=()=>'x'+Math.random().toString(36).slice(2,9);
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch{}
+  if(DB) DB.doc('state/desk').set({...S,savedAt:new Date().toISOString()}).catch(()=>{});
+}
+function add(o){ S.items.push({id:uid(),done:false,...o}); }
+
+const live=()=>S.items.filter(i=>!i.done);
+const urgency=i=>{const d=diff(NOW(),parse(i.due));return d<0?'late':d<=2?'soon':''};
+function countdown(i){
+  const d=diff(NOW(),parse(i.due));
+  if(d<0) return d===-1?'1 day late':`${Math.abs(d)} days late`;
+  if(d===0) return 'Today';
+  if(d===1) return 'Tomorrow';
+  return `In ${d} days`;
+}
+
+/* ===== render ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function hero(){
+  const u=live().slice().sort((a,b)=>a.due.localeCompare(b.due))[0];
+  const n=NOW();
+  const dayNote = isBiz(n) ? 'Business day in Kuwait'
+    : isHoliday(n) ? 'Official holiday' : `${DAY_AR[n.getDay()]} · weekend`;
+  const foot = `<div class="hero-ft">Today · ${fmtMed(n)} · ${dayNote}</div>`;
+  $('#hero').innerHTML = (u
+    ? `<div class="lbl">Next due</div>
+       <div class="big ${urgency(u)}">${esc(countdown(u))}</div>
+       <div class="what">${esc(u.title)}<br>Due ${fmtMed(parse(u.due))}</div>`
+    : `<div class="lbl">Next due</div>
+       <div class="big">Nothing</div>
+       <div class="what">No open dates.</div>`) + foot;
+}
+
+function dowRow(){
+  $('#dow').innerHTML = DOW.map((d,i)=>`<div class="${i>=5?'we':''}">${d}</div>`).join('');
+}
+
+function calendar(){
+  const y=view.getFullYear(), m=view.getMonth();
+  $('#m-label').innerHTML = `${MONTHS[m]} <span class="yr">${y}</span>`;
+  const first=new Date(y,m,1), last=new Date(y,m+1,0);
+  const start=addDays(first,-first.getDay());
+  const cells=Math.ceil((first.getDay()+last.getDate())/7)*7;
+
+  const g=$('#grid'); g.innerHTML='';
+  for(let i=0;i<cells;i++){
+    const d=addDays(start,i), key=iso(d);
+    const on=live().filter(x=>x.due===key);
+    const el=document.createElement('button');
+    el.type='button';
+    el.className='cell'+(isWeekend(d)?' we':'')+(isHoliday(d)?' hol':'')
+      +(d.getMonth()!==m?' out':'')+(key===iso(NOW())?' today':'')+(key===picked?' pick':'');
+    el.dataset.day=key;
+    el.setAttribute('aria-label',`${fmtFull(d)}, ${on.length} due`);
+    el.innerHTML=`<span class="daynum">${d.getDate()}</span>`
+      + (on.length?`<span class="evs">${on.slice(0,2).map(x=>
+          `<span class="ev ${urgency(x)}"><i class="d ${urgency(x)}"></i><span class="x">${esc(x.title)}</span></span>`).join('')}</span>`:'')
+      + (on.length>2?`<span class="more">${on.length-2} more</span>`:'')
+      + (on.length?`<span class="dots">${on.slice(0,4).map(x=>`<i class="${urgency(x)}"></i>`).join('')}</span>`:'');
+    g.appendChild(el);
+  }
+}
+
+function rowHTML(i){
+  const u=urgency(i);
+  return `<div class="row">
+    <span class="lead ${u}"></span>
+    <span class="mid">
+      <span class="ttl" dir="auto">${esc(i.title)}</span>
+      ${i.rule?`<span class="rule ar">${esc(i.rule)}</span>`:''}
+      <span class="sub">
+        <span class="tag ${u}">${esc(countdown(i))}</span>
+        <span>${fmtMed(parse(i.due))}</span>
+        ${i.annex?`<span class="tag" dir="auto">${esc(i.annex)}</span>`:''}
+        ${i.example?'<span class="tag">Example</span>':''}
+      </span>
+    </span>
+    <button class="go" data-done="${i.id}" aria-label="Mark done" title="Mark done">✓</button>
+  </div>`;
+}
+
+function lists(){
+  const all=live().slice().sort((a,b)=>a.due.localeCompare(b.due));
+
+  const over=all.filter(i=>diff(NOW(),parse(i.due))<0);
+  $('#card-over').hidden=!over.length;
+  $('#n-over').textContent=over.length||'';
+  $('#list-over').innerHTML=over.map(rowHTML).join('');
+
+  const day=all.filter(i=>i.due===picked);
+  const pd=parse(picked);
+  $('#day-title').textContent = picked===iso(NOW()) ? 'Today'
+    : pd.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  $('#n-day').textContent=day.length||'';
+  $('#unpick').hidden = picked===iso(NOW());
+  $('#list-day').innerHTML = day.length ? day.map(rowHTML).join('')
+    : `<div class="empty">Nothing due on this day.</div>`;
+
+  $('#n-all').textContent=all.length||'';
+  $('#list-all').innerHTML = all.length ? all.map(rowHTML).join('')
+    : `<div class="empty">Nothing scheduled.</div>`;
+
+  $('#banner').hidden=!S.items.some(i=>i.example&&!i.done);
+  $('#cal-note').textContent = S.holidays.length
+    ? `Weekends and ${S.holidays.length} holiday${S.holidays.length>1?'s':''} excluded from every calculation.`
+    : 'Weekends excluded. No official holidays entered yet.';
+}
+
+const draw=()=>{hero();calendar();lists()};
+
+/* ===== navigation ===== */
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===m)));
+  $('#pane-month').hidden = m!=='month';
+  $('#pane-list').hidden  = m!=='list';
+}
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>setMode(b.dataset.view));
+$('#prev').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);draw()};
+$('#next').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);draw()};
+$('#today-btn').onclick=()=>{view=day0(NOW());picked=iso(NOW());setMode('month');draw()};
+$('#unpick').onclick=()=>{picked=iso(NOW());view=day0(NOW());draw()};
+$('#grid').addEventListener('click',e=>{
+  const c=e.target.closest('[data-day]'); if(!c) return;
+  picked=c.dataset.day;
+  const d=parse(picked);
+  if(d.getMonth()!==view.getMonth()) view=new Date(d.getFullYear(),d.getMonth(),1);
+  draw();
+});
+
+/* ===== sheets ===== */
+const dlg=$('#dlg'), act=$('#act');
+function open(title,body,btns){
+  $('#d-title').textContent=title; $('#d-body').innerHTML=body; $('#d-foot').innerHTML='';
+  const c=document.createElement('button');
+  c.className='btn'; c.textContent='Cancel'; c.onclick=()=>dlg.close();
+  $('#d-foot').appendChild(c);
+  btns.forEach(b=>{
+    const e=document.createElement('button');
+    e.className='btn '+(b.primary?'filled':'tinted'); e.textContent=b.label;
+    e.onclick=()=>{ if(b.act()!==false) dlg.close(); };
+    $('#d-foot').appendChild(e);
+  });
+  dlg.showModal();
+}
+function goTo(dueISO){
+  const d=parse(dueISO);
+  view=new Date(d.getFullYear(),d.getMonth(),1); picked=dueISO;
+}
+
+$('#add').onclick=()=>act.showModal();
+$('#act-cancel').onclick=()=>act.close();
+act.addEventListener('click',e=>{
+  const b=e.target.closest('[data-go]'); if(!b) return;
+  act.close();
+  ({disc:newDisc,ent:newEnt,add:newPlain})[b.dataset.go]();
+});
+
+function newDisc(){
+  open('New disclosure',
+    `<label class="f"><span>What happened</span><input id="q-t" placeholder="Board resolved to change the external auditor"></label>
+     <label class="f"><span>Type — sets the annex and the deadline</span>
+       <select id="q-k">${KINDS.map(k=>`<option value="${k.id}">${esc(k.l)} — ${esc(k.a)}</option>`).join('')}</select></label>
+     <label class="f"><span>Date it arose</span><input type="date" id="q-d" value="${iso(NOW())}"></label>
+     <label class="f" id="q-aw" hidden><span>تاريخ حق الحضور</span><input type="date" id="q-a"></label>
+     <div id="q-p"></div>`,
+    [{label:'Add',primary:true,act(){
+      const ev=$('#q-d').value; if(!ev) return false;
+      const d=deriveDisc($('#q-k').value,ev,$('#q-a').value);
+      add({title:$('#q-t').value.trim()||d.label,due:d.due,annex:d.annex,rule:d.rule});
+      goTo(d.due); save(); draw();
+    }}]);
+  const upd=()=>{
+    const k=KINDS.find(x=>x.id===$('#q-k').value), ev=$('#q-d').value;
+    $('#q-aw').hidden = k.c!=='before';
+    if(!ev){$('#q-p').innerHTML='';return}
+    const d=deriveDisc(k.id,ev,$('#q-a').value);
+    const w=d.exact
+      ? d.exact.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})
+      : fmtFull(parse(d.due));
+    $('#q-p').innerHTML=`<div class="prev"><div class="prow">
+      <span class="t">File by · <span dir="auto">${esc(d.annex)}</span></span>
+      <span class="dt">${esc(w)}</span>
+      <span class="rl">${esc(d.rule)}</span></div></div>`;
+  };
+  ['#q-k','#q-d','#q-a'].forEach(s=>$(s).addEventListener('change',upd)); upd();
+}
+
+function newEnt(){
+  open('Entitlement dates',
+    `<label class="f"><span>General assembly date</span><input type="date" id="e-a" value="${iso(addBiz(NOW(),20))}"></label>
+     <label class="f"><span>يوم الاستحقاق — blank means 15 business days after</span><input type="date" id="e-e"></label>
+     <div id="e-p"></div>`,
+    [{label:'Add all',primary:true,act(){
+      const steps=deriveEnt($('#e-a').value,$('#e-e').value);
+      steps.forEach(s=>add({title:s.t,due:s.due,rule:s.rule,annex:'استحقاقات'}));
+      if(steps[0]) goTo(steps[0].due);
+      save(); draw();
+    }}]);
+  const upd=()=>{
+    if(!$('#e-a').value){$('#e-p').innerHTML='';return}
+    $('#e-p').innerHTML=`<div class="prev">${deriveEnt($('#e-a').value,$('#e-e').value).map(s=>
+      `<div class="prow"><span class="t arabic">${esc(s.t)}</span>
+       <span class="dt">${parse(s.due).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+       <span class="rl">${esc(s.rule)}</span></div>`).join('')}</div>`;
+  };
+  ['#e-a','#e-e'].forEach(s=>$(s).addEventListener('change',upd)); upd();
+}
+
+function newPlain(){
+  open('Add a date',
+    `<label class="f"><span>What</span><input id="n-t" placeholder="Quarterly entitlement review"></label>
+     <label class="f"><span>Due</span><input type="date" id="n-d" value="${picked||iso(addBiz(NOW(),3))}"></label>`,
+    [{label:'Add',primary:true,act(){
+      const t=$('#n-t').value.trim(); if(!t) return false;
+      const due=$('#n-d').value; add({title:t,due}); goTo(due); save(); draw();
+    }}]);
+}
+
+$('#a-hol').onclick=()=>{
+  const paint=()=>{
+    $('#h-cur').innerHTML = S.holidays.length
+      ? S.holidays.slice().sort().map(h=>`<span class="tag" style="margin:3px;display:inline-flex;align-items:center;gap:6px">
+          ${fmtMed(parse(h))}<button class="go" data-hx="${h}" style="width:20px;height:20px;margin:0;font-size:12px">×</button></span>`).join('')
+      : '<span style="color:var(--label-3)">None entered.</span>';
+  };
+  open('Official holidays',
+    `<p style="margin:0 0 14px;font-size:13.5px;color:var(--label-2);line-height:1.5">
+       Kuwait's holidays move with the Hijri calendar, so nothing is assumed here. Add the days your
+       company observes — they shade on the calendar and drop out of every deadline calculation.</p>
+     <label class="f"><span>Add a date</span><input type="date" id="h-new"></label>
+     <div id="h-cur"></div>`,
+    [{label:'Add',primary:true,act(){
+      const v=$('#h-new').value;
+      if(v&&!S.holidays.includes(v)){S.holidays.push(v);save();draw();paint()}
+      return false;
+    }}]);
+  paint();
+  $('#d-body').addEventListener('click',e=>{
+    const b=e.target.closest('[data-hx]'); if(!b) return;
+    S.holidays=S.holidays.filter(h=>h!==b.dataset.hx); save(); draw(); paint();
+  });
+};
+
+/* ===== done / clear ===== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-done]'); if(!b) return;
+  const i=S.items.find(x=>x.id===b.dataset.done);
+  if(i){ i.done=true; i.closedAt=new Date().toISOString(); save(); draw(); }
+});
+$('#a-clear').onclick=()=>{ S.items=S.items.filter(i=>!i.example); S.seeded='blank'; save(); draw(); };
+
+/* ===== backup ===== */
+function toast(m){ $('#note').textContent=m; setTimeout(()=>{if($('#note').textContent===m)$('#note').textContent=''},5000) }
+async function offer(name,data){
+  if(DL){ try{await DL.save({filename:name,data}); toast('Saved.')}catch{toast('Save declined.')} return; }
+  try{
+    const u=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+    const a=document.createElement('a'); a.href=u; a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),4000); toast('Downloaded.');
+  }catch{ toast('Could not save here.') }
+}
+$('#a-backup').onclick=()=>offer(`compliance-calendar-${iso(NOW())}.json`,JSON.stringify(S,null,2));
+$('#a-restore').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{
+  const f=e.target.files?.[0]; e.target.value=''; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+      const d=JSON.parse(r.result);
+      if(!Array.isArray(d.items)) throw 0;
+      S={...structuredClone(BLANK),...d}; save(); draw(); toast(`Restored ${S.items.length} dates.`);
+    }catch{ toast('Not a calendar backup.') } };
+  r.readAsText(f);
+};
+
+/* ===== appearance ===== */
+$('#theme').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const n=cur?(cur==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark');
+  document.documentElement.setAttribute('data-theme',n);
+  try{localStorage.setItem('kfic-desk-theme',n)}catch{}
+};
+try{ const t=localStorage.getItem('kfic-desk-theme'); if(t)document.documentElement.setAttribute('data-theme',t) }catch{}
+
+/* ===== examples so the calendar is never empty on a first open ===== */
+function examples(){
+  const T=NOW();
+  return {items:[
+    {id:uid(),done:false,example:true,title:'Insider list refresh after the IR team change',
+     due:iso(addBiz(T,2)),annex:'ملحق 5',rule:'التحديث خلال 5 أيام عمل من التغيّر'},
+    {id:uid(),done:false,example:true,title:'EDD re-performed on 7 high-risk files',
+     due:iso(addBiz(T,-4)),annex:'CMA'},
+    {id:uid(),done:false,example:true,title:'Monthly liquidity return to CBK',
+     due:iso(roll(addDays(T,12)))},
+  ],holidays:[],seeded:null};
+}
+
+/* ===== boot ===== */
+const saved=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}})();
+S = (saved && saved.seeded!==null) ? {...structuredClone(BLANK),...saved} : examples();
+dowRow(); draw();
+setInterval(hero,60000);
+
+(async()=>{
+  const [db,dl]=await Promise.all([
+    window.claude?.use?.('db')??null,
+    window.claude?.use?.('downloads')??null,
+  ]);
+  DB=db; DL=dl;
+  if(!DB) return;
+  try{
+    const s=await DB.doc('state/desk').get();
+    if(s.exists){ S={...structuredClone(BLANK),...s.data()}; draw(); }
+    else if(S.seeded!==null) save();
+    DB.doc('state/desk').onSnapshot(x=>{
+      if(!x.exists||x.metadata.hasPendingWrites) return;
+      S={...structuredClone(BLANK),...x.data()}; draw();
+    },()=>{});
+  }catch{}
+})();
+</script>
+
+</body>
+</html>

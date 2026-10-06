@@ -40,10 +40,16 @@ ${body}
 </html>
 `;
 
-/* Output lands in docs/ because GitHub Pages serves a branch's /docs
-   folder with no configuration at all, and Netlify can publish the same
-   folder — one build output, either host. */
+/* Written to two places on purpose.
+   This repo's Pages source is "deploy from a branch" (main, root) — its
+   built-in "pages build and deployment" workflow runs on every push and
+   is what actually serves the site, so the root copy is the live one.
+   docs/ feeds the Actions workflow and Netlify, and keeps working if the
+   Pages source is ever switched to GitHub Actions. Both are generated;
+   neither is edited by hand. */
+await writeFile(new URL('./index.html', import.meta.url), doc);
 await mkdir(new URL('./docs/', import.meta.url), { recursive: true });
 await writeFile(new URL('./docs/index.html', import.meta.url), doc);
 await writeFile(new URL('./docs/.nojekyll', import.meta.url), '');
-console.log(`docs/index.html — ${(doc.length / 1024).toFixed(1)} KB`);
+await writeFile(new URL('./.nojekyll', import.meta.url), '');
+console.log(`index.html + docs/index.html — ${(doc.length / 1024).toFixed(1)} KB each`);
