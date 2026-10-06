@@ -52,6 +52,34 @@ button,input,select{font-family:inherit}
 /* Latin strings must never inherit an RTL direction — it reorders them. */
 .ar{direction:ltr;unicode-bidi:isolate}
 
+/* ---------- language ----------
+   Both scripts are shown by default; the button narrows the page to one.
+   Two things never hide: the quoted Arabic rule under an item, which is
+   the citation the deadline actually rests on rather than a translation
+   of the title, and the Hijri month name, which has no settled English. */
+html[data-lang="ar"] .L-en,
+html[data-lang="ar"] .bi>i,
+html[data-lang="ar"] .bir>i{display:none!important}
+html[data-lang="en"] .L-ar,
+html[data-lang="en"] .bi>b,
+html[data-lang="en"] .bir>b{display:none!important}
+/* only while both are shown — the small English gloss under a large Arabic line */
+html[data-lang="ar"] .L-both,
+html[data-lang="en"] .L-both{display:none!important}
+/* only once English stands alone, where it takes over the large line */
+.L-only-en{display:none!important}
+html[data-lang="en"] .L-only-en{display:block!important}
+/* alone, the surviving half should not look like a gloss of something */
+html[data-lang="en"] .bi>i,html[data-lang="en"] .bir>i{font-size:1em;color:inherit;font-weight:500}
+html[data-lang="en"] .tag .L-en{margin-inline-start:0;opacity:1;font-weight:600}
+html[data-lang="en"] .dow div .L-en{font-size:10.5px;font-weight:600;color:inherit}
+html[data-lang="en"] .sh-h .L-en{font-size:16px;font-weight:600;color:inherit;margin-top:0;display:block}
+html[data-lang="en"] label.f>span .L-en{font-size:11.5px;font-weight:600;color:var(--ink-2)}
+html[data-lang="en"] .sheet-opt .ds .L-en{font-size:11.5px}
+html[data-lang="en"] .hero .lbl .L-en{font-size:12px;letter-spacing:0;text-transform:none}
+.hero-ft .L-ar,.hero-ft .L-en{display:block}
+html[data-lang="ar"] .lg li .L-en::before,html[data-lang="en"] .lg li .L-en::before{content:none}
+
 /* ---------- the bilingual pair ---------- */
 /* Arabic sits on top in the body weight; English under it, smaller
    and quieter, so the Arabic reads as the label and the English as
@@ -116,6 +144,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;gap:5px}
   border-inline-start:1px solid var(--rule);transition:background .16s ease,color .16s ease;
 }
 .seg button:first-child{border-inline-start:none}
+.seg.lang button{padding:5px 9px;font-size:12.5px;font-weight:600;min-width:34px}
 .seg button:hover{background:var(--void)}
 .seg button[aria-selected="true"]{background:var(--gold-tint);color:var(--gold)}
 .seg button[aria-selected="true"] .bi>b{font-weight:600}
@@ -260,6 +289,7 @@ main{padding-block:16px 48px}
 .hero .big{font-size:25px;font-weight:600;letter-spacing:-.02em;margin-top:6px;line-height:1.14;
   direction:rtl;unicode-bidi:isolate}
 .hero .big-en{font-size:12.5px;color:var(--muted);line-height:1.3}
+.hero .big.L-only-en{direction:ltr}
 .hero .big.late{color:var(--crimson)} .hero .big.soon{color:var(--gold)}
 .hero .what{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.5;font-weight:300}
 .hero .what b{font-weight:500;color:var(--ink)}
@@ -348,6 +378,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
   .eyebrow{font-size:9.5px;letter-spacing:.1em}
   .bar{width:100%;gap:6px}
   .seg{flex:1 1 100%;display:grid;grid-template-columns:repeat(5,1fr)}
+  .seg.lang{grid-template-columns:repeat(3,1fr)}  /* it has three, not five */
   .seg button{padding:5px 2px}
   .seg button .bi>i{display:none}
   .btn{padding:7px 10px;min-height:34px;font-size:13px}
@@ -363,7 +394,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
 <header class="mast wrap">
   <div class="mark">
     <div class="eyebrow">
-      <span class="a">الالتزام ومكافحة غسل الأموال</span><span class="sep">·</span>KFIC Compliance &amp; AML
+      <span class="a L-ar">الالتزام ومكافحة غسل الأموال</span><span class="sep L-ar L-en">·</span><span class="L-en">KFIC Compliance &amp; AML</span>
     </div>
     <h1 id="m-label">—</h1>
   </div>
@@ -387,7 +418,12 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     <button class="btn solid icon" id="add" aria-label="Add / إضافة">+</button>
     <a class="btn gold portal" id="portal" href="https://marja-cma.netlify.app/ar"
        target="_blank" rel="noopener noreferrer"
-       title="مَرجع — بوابة هيئة أسواق المال / CMA reference portal">مَرجع<span class="ext">↗</span></a>
+       title="مَرجع — بوابة هيئة أسواق المال / CMA reference portal"><span class="L-ar">مَرجع</span><span class="L-en">Marja</span><span class="ext">↗</span></a>
+    <div class="seg lang" role="tablist" aria-label="Language / اللغة">
+      <button role="tab" data-lang="ar" aria-selected="false" aria-label="Arabic only / عربي فقط" title="عربي">ع</button>
+      <button role="tab" data-lang="en" aria-selected="false" aria-label="English only" title="English">EN</button>
+      <button role="tab" data-lang="both" aria-selected="true" aria-label="Both / الاثنان" title="عربي + English">ع+EN</button>
+    </div>
     <button class="btn icon" id="theme" aria-label="Switch appearance / المظهر">◐</button>
   </div>
 </header>
@@ -424,7 +460,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
         <div class="card-h">
           <h2 id="day-title">—</h2>
           <span class="n" id="n-day"></span>
-          <button class="lnk" id="unpick" hidden>اليوم · Today</button>
+          <button class="lnk" id="unpick" hidden><span class="L-ar">اليوم</span><span class="L-en">Today</span></button>
         </div>
         <div class="list" id="list-day"></div>
       </section>
@@ -432,45 +468,45 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
   </div>
 
   <div class="banner" id="banner" hidden>
-    <span>ثلاثة مواعيد توضيحية معروضة حتى لا تكون الرزنامة فارغة · Three example dates are shown so the calendar isn't empty.</span>
-    <button class="btn" id="a-clear">إزالتها · Clear them</button>
+    <span><span class="L-ar">ثلاثة مواعيد توضيحية معروضة حتى لا تكون الرزنامة فارغة</span><span class="L-en">Three example dates are shown so the calendar isn't empty.</span></span>
+    <button class="btn" id="a-clear"><span class="L-ar">إزالتها</span><span class="L-en">Clear them</span></button>
   </div>
 
   <div class="legend">
     <div class="lg">
-      <h3>الدلالات <em>Key</em></h3>
+      <h3><span class="L-ar">الدلالات</span> <em class="L-en">Key</em></h3>
       <ul>
-        <li><span class="sw late"></span>متأخر عن موعده <em>· Overdue</em></li>
-        <li><span class="sw soon"></span>خلال يومين أو أقل <em>· Due within two days</em></li>
-        <li><span class="sw open"></span>قائم ولم يحن موعده <em>· Open</em></li>
-        <li><span class="sw tod"></span>اليوم <em>· Today</em></li>
+        <li><span class="sw late"></span><span class="L-ar">متأخر عن موعده</span><em class="L-en">Overdue</em></li>
+        <li><span class="sw soon"></span><span class="L-ar">خلال يومين أو أقل</span><em class="L-en">Due within two days</em></li>
+        <li><span class="sw open"></span><span class="L-ar">قائم ولم يحن موعده</span><em class="L-en">Open</em></li>
+        <li><span class="sw tod"></span><span class="L-ar">اليوم</span><em class="L-en">Today</em></li>
       </ul>
     </div>
     <div class="lg">
-      <h3>الأيام <em>Days</em></h3>
+      <h3><span class="L-ar">الأيام</span> <em class="L-en">Days</em></h3>
       <ul>
-        <li><span class="sw we"></span>نهاية الأسبوع — الجمعة والسبت <em>· Weekend</em></li>
-        <li><span class="sw hol"></span>عطلة رسمية تُستثنى من الحساب <em>· Official holiday</em></li>
-        <li>الرقم الكبير ميلادي والصغير هجري <em>· Gregorian large, Hijri small</em></li>
-        <li>شريط ذهبي باهت = أول شهر هجري <em>· Faint gold bar starts a Hijri month</em></li>
+        <li><span class="sw we"></span><span class="L-ar">نهاية الأسبوع — الجمعة والسبت</span><em class="L-en">Weekend — Friday and Saturday</em></li>
+        <li><span class="sw hol"></span><span class="L-ar">عطلة رسمية تُستثنى من الحساب</span><em class="L-en">Official holiday, excluded</em></li>
+        <li><span class="L-ar">الرقم الكبير ميلادي والصغير هجري</span><em class="L-en">Gregorian large, Hijri small</em></li>
+        <li><span class="L-ar">شريط ذهبي باهت = أول شهر هجري</span><em class="L-en">Faint gold bar starts a Hijri month</em></li>
       </ul>
     </div>
     <div class="lg">
-      <h3>الحساب <em>Calculation</em></h3>
+      <h3><span class="L-ar">الحساب</span> <em class="L-en">Calculation</em></h3>
       <ul>
         <li id="cal-note">—</li>
-        <li>أيام العمل تستثني الجمعة والسبت والعطل <em>· Business days skip Fri, Sat and holidays</em></li>
-        <li>معلومة جوهرية خارج الدوام: 08:45 قبل الجلسة التالية <em>· 15 min before the next session</em></li>
+        <li><span class="L-ar">أيام العمل تستثني الجمعة والسبت والعطل</span><em class="L-en">Business days skip Fri, Sat and holidays</em></li>
+        <li><span class="L-ar">معلومة جوهرية خارج الدوام: 08:45 قبل الجلسة التالية</span><em class="L-en">Material info out of hours: 08:45, 15 min before the next session</em></li>
       </ul>
     </div>
     <div class="lg">
-      <h3>الرزنامة <em>This calendar</em></h3>
+      <h3><span class="L-ar">الرزنامة</span> <em class="L-en">This calendar</em></h3>
       <ul>
-        <li>تُحفظ على هذا الجهاز وفي مساحة العمل <em>· Saved locally and in the workspace</em></li>
+        <li><span class="L-ar">تُحفظ على هذا الجهاز وفي مساحة العمل</span><em class="L-en">Saved locally and in the workspace</em></li>
         <li class="acts">
-          <button id="a-hol">العطل الرسمية · Holidays</button><span class="dot">·</span>
-          <button id="a-backup">نسخة احتياطية · Back up</button><span class="dot">·</span>
-          <button id="a-restore">استعادة · Restore</button>
+          <button id="a-hol"><span class="L-ar">العطل الرسمية</span><span class="L-en">Holidays</span></button><span class="dot">·</span>
+          <button id="a-backup"><span class="L-ar">نسخة احتياطية</span><span class="L-en">Back up</span></button><span class="dot">·</span>
+          <button id="a-restore"><span class="L-ar">استعادة</span><span class="L-en">Restore</span></button>
           <input type="file" id="file" accept="application/json,.json" hidden>
           <span id="note"></span>
         </li>
@@ -479,10 +515,10 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
   </div>
 
   <p class="colophon">
-    <b>رزنامة الالتزام</b> — مواعيد الإفصاح والاستحقاقات والتراخيص لشركة الكويت للاستثمار المالي،
+    <span class="L-ar"><b>رزنامة الالتزام</b> — مواعيد الإفصاح والاستحقاقات والتراخيص لشركة الكويت للاستثمار المالي،
     محسوبة بأيام العمل في دولة الكويت (نهاية الأسبوع الجمعة والسبت). التواريخ الهجرية وفق تقويم أم القرى
-    وقد تختلف يوماً عن الإعلان الرسمي، والعطل تُدخل يدوياً لأنها تخضع للرؤية والإعلان الرسمي.
-    <span class="en"><b>KFIC Compliance Calendar</b> — disclosure, entitlement and licence dates on Kuwait
+    وقد تختلف يوماً عن الإعلان الرسمي، والعطل تُدخل يدوياً لأنها تخضع للرؤية والإعلان الرسمي.</span>
+    <span class="en L-en"><b>KFIC Compliance Calendar</b> — disclosure, entitlement and licence dates on Kuwait
     business days. Hijri dates follow Umm al-Qura and may differ by a day from the official announcement;
     holidays are entered by hand because they depend on sighting and official decree.</span>
   </p>
@@ -495,25 +531,28 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
 </dialog>
 
 <dialog id="act">
-  <div class="sh-h"><h3>الإضافة إلى الرزنامة<span class="en">Add to the calendar</span></h3></div>
+  <div class="sh-h"><h3><span class="L-ar">الإضافة إلى الرزنامة</span><span class="en L-en">Add to the calendar</span></h3></div>
   <div>
     <button class="sheet-opt" data-go="disc">
       <span class="ic">إ</span>
-      <span class="tx"><b>إفصاح جديد</b><span class="ds">يختار الملحق ويحسب الموعد
-        <i>Picks the annex and works out the deadline</i></span></span>
+      <span class="tx"><b><span class="L-ar">إفصاح جديد</span><span class="L-en">New disclosure</span></b>
+        <span class="ds"><span class="L-ar">يختار الملحق ويحسب الموعد</span>
+        <i class="L-en">Picks the annex and works out the deadline</i></span></span>
     </button>
     <button class="sheet-opt" data-go="ent">
       <span class="ic">ح</span>
-      <span class="tx"><b>مواعيد الاستحقاقات</b><span class="ds">الجدول كاملاً من تاريخ واحد
-        <i>The full استحقاقات timetable from one date</i></span></span>
+      <span class="tx"><b><span class="L-ar">مواعيد الاستحقاقات</span><span class="L-en">Entitlement dates</span></b>
+        <span class="ds"><span class="L-ar">الجدول كاملاً من تاريخ واحد</span>
+        <i class="L-en">The full استحقاقات timetable from one date</i></span></span>
     </button>
     <button class="sheet-opt" data-go="add">
       <span class="ic">+</span>
-      <span class="tx"><b>موعد آخر</b><span class="ds">تاريخ تُدخله بنفسك
-        <i>A date you enter yourself</i></span></span>
+      <span class="tx"><b><span class="L-ar">موعد آخر</span><span class="L-en">Something else</span></b>
+        <span class="ds"><span class="L-ar">تاريخ تُدخله بنفسك</span>
+        <i class="L-en">A date you enter yourself</i></span></span>
     </button>
   </div>
-  <div class="sh-f"><button class="btn" id="act-cancel">إلغاء · Cancel</button></div>
+  <div class="sh-f"><button class="btn" id="act-cancel"><span class="L-ar">إلغاء</span><span class="L-en">Cancel</span></button></div>
 </dialog>
 
 <script>
@@ -531,6 +570,8 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const MONTHS_AR=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 const HMONTHS_AR=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة',
                   'رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
+const HMONTHS_EN=['Muharram','Safar','Rabi I','Rabi II','Jumada I','Jumada II',
+                  'Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
 
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
@@ -557,7 +598,7 @@ function hijri(d){
     const g=k=>p.find(x=>x.type===k)?.value;
     const day=+g('day'), mo=+g('month'), yr=+String(g('year')).replace(/\D/g,'');
     if(!day||!mo) return null;
-    return {d:day,m:mo,y:yr,name:HMONTHS_AR[mo-1]};
+    return {d:day,m:mo,y:yr,name:HMONTHS_AR[mo-1],en:HMONTHS_EN[mo-1]};
   }catch{ return null }
 }
 
@@ -637,6 +678,9 @@ const KEY='kfic-desk-v2';
 const BLANK={items:[],holidays:[],seeded:null};
 let S=structuredClone(BLANK), DB=null, DL=null;
 let view=day0(NOW()), picked=iso(NOW()), mode='month';
+/* 'both' (default), 'ar', or 'en'. Only the chrome switches — an item's
+   title is whatever it was entered as, and is never machine-translated. */
+let lang=(()=>{try{return localStorage.getItem('kfic-desk-lang')||'both'}catch{return 'both'}})();
 
 const uid=()=>'x'+Math.random().toString(36).slice(2,9);
 function save(){
@@ -661,6 +705,9 @@ function countdown(i){
 
 /* ===== render ===== */
 const $=s=>document.querySelector(s);
+/* One pair, one shape. CSS decides which half survives. */
+const L=(ar,en)=>`<span class="L-ar" dir="rtl">${esc(ar)}</span><span class="L-en" dir="ltr">${esc(en)}</span>`;
+const pick=(ar,en)=>lang==='en'?en:ar;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function hero(){
@@ -670,21 +717,25 @@ function hero(){
     : isHoliday(n) ? {ar:'عطلة رسمية',en:'Official holiday'}
     : {ar:`${DAY_AR[n.getDay()]} — نهاية الأسبوع`,en:'Weekend'};
   const foot = `<div class="hero-ft">
-      <span dir="rtl">${esc(fmtMedAr(n))}</span>${h?` · <span class="hj" dir="rtl">${h.d} ${esc(h.name)} ${h.y}هـ</span>`:''}
-      <br>${esc(fmtFull(n))} · ${esc(note.ar)} · ${esc(note.en)}
+      <span class="L-ar" dir="rtl">${esc(fmtMedAr(n))}${h?` · `:''}`
+        + `${h?`<span class="hj">${h.d} ${esc(h.name)} ${h.y}هـ</span>`:''} · ${esc(note.ar)}</span>
+      <span class="L-en" dir="ltr">${esc(fmtFull(n))}${h?` · <span class="hj">${h.d} ${esc(h.en)} ${h.y} AH</span>`:''} · ${esc(note.en)}</span>
     </div>`;
-  const lbl = `<div class="lbl"><b>الموعد القادم</b>Next due</div>`;
+  const lbl = `<div class="lbl"><b class="L-ar">الموعد القادم</b><span class="L-en">Next due</span></div>`;
   const c=u?countdown(u):null;
   $('#hero').innerHTML = (u
     ? `${lbl}
-       <div class="big ${urgency(u)}">${esc(c.ar)}</div>
-       <div class="big-en">${esc(c.en)}</div>
+       <div class="big ${urgency(u)} L-ar">${esc(c.ar)}</div>
+       <div class="big ${urgency(u)} L-only-en" dir="ltr">${esc(c.en)}</div>
+       <div class="big-en L-both">${esc(c.en)}</div>
        <div class="what"><b dir="auto">${esc(u.title)}</b><br>
-         <span dir="rtl">${esc(fmtMedAr(parse(u.due)))}</span> · ${esc(fmtMed(parse(u.due)))}</div>`
+         <span class="L-ar" dir="rtl">${esc(fmtMedAr(parse(u.due)))}</span>
+         <span class="L-en" dir="ltr">${esc(fmtMed(parse(u.due)))}</span></div>`
     : `${lbl}
-       <div class="big">لا شيء</div>
-       <div class="big-en">Nothing open</div>
-       <div class="what">لا مواعيد قائمة · No open dates.</div>`) + foot;
+       <div class="big L-ar">لا شيء</div>
+       <div class="big L-only-en" dir="ltr">Nothing open</div>
+       <div class="big-en L-both">Nothing open</div>
+       <div class="what">${L('لا مواعيد قائمة','No open dates.')}</div>`) + foot;
 }
 
 /* How many months each view spans, and where its period begins. */
@@ -700,12 +751,12 @@ function periodStart(d,m){
 function periodLabel(d,m){
   const y=d.getFullYear(), mo=d.getMonth();
   const yr=`<span class="yr">${y}</span>`;
-  if(m==='quarter') return `<span class="a">الربع ${Q_AR[Math.floor(mo/3)]}</span>
-    <span class="e">Q${Math.floor(mo/3)+1}</span>${yr}`;
-  if(m==='half')    return `<span class="a">النصف ${Q_AR[mo<6?0:1]}</span>
-    <span class="e">H${mo<6?1:2}</span>${yr}`;
-  if(m==='year')    return `<span class="a">سنة</span><span class="e">Year</span>${yr}`;
-  return `<span class="a">${MONTHS_AR[mo]}</span><span class="e">${MONTHS[mo]}</span>${yr}`;
+  if(m==='quarter') return `<span class="a L-ar">الربع ${Q_AR[Math.floor(mo/3)]}</span>
+    <span class="e L-en">Q${Math.floor(mo/3)+1}</span>${yr}`;
+  if(m==='half')    return `<span class="a L-ar">النصف ${Q_AR[mo<6?0:1]}</span>
+    <span class="e L-en">H${mo<6?1:2}</span>${yr}`;
+  if(m==='year')    return `<span class="a L-ar">سنة</span><span class="e L-en">Year</span>${yr}`;
+  return `<span class="a L-ar">${MONTHS_AR[mo]}</span><span class="e L-en">${MONTHS[mo]}</span>${yr}`;
 }
 /* Inclusive [start,end) of the period currently shown. */
 function periodRange(){
@@ -717,8 +768,11 @@ function periodRange(){
    month caption, e.g. "أكتوبر / ربيع الآخر – جمادى الأولى". */
 function hijriSpan(y,m){
   const a=hijri(new Date(y,m,1)), b=hijri(new Date(y,m+1,0));
-  if(!a||!b) return '';
-  return a.m===b.m ? `${a.name} ${a.y}` : `${a.name} – ${b.name} ${b.y}`;
+  if(!a||!b) return null;
+  return {
+    ar: a.m===b.m ? `${a.name} ${a.y}` : `${a.name} – ${b.name} ${b.y}`,
+    en: a.m===b.m ? `${a.en} ${a.y}`   : `${a.en} – ${b.en} ${b.y}`,
+  };
 }
 
 function monthBlock(y,m,compact){
@@ -729,12 +783,14 @@ function monthBlock(y,m,compact){
   if(compact){
     const n=live().filter(x=>{const d=parse(x.due);return d.getFullYear()===y&&d.getMonth()===m}).length;
     const hs=hijriSpan(y,m);
-    out+=`<div class="mon-cap"><b>${MONTHS_AR[m]}</b><em>${MONTHS[m]}</em>`
+    out+=`<div class="mon-cap"><b class="L-ar">${MONTHS_AR[m]}</b><em class="L-en">${MONTHS[m]}</em>`
       + (n?`<span class="n">${n}</span>`:'')
-      + (hs?`<span class="hj">${esc(hs)}</span>`:'')+`</div>`;
+      + (hs?`<span class="hj"><span class="L-ar" dir="rtl">${esc(hs.ar)}</span>`
+            + `<span class="L-en" dir="ltr">${esc(hs.en)}</span></span>`:'')+`</div>`;
   }
   out+=`<div class="dow">${DOW_AR.map((d,i)=>
-    `<div class="${i>=5?'we':''}" dir="rtl">${compact?DOW_AR1[i]:d}<span dir="ltr">${DOW[i]}</span></div>`).join('')}</div>`;
+    `<div class="${i>=5?'we':''}"><b class="L-ar" dir="rtl">${compact?DOW_AR1[i]:d}</b>`
+    + `<span class="L-en" dir="ltr">${compact?DOW[i].slice(0,1):DOW[i]}</span></div>`).join('')}</div>`;
   out+=`<div class="grid">`;
   for(let i=0;i<cells;i++){
     const d=addDays(start,i), key=iso(d);
@@ -746,7 +802,8 @@ function monthBlock(y,m,compact){
     const aria=`${fmtFull(d)}${h?`, ${h.d} ${h.name} ${h.y} AH`:''}, ${on.length} due`;
     out+=`<button type="button" class="${cls}" data-day="${key}" aria-label="${esc(aria)}">`
       + `<span class="t"><b>${d.getDate()}</b>${h?`<i>${h.d}</i>`:''}</span>`
-      + (h&&h.d===1&&!compact?`<span class="hm">${esc(h.name)}</span>`:'')
+      + (h&&h.d===1&&!compact?`<span class="hm"><span class="L-ar" dir="rtl">${esc(h.name)}</span>`
+          + `<span class="L-en" dir="ltr">${esc(h.en)}</span></span>`:'')
       + (on.length&&!compact?`<span class="evs">${on.slice(0,2).map(x=>
           `<span class="ev ${urgency(x)}"><i class="d ${urgency(x)}"></i><span class="x" dir="auto">${esc(x.title)}</span></span>`).join('')}</span>`:'')
       + (on.length>2&&!compact?`<span class="more">+${on.length-2}</span>`:'')
@@ -776,12 +833,13 @@ function rowHTML(i){
       <span class="ttl" dir="auto">${esc(i.title)}</span>
       ${i.rule?`<span class="rule ar">${esc(i.rule)}</span>`:''}
       <span class="sub">
-        <span class="tag ${u}" dir="rtl">${esc(c.ar)}<span class="en">${esc(c.en)}</span></span>
-        <span dir="rtl">${esc(fmtMedAr(d))}</span>
-        <span dir="ltr">${esc(fmtMed(d))}</span>
-        ${h?`<span class="tag" dir="rtl">${h.d} ${esc(h.name)}</span>`:''}
+        <span class="tag ${u}"><span class="L-ar" dir="rtl">${esc(c.ar)}</span><span class="en L-en" dir="ltr">${esc(c.en)}</span></span>
+        <span class="L-ar" dir="rtl">${esc(fmtMedAr(d))}</span>
+        <span class="L-en" dir="ltr">${esc(fmtMed(d))}</span>
+        ${h?`<span class="tag"><span class="L-ar" dir="rtl">${h.d} ${esc(h.name)}</span>`
+            + `<span class="L-en" dir="ltr">${h.d} ${esc(h.en)}</span></span>`:''}
         ${i.annex?`<span class="tag" dir="auto">${esc(i.annex)}</span>`:''}
-        ${i.example?'<span class="tag" dir="rtl">مثال<span class="en">Example</span></span>':''}
+        ${i.example?`<span class="tag"><span class="L-ar" dir="rtl">مثال</span><span class="en L-en" dir="ltr">Example</span></span>`:''}
         ${i.src?`<a class="src" href="${esc(i.src.url)}" target="_blank" rel="noopener noreferrer">${esc(i.src.label)} ↗</a>`:''}
       </span>
     </span>
@@ -789,7 +847,7 @@ function rowHTML(i){
   </div>`;
 }
 
-const EMPTY=(ar,en)=>`<div class="empty" dir="rtl">${ar}<i dir="ltr">${en}</i></div>`;
+const EMPTY=(ar,en)=>`<div class="empty"><span class="L-ar" dir="rtl">${ar}</span><i class="L-en" dir="ltr">${en}</i></div>`;
 
 function lists(){
   const all=live().slice().sort((a,b)=>a.due.localeCompare(b.due));
@@ -804,7 +862,8 @@ function lists(){
   const isToday = picked===iso(NOW());
   $('#day-title').innerHTML = isToday
     ? `<span class="bir"><b>اليوم</b><i>Today</i></span>`
-    : `<span class="bir"><b>${esc(fmtMedAr(pd))}${ph?` · ${ph.d} ${esc(ph.name)}`:''}</b><i>${esc(fmtMed(pd))}</i></span>`;
+    : `<span class="bir"><b>${esc(fmtMedAr(pd))}${ph?` · ${ph.d} ${esc(ph.name)}`:''}</b>`
+      + `<i>${esc(fmtMed(pd))}${ph?` · ${ph.d} ${esc(ph.en)}`:''}</i></span>`;
   $('#n-day').textContent=day.length||'';
   $('#unpick').hidden = isToday;
   $('#list-day').innerHTML = day.length ? day.map(rowHTML).join('')
@@ -818,23 +877,35 @@ function lists(){
   const n=S.holidays.length;
   const arHol = n===1?'عطلة رسمية واحدة':(n<=10?`${n} عطل رسمية`:`${n} عطلة رسمية`);
   $('#cal-note').innerHTML = n
-    ? `نهاية الأسبوع و${arHol} مُستثناة من كل حساب
-       <em>· Weekends and ${n} holiday${n>1?'s':''} excluded</em>`
-    : `نهاية الأسبوع مُستثناة، ولم تُدخل عطل رسمية بعد
-       <em>· Weekends excluded; no holidays entered yet</em>`;
+    ? `<span class="L-ar">نهاية الأسبوع و${arHol} مُستثناة من كل حساب</span>
+       <em class="L-en">Weekends and ${n} holiday${n>1?'s':''} excluded</em>`
+    : `<span class="L-ar">نهاية الأسبوع مُستثناة، ولم تُدخل عطل رسمية بعد</span>
+       <em class="L-en">Weekends excluded; no holidays entered yet</em>`;
 }
 
 const draw=()=>{hero();calendar();lists()};
 
+/* ===== language ===== */
+function setLang(l){
+  lang=l;
+  document.documentElement.setAttribute('data-lang',l);
+  document.documentElement.lang = l==='en'?'en':'ar';
+  document.querySelectorAll('.seg.lang button')
+    .forEach(b=>b.setAttribute('aria-selected',String(b.dataset.lang===l)));
+  try{localStorage.setItem('kfic-desk-lang',l)}catch{}
+  draw();
+}
+document.querySelectorAll('.seg.lang button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+
 /* ===== navigation ===== */
 function setMode(m){
   mode=m;
-  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===m)));
+  document.querySelectorAll('.seg:not(.lang) button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===m)));
   $('#pane-month').hidden = m==='list';
   $('#pane-list').hidden  = m!=='list';
   draw();
 }
-document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>setMode(b.dataset.view));
+document.querySelectorAll('.seg:not(.lang) button').forEach(b=>b.onclick=()=>setMode(b.dataset.view));
 const step=d=>{const m=mode==='list'?'month':mode;
   view=new Date(view.getFullYear(),periodStart(view,m).getMonth()+d*SPAN[m],1);draw()};
 $('#prev').onclick=()=>step(-1);
@@ -852,14 +923,14 @@ $('#cal-wrap').addEventListener('click',e=>{
 /* ===== dialogs ===== */
 const dlg=$('#dlg'), act=$('#act');
 function open(titleAr,titleEn,body,btns){
-  $('#d-title').innerHTML=`${esc(titleAr)}<span class="en">${esc(titleEn)}</span>`;
+  $('#d-title').innerHTML=`<span class="L-ar">${esc(titleAr)}</span><span class="en L-en">${esc(titleEn)}</span>`;
   $('#d-body').innerHTML=body; $('#d-foot').innerHTML='';
   const c=document.createElement('button');
-  c.className='btn'; c.textContent='إلغاء · Cancel'; c.onclick=()=>dlg.close();
+  c.className='btn'; c.innerHTML=L('إلغاء','Cancel'); c.onclick=()=>dlg.close();
   $('#d-foot').appendChild(c);
   btns.forEach(b=>{
     const e=document.createElement('button');
-    e.className='btn '+(b.primary?'solid':'gold'); e.textContent=b.label;
+    e.className='btn '+(b.primary?'solid':'gold'); e.innerHTML=L(b.ar,b.en);
     e.onclick=()=>{ if(b.act()!==false) dlg.close(); };
     $('#d-foot').appendChild(e);
   });
@@ -880,19 +951,21 @@ act.addEventListener('click',e=>{
 
 function newDisc(){
   open('إفصاح جديد','New disclosure',
-    `<label class="f"><span>ما الذي حدث<em>What happened</em></span>
+    `<label class="f"><span><span class="L-ar">ما الذي حدث</span><em class="L-en">What happened</em></span>
        <input id="q-t" placeholder="قرر المجلس تغيير مراقب الحسابات الخارجي"></label>
-     <label class="f"><span>النوع — يحدد الملحق والمهلة<em>Type — sets the annex and the deadline</em></span>
-       <select id="q-k">${KINDS.map(k=>`<option value="${k.id}">${esc(k.la)} — ${esc(k.a)} · ${esc(k.l)}</option>`).join('')}</select></label>
-     <label class="f"><span>تاريخ النشوء<em>Date it arose</em></span>
+     <label class="f"><span><span class="L-ar">النوع — يحدد الملحق والمهلة</span><em class="L-en">Type — sets the annex and the deadline</em></span>
+       <select id="q-k">${KINDS.map(k=>`<option value="${k.id}">${esc(
+         lang==='en' ? `${k.l} — ${k.a}` : lang==='ar' ? `${k.la} — ${k.a}` : `${k.la} — ${k.a} · ${k.l}`
+       )}</option>`).join('')}</select></label>
+     <label class="f"><span><span class="L-ar">تاريخ النشوء</span><em class="L-en">Date it arose</em></span>
        <input type="date" id="q-d" value="${iso(NOW())}"></label>
-     <label class="f" id="q-aw" hidden><span>تاريخ حق الحضور<em>Attendance entitlement date</em></span>
+     <label class="f" id="q-aw" hidden><span><span class="L-ar">تاريخ حق الحضور</span><em class="L-en">Attendance entitlement date</em></span>
        <input type="date" id="q-a"></label>
      <div id="q-p"></div>`,
-    [{label:'إضافة · Add',primary:true,act(){
+    [{ar:'إضافة',en:'Add',primary:true,act(){
       const ev=$('#q-d').value; if(!ev) return false;
       const d=deriveDisc($('#q-k').value,ev,$('#q-a').value);
-      add({title:$('#q-t').value.trim()||d.labelAr,due:d.due,annex:d.annex,rule:d.rule});
+      add({title:$('#q-t').value.trim()||pick(d.labelAr,d.label),due:d.due,annex:d.annex,rule:d.rule});
       goTo(d.due); save(); draw();
     }}]);
   const upd=()=>{
@@ -907,20 +980,20 @@ function newDisc(){
     $('#q-p').innerHTML=`<div class="prev"><div class="prow">
       <span class="t arabic">يُفصح في موعد أقصاه · <span dir="auto">${esc(d.annex)}</span></span>
       <span class="dt">${esc(w)}</span>
-      <span class="rl">${esc(d.rule)}${h?` — ${h.d} ${esc(h.name)} ${h.y}هـ`:''}</span></div></div>`;
+      <span class="rl">${esc(d.rule)}${h?` — ${pick(`${h.d} ${h.name} ${h.y}هـ`,`${h.d} ${h.en} ${h.y} AH`)}`:''}</span></div></div>`;
   };
   ['#q-k','#q-d','#q-a'].forEach(s=>$(s).addEventListener('change',upd)); upd();
 }
 
 function newEnt(){
   open('مواعيد الاستحقاقات','Entitlement dates',
-    `<label class="f"><span>تاريخ الجمعية العامة<em>General assembly date</em></span>
+    `<label class="f"><span><span class="L-ar">تاريخ الجمعية العامة</span><em class="L-en">General assembly date</em></span>
        <input type="date" id="e-a" value="${iso(addBiz(NOW(),20))}"></label>
-     <label class="f"><span>يوم الاستحقاق — إن تُرك فارغاً يُحسب 15 يوم عمل بعد الجمعية
-       <em>Entitlement day — blank means 15 business days after</em></span>
+     <label class="f"><span><span class="L-ar">يوم الاستحقاق — إن تُرك فارغاً يُحسب 15 يوم عمل بعد الجمعية</span>
+       <em class="L-en">Entitlement day — blank means 15 business days after</em></span>
        <input type="date" id="e-e"></label>
      <div id="e-p"></div>`,
-    [{label:'إضافة الجدول كاملاً · Add all',primary:true,act(){
+    [{ar:'إضافة الجدول كاملاً',en:'Add all',primary:true,act(){
       const steps=deriveEnt($('#e-a').value,$('#e-e').value);
       steps.forEach(s=>add({title:s.t,due:s.due,rule:s.rule,annex:'استحقاقات'}));
       if(steps[0]) goTo(steps[0].due);
@@ -939,11 +1012,11 @@ function newEnt(){
 
 function newPlain(){
   open('إضافة موعد','Add a date',
-    `<label class="f"><span>الموضوع<em>What</em></span>
+    `<label class="f"><span><span class="L-ar">الموضوع</span><em class="L-en">What</em></span>
        <input id="n-t" placeholder="مراجعة الاستحقاقات الربعية"></label>
-     <label class="f"><span>الموعد<em>Due</em></span>
+     <label class="f"><span><span class="L-ar">الموعد</span><em class="L-en">Due</em></span>
        <input type="date" id="n-d" value="${picked||iso(addBiz(NOW(),3))}"></label>`,
-    [{label:'إضافة · Add',primary:true,act(){
+    [{ar:'إضافة',en:'Add',primary:true,act(){
       const t=$('#n-t').value.trim(); if(!t) return false;
       const due=$('#n-d').value; add({title:t,due}); goTo(due); save(); draw();
     }}]);
@@ -955,21 +1028,22 @@ $('#a-hol').onclick=()=>{
       ? S.holidays.slice().sort().map(h=>{
           const d=parse(h), hj=hijri(d);
           return `<span class="tag" style="margin:3px;display:inline-flex;align-items:center;gap:6px">
-            <span dir="rtl">${esc(fmtMedAr(d))}${hj?` · ${hj.d} ${esc(hj.name)}`:''}</span>
+            <span class="L-ar" dir="rtl">${esc(fmtMedAr(d))}${hj?` · ${hj.d} ${esc(hj.name)}`:''}</span>
+            <span class="L-en" dir="ltr">${esc(fmtMed(d))}${hj?` · ${hj.d} ${esc(hj.en)}`:''}</span>
             <button class="go" data-hx="${h}" style="width:19px;height:19px;margin:0;font-size:11px"
               aria-label="Remove / إزالة">×</button></span>`}).join('')
-      : '<span style="color:var(--faint)" dir="rtl">لم تُدخل عطل بعد · None entered.</span>';
+      : `<span style="color:var(--faint)">${L('لم تُدخل عطل بعد','None entered.')}</span>`;
   };
   open('العطل الرسمية','Official holidays',
-    `<p style="margin:0 0 13px;font-size:12px;color:var(--ink-2);line-height:1.65;font-weight:300" dir="rtl">
-       عطل الكويت تتحرك مع التقويم الهجري، فلا يُفترض شيء هنا. أدخل الأيام التي تعتمدها الشركة —
-       تُظلَّل على الرزنامة وتُستثنى من كل حساب لأيام العمل.
-       <span style="display:block;margin-top:5px;direction:ltr;color:var(--muted)">Kuwait's holidays move with the
+    `<p style="margin:0 0 13px;font-size:12px;color:var(--ink-2);line-height:1.65;font-weight:300">
+       <span class="L-ar" dir="rtl">عطل الكويت تتحرك مع التقويم الهجري، فلا يُفترض شيء هنا. أدخل الأيام التي تعتمدها الشركة —
+       تُظلَّل على الرزنامة وتُستثنى من كل حساب لأيام العمل.</span>
+       <span class="L-en" style="display:block;margin-top:5px;direction:ltr">Kuwait's holidays move with the
        Hijri calendar, so nothing is assumed. Add the days your company observes — they shade on the
        calendar and drop out of every business-day calculation.</span></p>
-     <label class="f"><span>إضافة تاريخ<em>Add a date</em></span><input type="date" id="h-new"></label>
+     <label class="f"><span><span class="L-ar">إضافة تاريخ</span><em class="L-en">Add a date</em></span><input type="date" id="h-new"></label>
      <div id="h-cur"></div>`,
-    [{label:'إضافة · Add',primary:true,act(){
+    [{ar:'إضافة',en:'Add',primary:true,act(){
       const v=$('#h-new').value;
       if(v&&!S.holidays.includes(v)){S.holidays.push(v);save();draw();paint()}
       return false;
@@ -992,13 +1066,14 @@ $('#a-clear').onclick=()=>{ S.items=S.items.filter(i=>!i.example); S.seeded='bla
 /* ===== backup ===== */
 function toast(m){ $('#note').textContent=m; setTimeout(()=>{if($('#note').textContent===m)$('#note').textContent=''},5000) }
 async function offer(name,data){
-  if(DL){ try{await DL.save({filename:name,data}); toast('تم الحفظ · Saved.')}catch{toast('تعذّر الحفظ · Save declined.')} return; }
+  if(DL){ try{await DL.save({filename:name,data}); toast(pick('تم الحفظ','Saved.'))}
+          catch{toast(pick('تعذّر الحفظ','Save declined.'))} return; }
   try{
     const u=URL.createObjectURL(new Blob([data],{type:'application/json'}));
     const a=document.createElement('a'); a.href=u; a.download=name;
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(u),4000); toast('تم التنزيل · Downloaded.');
-  }catch{ toast('تعذّر الحفظ هنا · Could not save here.') }
+    setTimeout(()=>URL.revokeObjectURL(u),4000); toast(pick('تم التنزيل','Downloaded.'));
+  }catch{ toast(pick('تعذّر الحفظ هنا','Could not save here.')) }
 }
 $('#a-backup').onclick=()=>offer(`compliance-calendar-${iso(NOW())}.json`,JSON.stringify(S,null,2));
 $('#a-restore').onclick=()=>$('#file').click();
@@ -1009,8 +1084,8 @@ $('#file').onchange=e=>{
       const d=JSON.parse(r.result);
       if(!Array.isArray(d.items)) throw 0;
       S={...structuredClone(BLANK),...d}; save(); draw();
-      toast(`استُعيد ${S.items.length} موعداً · Restored ${S.items.length} dates.`);
-    }catch{ toast('الملف ليس نسخة احتياطية · Not a calendar backup.') } };
+      toast(pick(`استُعيد ${S.items.length} موعداً`,`Restored ${S.items.length} dates.`));
+    }catch{ toast(pick('الملف ليس نسخة احتياطية','Not a calendar backup.')) } };
   r.readAsText(f);
 };
 
@@ -1039,7 +1114,7 @@ function examples(){
 /* ===== boot ===== */
 const saved=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}})();
 S = (saved && saved.seeded!==null) ? {...structuredClone(BLANK),...saved} : examples();
-draw();
+setLang(lang);
 setInterval(hero,60000);
 
 (async()=>{
