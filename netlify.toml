@@ -1,6 +1,5 @@
-# The repo root holds the board-facing testing dashboard (index.html) and
-# the desk's Artifact-body source. Only the built standalone desk in web/
-# is published.
+# compliance-desk.html at the root is the Artifact-body source; build-web.mjs
+# wraps it into docs/, which is what gets published.
 [build]
   publish = "docs"
   command = "node build-web.mjs"
