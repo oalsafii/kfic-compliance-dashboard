@@ -488,6 +488,15 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     </aside>
   </div>
 
+  <div class="banner" id="nodata" hidden>
+    <span>
+      <span class="L-ar"><b>هذه النسخة لا تحمل بياناتك.</b> مواعيدك محفوظة في رزنامة الالتزام داخل Claude —
+        افتحها من هناك، أو استخدم «استعادة» أدناه لتحميل نسخة احتياطية في هذا المتصفح.</span>
+      <span class="L-en"><b>This copy holds none of your dates.</b> They live in the calendar inside Claude —
+        open it there, or use Restore below to load a backup into this browser.</span>
+    </span>
+  </div>
+
   <div class="banner" id="banner" hidden>
     <span><span class="L-ar">ثلاثة مواعيد توضيحية معروضة حتى لا تكون الرزنامة فارغة</span><span class="L-en">Three example dates are shown so the calendar isn't empty.</span></span>
     <button class="btn" id="a-clear"><span class="L-ar">إزالتها</span><span class="L-en">Clear them</span></button>
@@ -900,6 +909,7 @@ function lists(){
     : EMPTY('لا مواعيد مجدولة','Nothing scheduled');
 
   $('#banner').hidden=!S.items.some(i=>i.example&&!i.done);
+  $('#nodata').hidden = !(!S.items.length && !SEED && dbState!=='live' && dbState!=='connecting');
   const DBS={
     connecting:['يجري الاتصال بمساحة العمل…','Connecting to the workspace…'],
     live:[`متصل بمساحة العمل · ${S.items.length} موعداً`,`Workspace connected · ${S.items.length} dates`],
