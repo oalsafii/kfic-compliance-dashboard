@@ -1111,11 +1111,33 @@ function examples(){
   ],holidays:[],seeded:null};
 }
 
+/* ===== the date changing under an open page =====
+   A calendar left open overnight kept rendering yesterday: `picked` is
+   fixed at load and only the hero was on a timer, so the day card still
+   read "Today" while listing the previous day — which looks exactly like
+   having nothing due. Watch for the date turning over, carry "today"
+   forward, and redraw. Waking a sleeping laptop fires no timer, so the
+   same check runs when the tab is shown or focused. */
+let todayISO=iso(NOW());
+function tick(){
+  const t=iso(NOW());
+  if(t===todayISO){ hero(); return; }
+  if(picked===todayISO){
+    picked=t;
+    const d=parse(t), [a,b]=periodRange();
+    if(d<a||d>=b) view=new Date(d.getFullYear(),d.getMonth(),1);
+  }
+  todayISO=t;
+  draw();
+}
+setInterval(tick,30000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) tick() });
+addEventListener('focus',tick);
+
 /* ===== boot ===== */
 const saved=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}})();
 S = (saved && saved.seeded!==null) ? {...structuredClone(BLANK),...saved} : examples();
 setLang(lang);
-setInterval(hero,60000);
 
 (async()=>{
   const [db,dl]=await Promise.all([
