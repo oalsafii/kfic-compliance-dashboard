@@ -523,7 +523,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     <div class="lg">
       <h3><span class="L-ar">الرزنامة</span> <em class="L-en">This calendar</em></h3>
       <ul>
-        <li><span class="L-ar">تُحفظ على هذا الجهاز وفي مساحة العمل</span><em class="L-en">Saved locally and in the workspace</em></li>
+        <li id="db-state">—</li>
         <li class="acts">
           <button id="a-hol"><span class="L-ar">العطل الرسمية</span><span class="L-en">Holidays</span></button><span class="dot">·</span>
           <button id="a-backup"><span class="L-ar">نسخة احتياطية</span><span class="L-en">Back up</span></button><span class="dot">·</span>
@@ -697,6 +697,11 @@ function deriveEnt(agmISO,entISO){
 /* ===== state ===== */
 const KEY='kfic-desk-v2';
 const BLANK={items:[],holidays:[],seeded:null};
+/* Replaced at publish time for the private build. The workspace store stays
+   the source of truth when it answers; this is only what the page falls back
+   to when it does not, so a calendar with dates in it never renders blank. */
+const SEED=null; /*__SEED__*/
+let dbState='connecting';
 let S=structuredClone(BLANK), DB=null, DL=null;
 let view=day0(NOW()), picked=iso(NOW()), mode='month';
 /* 'both' (default), 'ar', or 'en'. Only the chrome switches — an item's
@@ -895,6 +900,14 @@ function lists(){
     : EMPTY('لا مواعيد مجدولة','Nothing scheduled');
 
   $('#banner').hidden=!S.items.some(i=>i.example&&!i.done);
+  const DBS={
+    connecting:['يجري الاتصال بمساحة العمل…','Connecting to the workspace…'],
+    live:[`متصل بمساحة العمل · ${S.items.length} موعداً`,`Workspace connected · ${S.items.length} dates`],
+    local:['مساحة العمل غير متاحة هنا — معروض من النسخة المحفوظة','Workspace unavailable here — showing the saved copy'],
+  }[dbState] || ['مساحة العمل غير متاحة — معروض من النسخة المحفوظة ('+dbState+')',
+                 'Workspace unavailable — showing the saved copy ('+dbState+')'];
+  $('#db-state').innerHTML=`<span class="sw ${dbState==='live'?'open':'soon'}"></span>`
+    + `<span class="L-ar">${esc(DBS[0])}</span><em class="L-en">${esc(DBS[1])}</em>`;
   const n=S.holidays.length;
   const arHol = n===1?'عطلة رسمية واحدة':(n<=10?`${n} عطل رسمية`:`${n} عطلة رسمية`);
   $('#cal-note').innerHTML = n
@@ -1157,7 +1170,12 @@ addEventListener('focus',tick);
 
 /* ===== boot ===== */
 const saved=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}})();
-S = (saved && saved.seeded!==null) ? {...structuredClone(BLANK),...saved} : examples();
+/* An emptied local copy must not outrank a baked snapshot: clearing the
+   example dates on one device is how a browser ends up holding nothing. */
+const localOK = saved && saved.seeded!==null && (saved.items?.length || !SEED);
+S = localOK ? {...structuredClone(BLANK),...saved}
+  : SEED ? {...structuredClone(BLANK),...SEED}
+  : examples();
 setLang(lang);
 
 (async()=>{
@@ -1166,16 +1184,23 @@ setLang(lang);
     window.claude?.use?.('downloads')??null,
   ]);
   DB=db; DL=dl;
-  if(!DB) return;
+  if(!DB){ dbState='local'; draw(); return; }
   try{
     const s=await DB.doc('state/desk').get();
-    if(s.exists){ S={...structuredClone(BLANK),...s.data()}; draw(); }
-    else if(S.seeded!==null) save();
+    if(s.exists){ S={...structuredClone(BLANK),...s.data()}; dbState='live'; }
+    else {
+      /* An unreadable document is indistinguishable from a missing one, so
+         only create it from a state that actually holds something — writing
+         an empty page over a full store is how the calendar would be lost. */
+      dbState='live';
+      if(S.seeded!==null && S.items.length) save();
+    }
+    draw();
     DB.doc('state/desk').onSnapshot(x=>{
       if(!x.exists||x.metadata.hasPendingWrites) return;
-      S={...structuredClone(BLANK),...x.data()}; draw();
-    },()=>{});
-  }catch{}
+      S={...structuredClone(BLANK),...x.data()}; dbState='live'; draw();
+    },e=>{ dbState=(e&&e.code)||'unavailable'; draw(); });
+  }catch(e){ dbState=(e&&e.code)||'unavailable'; draw(); }
 })();
 </script>
 
